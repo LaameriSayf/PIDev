@@ -1,0 +1,35 @@
+
+{% extends 'baseB.html.twig' %}
+
+{% block title %}Ajouter une catégorie de blog{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6"><br><br>
+<br>
+<br>
+
+
+                <div class="card" >
+                    <div class="card-header"style="color:blue;">
+                        <h1 class="card-title">𝓐𝓳𝓸𝓾𝓽𝓮𝓻 𝓾𝓷𝓮 𝓬𝓪𝓽é𝓰𝓸𝓻𝓲𝓮 𝓭𝓮 𝓫𝓵𝓸𝓰</h1>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(myForm, {'attr': {'class': 'form'}}) }}
+                            <div class="form-group">
+                                {{ form_row(myForm.titrecategorie, {'attr': {'class': 'form-control', 'placeholder': 'Titre de la catégorie'}}) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_row(myForm.descriptioncategorie, {'attr': {'class': 'form-control', 'placeholder': 'Description de la catégorie'}}) }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                        {{ form_end(myForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
