@@ -6,9 +6,12 @@ use App\Entity\Categorie;
 use App\Entity\Medicament;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 
 class MedicamentType extends AbstractType
 {
@@ -21,11 +24,21 @@ class MedicamentType extends AbstractType
                 ])
             ->add('ref_med')
             ->add('nom_med')
-            ->add('date_amm')
-            ->add('date_expiration')
+            ->add('date_amm', DateType::class , [
+                'widget' => 'single_text',
+            
+            ])
+            ->add('date_expiration', DateType::class , [
+                'widget' => 'single_text',
+            
+            ])
             ->add('Qte')
             ->add('description')
-            ->add('etat')
+            ->add('etat', ChoiceType::class,['choices' => [
+                'En stock' => 'En stock',
+                'Epuisé' => 'Epuisé',
+               
+            ],])
             ->add('Ajouter',SubmitType::class)
         ;
     }

@@ -275,7 +275,7 @@
       </div>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           
           
@@ -287,8 +287,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Categorie</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des catégories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('addCategorie')}}">Ajouter Categorie</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherCategorie')}}">Consulter liste des catégories</a></li>
               </ul>
             </div>
           </li>
@@ -301,9 +301,9 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/login.html"> Ajouter médicament </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html">Consulter liste des medicaments</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Statistique </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_addMedicament')}}"> Ajouter médicament</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherMedicament')}}"> Consulter liste des medicaments</a></li>
+                <li class="nav-item"> <a class="nav-link" href="">  Statistique</a></li>
               </ul>
             </div>
           </li>
@@ -330,8 +330,8 @@
                                         <th>description</th>
                                         <th>etat</th>
                                         <th>categorie</th>
-                                        <th>Option</th>
-                                          <th>Option</th>
+                                        <th class="text-center">Option</th>
+                                          
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -346,8 +346,8 @@
                                         <td>{{ med.getDescription() }}</td>
                                         <td>{{ med.getEtat() }}</td>
                                         <td>{{ med.getCategorie().getNomCat() }}</td>
-                                         <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}">edit</a> </td>
-                                      <td><a href="{{ path('app_deleteMedicament', {'id': med.id}) }}">delete</a></td>
+                                         <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a> 
+                                      <a href="{{ path('app_deleteMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-danger">Supprimer</button></a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
