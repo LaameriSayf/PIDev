@@ -26,7 +26,7 @@ class Commentaire
     private ?blog $idblog = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?admin $idadmin = null;
+    private ?GlobalUser $id_user = null;
 
    
     public function getId(): ?int
@@ -82,14 +82,26 @@ class Commentaire
         return $this;
     }
 
-    public function getIdadmin(): ?admin
+    public function getIdadmin(): ?GlobalUser
     {
-        return $this->idadmin;
+        return $this->id_user;
     }
 
-    public function setIdadmin(?admin $idadmin): static
+    public function setIdadmin(?GlobalUser $id_user): static
     {
-        $this->idadmin = $idadmin;
+        $this->id_user = $id_user;
+
+        return $this;
+    }
+
+    public function getIdUser(): ?GlobalUser
+    {
+        return $this->id_user;
+    }
+
+    public function setIdUser(?GlobalUser $id_user): static
+    {
+        $this->id_user = $id_user;
 
         return $this;
     }

@@ -10,10 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PharmacienRepository::class)]
 class Pharmacien extends Admin
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $poste = null;
@@ -26,10 +22,6 @@ class Pharmacien extends Admin
         $this->medicaments = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function isPoste(): ?bool
     {

@@ -6,23 +6,14 @@ use App\Repository\MedecinRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MedecinRepository::class)]
-class Medecin extends Admin
+class Medecin extends GlobalUser
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $specialite = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $etat = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getSpecialite(): ?string
     {
@@ -47,4 +38,6 @@ class Medecin extends Admin
 
         return $this;
     }
+
+
 }

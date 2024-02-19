@@ -8,12 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
-class Patient extends Admin
+class Patient extends GlobalUser
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $numcarte = null;
@@ -24,17 +20,10 @@ class Patient extends Admin
     #[ORM\OneToMany(mappedBy: 'idpatient', targetEntity: Rendezvous::class)]
     private Collection $rendezvouses;
 
-   
-
     public function __construct()
     {
         $this->ordonnances = new ArrayCollection();
         $this->rendezvouses = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getNumcarte(): ?int
