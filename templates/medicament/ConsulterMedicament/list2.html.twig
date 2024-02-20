@@ -343,7 +343,7 @@
                                         <td>{{ med.getDateAmm() | date('Y-m-d') }}</td>
                                         <td>{{ med.getDateExpiration() | date('Y-m-d') }}</td>
                                         <td>{{ med.getQte() }}</td>
-                                        <td>{{ med.getDescription() }}</td>
+                                        <td>{{ med.getDescription()[:3] ~ '...' }}</td>
                                         <td>{{ med.getEtat() }}</td>
                                         <td>{{ med.getCategorie().getNomCat() }}</td>
                                          <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a> 
