@@ -41,12 +41,18 @@ class MedecinController extends AbstractController
     }
   
     #[Route('/afficherMedecin', name: 'app_afficherMedecin')]
-    public function afficher(ManagerRegistry $doctrine): Response
-    {
-        $repo=$doctrine->getRepository(Medecin::class);
-        $Medecin=$repo->findAll();
-        return $this->render('medecin/consultermedecin.html.twig', ['listMedecin'=>$Medecin]);
-    }
+ public function affiche(Request $request,ManagerRegistry $doctrine,MedecinRepository $MedecinRepository): Response
+{
+ $searchQuery = $request->query->get('search', ''); 
+$repository = $this->getDoctrine()->getRepository(Medecin::class); 
+$listMedecin = $searchQuery !== '' ?
+        $MedecinRepository->findBySearchQuery($searchQuery) : 
+        $repository->findAll(); 
+return $this->render('medecin/consultermedecin.html.twig', [ 'listMedecin' => $listMedecin, 'searchQuery' => $searchQuery, ]);
+ }
+ 
+
+    
     #[Route('/editMedecin/{id}', name: 'app_editMedecin')]
 public function edit(MedecinRepository $repository, $id, Request $request)
 {
@@ -80,5 +86,15 @@ return $this->render('medecin/editmedecin.html.twig', [
 
         
         return $this->redirectToRoute('app_afficherMedecin');
+    }
+    #[Route('/ShowMedecin/{id}', name: 'app_showMedecin')]
+    public function showMedecin($id, MedecinRepository $repository)
+    {
+        $medecin = $repository->find($id);
+
+        if (!$medecin) {
+            return $this->redirectToRoute('app_afficherMedecin');
+        }
+        return $this->render('medecin/detailsmedecin.html.twig',['medecin' =>$medecin]);
     }
 }

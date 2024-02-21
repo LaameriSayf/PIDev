@@ -214,8 +214,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Medecin</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des Medecin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('addMedecin')}}">Ajouter Medecin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_afficherMedecin')}}">Consulter liste des Medecin</a></li>
               </ul>
             </div>
           </li>
@@ -301,7 +301,13 @@
         </ul>
       </nav>
       <!-- partial -->
-      <div class="col-12 grid-margin stretch-card">
+
+        
+        
+<div class="main-panel">        
+    <div class="content-wrapper">
+        <div class="row">
+        <div class="col-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                 <a href="{{ path('app_editAdmin', {'id': admin.id}) }}" class="btn btn-primary">Edit</a>
@@ -310,17 +316,25 @@
             </div>
         </div>
         </div>
-            <div class="col-md-8">
-                <h1><strong>CIN</strong> {{ admin.cin }}</h1>
-                <p class="lead"><strong>Nom</strong> {{ admin.nom }}</p>
-                <p><strong>Prenom</strong> {{ admin.prenom }}</p>
-                <p><strong>Genre</strong> {{ admin.genre }}</p>
-                <p><strong>Date de naissance</strong> {{ admin.datenaissance|date('Y-m-d H:i') }}</p>
-                <p><strong>Numéro de télephone</strong> {{ admin.numtel }}</p>
-                <p><strong>email</strong> {{ admin.email }}</p>
-                <p><strong>Password</strong> {{ admin.password }}</p>
-                <p><strong>Interlock</strong> {{ admin.interlock }}</p>
+            <div>
+                <strong>Cin:</strong> {{ admin.Cin() }}
+                <p><strong>Nom:</strong> {{ admin.nom }}</p>
+                <p><strong>Prenom:</strong> {{ admin.prenom }}</p>
+                <p><strong>Genre:</strong> {{ admin.genre }}</p>
+                <p><strong>Date de naissance:</strong> {{ admin.datenaissance|date('Y-m-d') }}</p>
+                <p><strong>Numéro de télephone:</strong> {{ admin.numtel }}</p>
+                <p><strong>email:</strong> {{ admin.email }}</p>
+                <p><strong>Password:</strong> {{ admin.password }}</p>
+                <p><strong>Interlock:</strong> {{ admin.interlock }}</p>
+            </div>
+             
             </div>
         </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <!-- Ajoutez ici le code du pied de page si nécessaire -->
+    <!-- partial -->
+</div>
 
         {% endblock %}

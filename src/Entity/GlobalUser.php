@@ -66,7 +66,7 @@ class GlobalUser
     #[Assert\Length(max: 255, maxMessage: 'Le mot de passe ne doit pas dépasser {{ limit }} caractères.' )]
     #[Assert\Regex(
         pattern: '/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/',
-        message: 'Le mot de passe doit contenir au moins une lettre et un chiffre.'
+        message: 'Le mot de passe doit contenir au moins des lettres et des chiffres.'
     )]
     private ?string $password = null;
 

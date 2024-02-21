@@ -6,12 +6,17 @@ use App\Repository\PatientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 class Patient extends GlobalUser
 {
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(type:"integer" , unique: true ,nullable: true)]
+    
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\Length(min: 5, minMessage: "votre numéro de la carte jaune doit avoir 5 chiffre seulement")]
+    #[Assert\Type(type:"integer", message:"Le numéro de la carte jaune doit être un entier.")]
     private ?int $numcarte = null;
 
     #[ORM\OneToMany(mappedBy: 'idpatient', targetEntity: Ordonnance::class)]

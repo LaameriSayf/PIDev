@@ -199,8 +199,8 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{asset('back/pages/samples/login.html')}}"> Ajouter Patients</a></li>
-                <li class="nav-item"> <a class="nav-link" href=".{{asset('back/pages/samples/register.html')}}"> Consulter liste des patients</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('addPatient')}}"> Ajouter Patients</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherPatient')}}"> Consulter liste des patients</a></li>
               </ul>
             </div>
           </li>
@@ -212,8 +212,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Admin</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des Administrateurs</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('addMedecin')}}">Ajouter Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_afficherMedecin')}}">Consulter liste des Administrateurs</a></li>
               </ul>
             </div>
           </li>

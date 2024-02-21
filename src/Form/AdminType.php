@@ -33,9 +33,7 @@ class AdminType extends AbstractType
             ])
             ->add('numtel')
             ->add('email')
-            ->add('password', PasswordType::class, [
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input']
-            ])
+            ->add('password')
             ->add('interlock', ChoiceType::class, [
                 'choices' => [
                     'Oui' => true,

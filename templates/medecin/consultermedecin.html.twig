@@ -296,13 +296,13 @@
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <i class="icon-paper menu-icon"></i>
-              <span class="menu-title">Gérer Patient</span>
+              <span class="menu-title">Gérer Patients</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{asset('back/pages/samples/login.html')}}"> Ajouter Patients</a></li>
-                <li class="nav-item"> <a class="nav-link" href=".{{asset('back/pages/samples/register.html')}}"> Consulter liste des patients</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('addPatient')}}"> Ajouter Patients</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherPatient')}}"> Consulter liste des patients</a></li>
               </ul>
             </div>
           </li>
@@ -314,8 +314,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Admin</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des Administrateurs</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('addMedecin')}}">Ajouter Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_afficherMedecin')}}">Consulter liste des Administrateurs</a></li>
               </ul>
             </div>
           </li>
@@ -405,42 +405,28 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Liste des administrateurs</h4>
+                        <h4 class="card-title">Liste des médecins</h4>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Cin</th>
+                                        <th>id</th>                                       
                                         <th>nom </th>
-                                        <th>prenom</th>
-                                        <th>genre</th>
-                                        <th>datede naissance</th>
-                                        <th>numtel</th>
+                                        <th>prenom</th> 
                                         <th>email</th>
-                                        <th>password</th>
-                                        <th>spécialité</th>
-                                        <th>Etat</th>
-                                        <th>modifier</th>
+                                        <th>Détails</th>
+                                        <th>Modifier</th>
                                         <th>Supprimer</th>
-                                      
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for i in listMedecin %}
                                     <tr>
                                         <td>{{ i.id }}</td>
-                                        <td>{{ i.getCin() }}</td>
                                         <td>{{ i.getNom() }}</td>
                                         <td>{{ i.getPrenom() }}</td>
-                                        <td>{{ i.isGenre() }}</td>
-                                        <td>{{ i.getDatenaissance()|date('Y-m-d') }}</td> <!-- Formatage de la date -->
-                                        <td>{{ i.getNumtel() }}</td>
-                                        <td>{{ i.getEmail() }}</td>
-                                        
-                                        <td>{{ i.getPassword() }}</td>
-                                        <td>{{ i.getSpecialite() }}</td>
-                                        <td>{{ i.isEtat() }}</td>
+                                        <td>{{ i.getEmail() }}</td> 
+                                        <td><a href="{{ path('app_showMedecin', {'id': i.id}) }}"><button type="button" class="btn btn-outline-primary">Détails</button></a></td>
                                         <td><a href="{{ path('app_editMedecin', {'id': i.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a></td>
                                         <td><a href="{{ path('app_deleteMedecin', {'id': i.id}) }}"><button type="button" class="btn btn-danger">Supprimer</button></a></td>
                                     </tr>

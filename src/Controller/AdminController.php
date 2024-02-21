@@ -45,17 +45,6 @@ class AdminController extends AbstractController
     }
     
 
-/*
-#[Route('/afficherAdmin', name: 'app_afficherAdmin')]
-public function afficher(ManagerRegistry $doctrine): Response
-{
-    
-    $repo=$doctrine->getRepository(Admin::class);
-    $Admin=$repo->findAll();
-    return $this->render('Admin/consulteradmin.html.twig', ['listAdmin'=>$Admin]);
-}
-*/
-
 #[Route('/afficherAdmin', name: 'app_afficherAdmin')]
  public function affiche(Request $request,ManagerRegistry $doctrine,AdminRepository $AdminRepository): Response
 {
@@ -67,8 +56,6 @@ $listAdmin = $searchQuery !== '' ?
 return $this->render('Admin/consulteradmin.html.twig', [ 'listAdmin' => $listAdmin, 'searchQuery' => $searchQuery, ]);
  }
  
-
-/************************************************************************************************************ */
 #[Route('/editAdmin/{id}', name: 'app_editAdmin')]
 public function edit(AdminRepository $repository, $id, Request $request)
 {
@@ -77,7 +64,7 @@ public function edit(AdminRepository $repository, $id, Request $request)
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
         $em = $this->getDoctrine()->getManager();
-        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
+        $em->flush(); 
         return $this->redirectToRoute("app_afficherAdmin");
     }
 

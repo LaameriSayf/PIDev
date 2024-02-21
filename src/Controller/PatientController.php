@@ -43,12 +43,19 @@ class PatientController extends AbstractController
 
 
     #[Route('/afficherPatient', name: 'app_afficherPatient')]
-    public function afficher(ManagerRegistry $doctrine): Response
-    {
-        $repo=$doctrine->getRepository(Patient::class);
-        $Patient=$repo->findAll();
-        return $this->render('patient/consulterpatient.html.twig', ['listPatient'=>$Patient]);
-    }
+ public function affiche(Request $request,ManagerRegistry $doctrine,PatientRepository $PatientRepository): Response
+{
+ $searchQuery = $request->query->get('search', ''); 
+$repository = $this->getDoctrine()->getRepository(Patient::class); 
+$listPatient = $searchQuery !== '' ?
+        $PatientRepository->findBySearchQuery($searchQuery) : 
+        $repository->findAll(); 
+return $this->render('patient/consulterpatient.html.twig', [ 'listPatient' => $listPatient, 'searchQuery' => $searchQuery, ]);
+ }
+ 
+
+
+    
     #[Route('/editPatient/{id}', name: 'app_editPatient')]
 public function edit(PatientRepository $repository, $id, Request $request)
 {
@@ -82,6 +89,16 @@ return $this->render('patient/editpatient.html.twig', [
 
         
         return $this->redirectToRoute('app_afficherPatient');
+    }
+    #[Route('/ShowPatient/{id}', name:'app_showPatient')]
+    public function showPatient($id, PatientRepository $repository)
+    {
+        $patient = $repository->find($id);
+
+        if (!$patient) {
+            return $this->redirectToRoute('app_afficherPatient');
+        }
+        return $this->render('patient/detailspatient.html.twig',['patient' =>$patient]);
     }
       
 }
