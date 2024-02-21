@@ -15,6 +15,7 @@ use App\Form\AdminType;
 
 
 
+
 class AdminController extends AbstractController
 {
     #[Route('/admin', name: 'app_admin')]
@@ -36,22 +37,38 @@ class AdminController extends AbstractController
             $em = $doctrine->getManager();
             $em->persist($admin);
             $em->flush();
-          //  return $this->redirectToRoute('addAdmin');
-          return new Response("success");
+           return $this->redirectToRoute('addAdmin');
+          
         }
         
         return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
     }
     
 
-
+/*
 #[Route('/afficherAdmin', name: 'app_afficherAdmin')]
 public function afficher(ManagerRegistry $doctrine): Response
 {
+    
     $repo=$doctrine->getRepository(Admin::class);
     $Admin=$repo->findAll();
     return $this->render('Admin/consulteradmin.html.twig', ['listAdmin'=>$Admin]);
 }
+*/
+
+#[Route('/afficherAdmin', name: 'app_afficherAdmin')]
+ public function affiche(Request $request,ManagerRegistry $doctrine,AdminRepository $AdminRepository): Response
+{
+ $searchQuery = $request->query->get('search', ''); 
+$repository = $this->getDoctrine()->getRepository(Admin::class); 
+$listAdmin = $searchQuery !== '' ?
+        $AdminRepository->findBySearchQuery($searchQuery) : 
+        $repository->findAll(); 
+return $this->render('Admin/consulteradmin.html.twig', [ 'listAdmin' => $listAdmin, 'searchQuery' => $searchQuery, ]);
+ }
+ 
+
+/************************************************************************************************************ */
 #[Route('/editAdmin/{id}', name: 'app_editAdmin')]
 public function edit(AdminRepository $repository, $id, Request $request)
 {
@@ -86,5 +103,16 @@ return $this->render('admin/editadmin.html.twig', [
         
         return $this->redirectToRoute('app_afficherAdmin');
     }
+    #[Route('/ShowAdmin/{id}', name: 'app_showAdmin')]
+    public function showAdmin($id, AdminRepository $repository)
+    {
+        $admin = $repository->find($id);
+
+        if (!$admin) {
+            return $this->redirectToRoute('app_afficherAdmin');
+        }
+        return $this->render('admin/detailsadmin.html.twig',['admin' =>$admin]);
+    }
+
       
 }

@@ -177,9 +177,10 @@ class GlobalUser
     }
 
     public function getPassword(): ?string
-    {
-        return $this->password;
-    }
+{
+    // Chiffrer le mot de passe avec des ***
+    return $this->password ? str_repeat('*', strlen($this->password)) : null;
+}
 
     public function setPassword(?string $password): static
     {

@@ -49,8 +49,44 @@ class PatientController extends AbstractController
         $Patient=$repo->findAll();
         return $this->render('patient/consulterpatient.html.twig', ['listPatient'=>$Patient]);
     }
+    #[Route('/editPatient/{id}', name: 'app_editPatient')]
+public function edit(PatientRepository $repository, $id, Request $request)
+{
+    $patient = $repository->find($id);
+    $form = $this->createForm(PatientType::class, $patient);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
+        return $this->redirectToRoute("app_afficherPatient");
+    }
 
 
+
+return $this->render('patient/editpatient.html.twig', [
+    'myForm' => $form->createView(),
+]);
 }
+#[Route('/deletePatient/{id}', name: 'app_deletePatient')]
+    public function delete($id, PatientRepository $repository)
+    {
+        $patient = $repository->find($id);
+
+        if (!$patient) {
+            throw $this->createNotFoundException('patient non trouvé');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($patient);
+        $em->flush();
+
+        
+        return $this->redirectToRoute('app_afficherPatient');
+    }
+      
+}
+
+
+
       
 

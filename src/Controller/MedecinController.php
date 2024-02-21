@@ -24,7 +24,7 @@ class MedecinController extends AbstractController
         ]);
     }
     #[Route('/addMedecin', name: 'addMedecin')]
-    public function addAdmin(Request $req, ManagerRegistry $doctrine): Response
+    public function addMedecin(Request $req, ManagerRegistry $doctrine): Response
     {
         $medecin = new medecin();
         $form = $this->createForm(MedecinType::class, $medecin);

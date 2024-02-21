@@ -21,6 +21,15 @@ class AdminRepository extends ServiceEntityRepository
         parent::__construct($registry, Admin::class);
     }
 
+    public function findBySearchQuery(string $searchQuery):array
+    {
+        return $this->createQueryBuilder('e')
+        ->where('e.nom LIKE :query')
+        ->setParameter('query','%'. $searchQuery .'%')
+        ->getQuery()
+        ->getResult();
+    }
+
 //    /**
 //     * @return Admin[] Returns an array of Admin objects
 //     */

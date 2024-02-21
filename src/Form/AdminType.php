@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class AdminType extends AbstractType
 {
@@ -32,7 +33,9 @@ class AdminType extends AbstractType
             ])
             ->add('numtel')
             ->add('email')
-            ->add('password')
+            ->add('password', PasswordType::class, [
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input']
+            ])
             ->add('interlock', ChoiceType::class, [
                 'choices' => [
                     'Oui' => true,
