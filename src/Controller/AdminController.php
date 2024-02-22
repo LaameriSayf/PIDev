@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
 use App\Form\AdminType;
+use Symfony\Component\Form\FormError;
 
 
 
@@ -28,22 +29,34 @@ class AdminController extends AbstractController
 
     #[Route('/addAdmin', name: 'addAdmin')]
     public function addAdmin(Request $req, ManagerRegistry $doctrine): Response
-    {
-        $admin = new Admin();
-        $form = $this->createForm(AdminType::class, $admin);
+{
+    $admin = new Admin();
+    $form = $this->createForm(AdminType::class, $admin);
 
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $em->persist($admin);
-            $em->flush();
-           return $this->redirectToRoute('addAdmin');
-          
+    $form->handleRequest($req);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $cin = $admin->getCin();
+        
+        // Vérifier si le cin existe déjà dans la base de données
+        $existingAdmin = $doctrine->getRepository(Admin::class)->findOneBy(['cin' => $cin]);
+        if ($existingAdmin) {
+            // Afficher un message d'erreur
+            $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
+            // Réafficher le formulaire avec le message d'erreur
+            return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
         }
         
-        return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
+        $em = $doctrine->getManager();
+        $em->persist($admin);
+        $em->flush();
+        
+        // Rediriger vers une autre page après l'ajout réussi
+        return $this->redirectToRoute('addAdmin');
     }
     
+    return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
+}
+
 
 #[Route('/afficherAdmin', name: 'app_afficherAdmin')]
  public function affiche(Request $request,ManagerRegistry $doctrine,AdminRepository $AdminRepository): Response

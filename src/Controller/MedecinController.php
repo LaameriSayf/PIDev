@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
 use App\Form\MedecinType;
+use Symfony\Component\Form\FormError;
 
 
 class MedecinController extends AbstractController
@@ -25,21 +26,34 @@ class MedecinController extends AbstractController
     }
     #[Route('/addMedecin', name: 'addMedecin')]
     public function addMedecin(Request $req, ManagerRegistry $doctrine): Response
-    {
-        $medecin = new medecin();
-        $form = $this->createForm(MedecinType::class, $medecin);
+{
+    $medecin = new Medecin();
+    $form = $this->createForm(MedecinType::class, $medecin);
 
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $em->persist($medecin);
-            $em->flush();
-            return $this->redirectToRoute('addMedecin');
+    $form->handleRequest($req);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $cin = $medecin->getCin();
+        
+        // Vérifier si le cin existe déjà dans la base de données
+        $existingMedecin = $doctrine->getRepository(Medecin::class)->findOneBy(['cin' => $cin]);
+        if ($existingMedecin) {
+            // Afficher un message d'erreur
+            $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
+            // Réafficher le formulaire avec le message d'erreur
+            return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
         }
         
-        return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
+        $em = $doctrine->getManager();
+        $em->persist($medecin);
+        $em->flush();
+        
+        // Rediriger vers une autre page après l'ajout réussi
+        return $this->redirectToRoute('addMedecin');
     }
-  
+    
+    return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
+}
+
     #[Route('/afficherMedecin', name: 'app_afficherMedecin')]
  public function affiche(Request $request,ManagerRegistry $doctrine,MedecinRepository $MedecinRepository): Response
 {

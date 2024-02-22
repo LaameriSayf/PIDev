@@ -10,18 +10,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
 #[ORM\Entity(repositoryClass: GlobalUserRepository::class)]
 #[ORM\InheritanceType("JOINED")]
 #[ORM\DiscriminatorColumn(name:"Role",type:"string")]
 #[ORM\DiscriminatorMap(["Patient","Pharmacien","Admin","Medecin"])]
-class GlobalUser
+class GlobalUser 
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
+
     #[ORM\Column(type:"integer" , unique: true ,nullable: true)]
-    
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
     #[Assert\Length(min: 8, minMessage: "votre numéro de la carte d'identité doit avoir 8 chiffre")]
     #[Assert\Type(type:"integer", message:"Le numéro de CIN doit être un entier.")]
@@ -30,11 +31,20 @@ class GlobalUser
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Regex(
+    pattern: '/^[a-zA-Z]*$/',
+    message: 'Le nom doit contenir uniquement des lettres.'
+      )]
     private ?string $nom = null;
+
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z]*$/',
+        message: 'Le prénom doit contenir uniquement des lettres.'
+          )]
     private ?string $prenom = null;
 
     #[ORM\Column(nullable: true)]
@@ -46,7 +56,11 @@ class GlobalUser
 
     #[ORM\Column(nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
-    #[Assert\Length(min: 8, minMessage: "votre numéro de téléphone doit avoir 8 chiffre")]
+    #[Assert\Length(
+        exactMessage: 'Le numéro de téléphone doit contenir exactement 8 chiffres.',
+        min: 8,
+        max: 8
+    )]
     #[Assert\Regex(
         pattern: '/^\d+$/',
         message: 'Le numéro de téléphone doit contenir uniquement des chiffres.'
@@ -260,4 +274,6 @@ class GlobalUser
 
         return $this;
     }
+    
 }
+

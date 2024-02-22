@@ -26,7 +26,7 @@ class LoginController extends AbstractController
                 'user'=>$user
             ]);
           //  return $this->redirectToRoute("app_afficherAdmin");  
-    }return $this->renderForm("login/login.twig",
+    }return $this->renderForm("login/login.html.twig",
     ["login_form" => $login_form,
     ]);
     }

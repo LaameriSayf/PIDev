@@ -2,16 +2,15 @@
 
 namespace App\Form;
 
-use App\Entity\Admin;
+use App\Entity\Pharmacien;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class AdminType extends AbstractType
+class PharmacienType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -33,9 +32,7 @@ class AdminType extends AbstractType
             ])
             ->add('numtel')
             ->add('email')
-            ->add('password', PasswordType::class, [
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
-            ])
+            ->add('password')
             ->add('interlock', ChoiceType::class, [
                 'choices' => [
                     'Oui' => true,
@@ -45,18 +42,16 @@ class AdminType extends AbstractType
                 'multiple' => false,
                 'label' => 'Interlock', // Ajoutez une étiquette pour le champ interlock
             ])
-            ->add('Ajouter', SubmitType::class)
-            ->add('Annuler', SubmitType::class);
+            ->add('poste')
+            ->add('Ajouter',SubmitType::class)
+            ->add('Annuler',SubmitType::class)
+        ;
     }
-    
-
-    
-
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Admin::class,
+            'data_class' => Pharmacien::class,
         ]);
     }
 }

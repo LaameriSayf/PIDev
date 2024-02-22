@@ -34,7 +34,7 @@ class PatientType extends AbstractType
             ->add('numtel')
             ->add('email')
             ->add('password', PasswordType::class, [
-                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input']
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
             ])
             ->add('interlock', ChoiceType::class, [
                 'choices' => [
@@ -43,7 +43,7 @@ class PatientType extends AbstractType
                 ],
                 'expanded' => true,
                 'multiple' => false,
-                'label' => 'Interlock', // Ajoutez une étiquette pour le champ interlock
+                'label' => 'Interlock', 
             ])
             ->add('numcarte')
             ->add('Ajouter',SubmitType::class)

@@ -11,7 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Security\Core\User\UserInterface;
 use App\Form\PatientType;
+use Symfony\Component\Form\FormError;
+
 
 class PatientController extends AbstractController
 {
@@ -24,21 +27,34 @@ class PatientController extends AbstractController
     }
 
 #[Route('/addPatient', name: 'addPatient')]
-    public function addAdmin(Request $req, ManagerRegistry $doctrine): Response
-    {
-        $patient = new Patient();
-        $form = $this->createForm(PatientType::class, $patient);
+public function addPatient(Request $req, ManagerRegistry $doctrine): Response
+{
+    $patient = new Patient();
+    $form = $this->createForm(PatientType::class, $patient);
 
-        $form->handleRequest($req);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $doctrine->getManager();
-            $em->persist($patient);
-            $em->flush();
-            return $this->redirectToRoute('addPatient');
+    $form->handleRequest($req);
+    if ($form->isSubmitted() && $form->isValid()) {
+        $cin = $patient->getCin();
+        
+        // Vérifier si le cin existe déjà dans la base de données
+        $existingPatient = $doctrine->getRepository(Patient::class)->findOneBy(['cin' => $cin]);
+        if ($existingPatient) {
+            // Afficher un message d'erreur
+            $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
+            // Réafficher le formulaire avec le message d'erreur
+            return $this->renderForm("patient/addpatient.html.twig", ["myForm" => $form]);
         }
         
-        return $this->renderForm("patient/addpatient.html.twig", ["myForm" => $form]);
+        $em = $doctrine->getManager();
+        $em->persist($patient);
+        $em->flush();
+        
+        // Rediriger vers une autre page après l'ajout réussi
+        return $this->redirectToRoute('addPatient');
     }
+    
+    return $this->renderForm("patient/addpatient.html.twig", ["myForm" => $form]);
+}
     
 
 
