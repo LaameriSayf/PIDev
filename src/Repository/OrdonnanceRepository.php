@@ -21,16 +21,17 @@ class OrdonnanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordonnance::class);
     }
 
-//    /**
-//     * @return Ordonnance[] Returns an array of Ordonnance objects
+//     /**
+//      * @return Ordonnance[] Returns an array of Ordonnance objects
 //     */
-//    public function findByExampleField($value): array
+//    public function patient($id): array
 //    {
 //        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
+//             ->join('o.patient','p')
+//             ->addSelect('p')
+//            ->andWhere('u.id = :val')
+//            ->setParameter('val', $id)
 //            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;

@@ -95,7 +95,16 @@
 												
 											</li>
 											<li><a href="#">Docteurs </a></li>
-											<li><a href="#">Services </a></li>
+											{#<li><a href="{{path("add_ordonnance")}}">Services</a></li>#}
+											<li>
+                                         <a href="#">Services <i class="icofont-rounded-down"></i></a>
+                                         <ul class="dropdown">
+                                          <li><a href="{{ path('add_dossier') }}">Gérer dossiers médicaux</a></li>
+                                          <li><a href="{{ path('add_ordonnance') }}">Gérer ordonnances</a></li>
+                                          </ul>
+                                          </li>
+
+    				
 										
 											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
 												<ul class="dropdown">

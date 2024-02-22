@@ -3,45 +3,52 @@
 namespace App\Entity;
 
 use App\Repository\OrdonnanceRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+use DateTime;
 #[ORM\Entity(repositoryClass: OrdonnanceRepository::class)]
 class Ordonnance
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id;
+    
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateprescription = null;
-
-    #[ORM\Column(length: 25555, nullable: true)]
-    private ?string $medecamentprescrit = null;
-
-    #[ORM\Column(length: 2555, nullable: true)]
-    private ?string $adresse = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
     private ?\DateTimeInterface $renouvellement = null;
 
+    #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 3, minMessage: "Votre description doit contenir au moins {{ limit }} caractères.")]
+    #[Assert\NotBlank(message:"Champs obligatoire !")]
+    private ?string $medecamentprescrit = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
+    #[Assert\NotBlank(message:"Champs obligatoire")]
+    private ?string $adresse = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
+    private ?\DateTimeInterface $dateprescription = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ordonnances_patient')]
+    private ?Patient $patient ;
+
     #[ORM\ManyToOne(inversedBy: 'ordonnances')]
-    private ?patient $idpatient = null;
+    private ?Dossiermedical $dossier = null;
 
-    public function getId(): ?int
+    public function getRenouvellement(): ?\DateTimeInterface
     {
-        return $this->id;
+        return $this->renouvellement;
     }
 
-    public function getDateprescription(): ?\DateTimeInterface
+    public function setRenouvellement(\DateTimeInterface $renouvellement): static
     {
-        return $this->dateprescription;
-    }
-
-    public function setDateprescription(?\DateTimeInterface $dateprescription): static
-    {
-        $this->dateprescription = $dateprescription;
+        $this->renouvellement = $renouvellement;
 
         return $this;
     }
@@ -51,7 +58,7 @@ class Ordonnance
         return $this->medecamentprescrit;
     }
 
-    public function setMedecamentprescrit(?string $medecamentprescrit): static
+    public function setMedecamentprescrit(string $medecamentprescrit): static
     {
         $this->medecamentprescrit = $medecamentprescrit;
 
@@ -63,34 +70,52 @@ class Ordonnance
         return $this->adresse;
     }
 
-    public function setAdresse(?string $adresse): static
+    public function setAdresse(string $adresse): static
     {
         $this->adresse = $adresse;
 
         return $this;
     }
 
-    public function getRenouvellement(): ?\DateTimeInterface
+    public function getDateprescription(): ?\DateTimeInterface
     {
-        return $this->renouvellement;
+        return $this->dateprescription;
     }
 
-    public function setRenouvellement(?\DateTimeInterface $renouvellement): static
+    public function setDateprescription( $dateprescription): static
     {
-        $this->renouvellement = $renouvellement;
+        $this->dateprescription = $dateprescription;
 
         return $this;
     }
 
-    public function getIdpatient(): ?patient
+    public function getPatient(): ?Patient
     {
-        return $this->idpatient;
+        return $this->patient;
     }
 
-    public function setIdpatient(?patient $idpatient): static
+    public function setPatient(?Patient $patient): static
     {
-        $this->idpatient = $idpatient;
+        $this->patient = $patient;
 
         return $this;
     }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getDossier(): ?Dossiermedical
+    {
+        return $this->dossier;
+    }
+
+    public function setDossier(?Dossiermedical $dossier): static
+    {
+        $this->dossier = $dossier;
+
+        return $this;
+    }
+    
+
 }
