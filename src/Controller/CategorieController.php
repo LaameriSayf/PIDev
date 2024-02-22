@@ -46,13 +46,13 @@ public function afficher(ManagerRegistry $doctrine): Response
     return $this->render('categorie/ConsulterCategorie/list.html.twig', ['listCategorie'=>$categorie]);
 }
 #[Route('/editCategorie/{id}', name: 'app_editCategorie')]
-public function edit(CategorieRepository $repository, $id, Request $request)
+public function edit(CategorieRepository $repository, $id, Request $request,ManagerRegistry $doctrine)
 {
     $categorie = $repository->find($id);
     $form = $this->createForm(CategorieType::class, $categorie);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
+        $em=$doctrine->getManager();
         $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
         return $this->redirectToRoute("app_afficherCategorie");
     }

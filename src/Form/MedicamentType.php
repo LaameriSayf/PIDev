@@ -26,10 +26,16 @@ class MedicamentType extends AbstractType
             ->add('nom_med')
             ->add('date_amm', DateType::class , [
                 'widget' => 'single_text',
+                'html5' => true,
+            
+                'data' => new \DateTime(), 
             
             ])
             ->add('date_expiration', DateType::class , [
                 'widget' => 'single_text',
+                'html5' => true,
+            
+                'data' => new \DateTime(), 
             
             ])
             ->add('Qte')
