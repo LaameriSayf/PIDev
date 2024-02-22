@@ -17,65 +17,109 @@ class CategorieController extends AbstractController
     #[Route('/categorie', name: 'app_categorie')]
     public function index(): Response
     {
+        // Méthode pour afficher la page d'index de la catégorie
         return $this->render('categorie/index.html.twig', [
             'controller_name' => 'CategorieController',
         ]);
     }
+    
     #[Route('/addCategorie', name: 'addCategorie')]
-    public function addCategorie(Request $req,ManagerRegistry $doctrine):Response
+    public function addCategorie(Request $req, ManagerRegistry $doctrine): Response
     { 
-        $categorie=new Categorie();
-        $form=$this->createForm(CategorieType::class,$categorie);
- 
+        // Méthode pour ajouter une nouvelle catégorie
+        $categorie = new Categorie();
+        $form = $this->createForm(CategorieType::class, $categorie);
+    
+        // Gérer la soumission du formulaire
         $form->handleRequest($req);
-        if ($form ->isSubmitted()&& $form->isValid()){
-            $em=$doctrine->getManager();
-            $em-> persist($categorie);
+    
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Obtenir le gestionnaire d'entités
+            $em = $doctrine->getManager();
+    
+            // Persister la nouvelle entité Catégorie
+            $em->persist($categorie);
+    
+            // Enregistrer les modifications dans la base de données
             $em->flush();
+    
+            // Rediriger vers la route pour afficher la liste des catégories
             return $this->redirectToRoute('app_afficherCategorie');
         }
-        
-        return $this->renderForm("categorie/AjouterCategorie/add.html.twig", ["myForm"=>$form]);
-
-}
-#[Route('/afficherCategorie', name: 'app_afficherCategorie')]
-public function afficher(ManagerRegistry $doctrine): Response
-{
-    $repo=$doctrine->getRepository(Categorie::class);
-    $categorie=$repo->findAll();
-    return $this->render('categorie/ConsulterCategorie/list.html.twig', ['listCategorie'=>$categorie]);
-}
-#[Route('/editCategorie/{id}', name: 'app_editCategorie')]
-public function edit(CategorieRepository $repository, $id, Request $request,ManagerRegistry $doctrine)
-{
-    $categorie = $repository->find($id);
-    $form = $this->createForm(CategorieType::class, $categorie);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em=$doctrine->getManager();
-        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
-        return $this->redirectToRoute("app_afficherCategorie");
+    
+        // Rendre le formulaire pour ajouter une catégorie
+        return $this->renderForm("categorie/AjouterCategorie/add.html.twig", ["myForm" => $form]);
     }
-
-    return $this->render('categorie/ConsulterCategorie/edit.html.twig', [
-        'myForm' => $form->createView(),
-    ]);
-}
-#[Route('/deleteCategorie/{id}', name: 'app_deleteCategorie')]
-    public function delete($id, CategorieRepository $repository)
+    
+    #[Route('/afficherCategorie', name: 'app_afficherCategorie')]
+    public function afficher(ManagerRegistry $doctrine): Response
     {
+        // Méthode pour afficher la liste des catégories
+        $repo = $doctrine->getRepository(Categorie::class);
+        $categorie = $repo->findAll();
+    
+        // Rendre le modèle pour afficher la liste des catégories
+        return $this->render('categorie/ConsulterCategorie/list.html.twig', ['listCategorie' => $categorie]);
+    }
+    
+    #[Route('/editCategorie/{id}', name: 'app_editCategorie')]
+    public function edit(CategorieRepository $repository, $id, Request $request, ManagerRegistry $doctrine)
+    {
+        // Méthode pour éditer une catégorie existante
         $categorie = $repository->find($id);
-
-        if (!$categorie) {
-            throw $this->createNotFoundException('Categorie non trouvé');
+        $form = $this->createForm(CategorieType::class, $categorie);
+    
+        // Gérer la soumission du formulaire
+        $form->handleRequest($request);
+    
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Obtenir le gestionnaire d'entités
+            $em = $doctrine->getManager();
+    
+            // Enregistrer les modifications dans la base de données
+            $em->flush();
+    
+            // Rediriger vers la route pour afficher la liste des catégories
+            return $this->redirectToRoute("app_afficherCategorie");
         }
+    
+        // Rendre le formulaire pour éditer une catégorie
+        return $this->render('categorie/ConsulterCategorie/edit.html.twig', [
+            'myForm' => $form->createView(),
+        ]);
+    }
+    
+    #[Route('/deleteCategorie/{id}', name: 'app_deleteCategorie')]
+    public function delete($id, CategorieRepository $repository, ManagerRegistry $doctrine)
+    {
+        // Méthode pour supprimer une catégorie
+        $categorie = $repository->find($id);
+    
+        // Vérifier si la catégorie existe
+        if (!$categorie) {
+            throw $this->createNotFoundException('Categorie non trouvée');
+        }
+        $em = $doctrine->getManager();
+    
+        $medicaments = $categorie->getMedicaments();
 
-        $em = $this->getDoctrine()->getManager();
+        foreach ($medicaments as $medicament) {
+            $em->remove($medicament);
+        }
+    
+        // Obtenir le gestionnaire d'entités
+      
+        // Supprimer la catégorie
         $em->remove($categorie);
+    
+        // Enregistrer les modifications dans la base de données
         $em->flush();
-
-        
+    
+        // Rediriger vers la route pour afficher la liste des catégories
         return $this->redirectToRoute('app_afficherCategorie');
     }
+    
       
 }

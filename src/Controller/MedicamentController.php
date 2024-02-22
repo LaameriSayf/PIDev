@@ -22,55 +22,94 @@ class MedicamentController extends AbstractController
         ]);
     }
     #[Route('/addMedicament', name: 'app_addMedicament')]
-    public function addMedicament(Request $req,ManagerRegistry $doctrine):Response
+    public function addMedicament(Request $req, ManagerRegistry $doctrine): Response
     { 
-        $medicament=new Medicament();
-        $form=$this->createForm(MedicamentType::class,$medicament);
- 
+        // Créer une nouvelle instance de l'entité Medicament
+        $medicament = new Medicament();
+        
+        // Créer un formulaire pour l'entité Medicament en utilisant le type de formulaire MedicamentType
+        $form = $this->createForm(MedicamentType::class, $medicament);
+     
+        // Gérer la soumission du formulaire
         $form->handleRequest($req);
-        if ($form ->isSubmitted()&& $form->isValid()){
-            $em=$doctrine->getManager();
-            $em-> persist($medicament);
+        
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Obtenir le gestionnaire d'entités
+            $em = $doctrine->getManager();
+            
+            // Persister la nouvelle entité Medicament
+            $em->persist($medicament);
+            
+            // Enregistrer les modifications dans la base de données
             $em->flush();
+            
+            // Rediriger vers la route pour afficher la liste des Medicaments
             return $this->redirectToRoute('app_afficherMedicament');
         }
         
-        return $this->renderForm("medicament/AjouterMedicament/add1.html.twig", ["myForm"=>$form]);
-
-}
-#[Route('/afficherMedicament', name: 'app_afficherMedicament')]
-public function afficher(ManagerRegistry $doctrine): Response
-{
-    $repo=$doctrine->getRepository(Medicament::class);
-    $medicament=$repo->findAll();
-    return $this->render('medicament/ConsulterMedicament/list2.html.twig', ['list'=>$medicament]);
-}
-
-#[Route('/editMedicament/{id}', name: 'app_editMedicament')]
-public function edit(MedicamentRepository $repository, $id, Request $request)
-{
-    $medicament = $repository->find($id);
-    $form = $this->createForm(MedicamentType::class, $medicament);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
-        return $this->redirectToRoute("app_afficherMedicament");
+        // Rendre le modèle de formulaire s'il n'est pas valide ou non soumis
+        return $this->renderForm("medicament/AjouterMedicament/add1.html.twig", ["myForm" => $form]);
     }
-
-    return $this->render('medicament/ConsulterMedicament/edit.html.twig', [
-        'myForm' => $form->createView(),
-    ]);
-}
-#[Route('/deleteMedicament/{id}', name: 'app_deleteMedicament')]
-public function delete($id, MedicamentRepository $repository)
-{
-    $medicament = $repository->find($id);
-    $em = $this->getDoctrine()->getManager();
-    $em->remove($medicament);
-    $em->flush();
-    return $this->redirectToRoute('app_afficherMedicament');
-}
-
-
-}
+    
+    #[Route('/afficherMedicament', name: 'app_afficherMedicament')]
+    public function afficher(ManagerRegistry $doctrine): Response
+    {
+        // Obtenir le dépôt pour l'entité Medicament
+        $repo = $doctrine->getRepository(Medicament::class);
+        
+        // Récupérer toutes les entités Medicament de la base de données
+        $medicament = $repo->findAll();
+        
+        // Rendre le modèle pour afficher la liste des Medicaments
+        return $this->render('medicament/ConsulterMedicament/list2.html.twig', ['list' => $medicament]);
+    }
+    
+    #[Route('/editMedicament/{id}', name: 'app_editMedicament')]
+    public function edit(MedicamentRepository $repository, $id, Request $request, ManagerRegistry $doctrine)
+    {
+        // Trouver l'entité Medicament par son ID
+        $medicament = $repository->find($id);
+        
+        // Créer un formulaire pour éditer l'entité Medicament
+        $form = $this->createForm(MedicamentType::class, $medicament);
+        
+        // Gérer la soumission du formulaire
+        $form->handleRequest($request);
+        
+        // Vérifier si le formulaire est soumis et valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Obtenir le gestionnaire d'entités
+            $em = $doctrine->getManager();
+            
+            // Enregistrer les modifications dans la base de données
+            $em->flush();
+            
+            // Rediriger vers la route pour afficher la liste des Medicaments
+            return $this->redirectToRoute("app_afficherMedicament");
+        }
+    
+        // Rendre le modèle de formulaire pour éditer l'entité Medicament
+        return $this->render('medicament/ConsulterMedicament/edit.html.twig', [
+            'myForm' => $form->createView(),
+        ]);
+    }
+    
+    #[Route('/deleteMedicament/{id}', name: 'app_deleteMedicament')]
+    public function delete($id, MedicamentRepository $repository, ManagerRegistry $doctrine)
+    {
+        // Trouver l'entité Medicament par son ID
+        $medicament = $repository->find($id);
+        
+        // Obtenir le gestionnaire d'entités
+        $em = $doctrine->getManager();
+        
+        // Supprimer l'entité Medicament
+        $em->remove($medicament);
+        
+        // Enregistrer les modifications dans la base de données
+        $em->flush();
+        
+        // Rediriger vers la route pour afficher la liste des Medicaments
+        return $this->redirectToRoute('app_afficherMedicament');
+    }}
