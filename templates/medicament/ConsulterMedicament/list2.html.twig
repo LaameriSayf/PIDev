@@ -368,25 +368,43 @@
 </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var showButtons = document.querySelectorAll('.show-description');
-        showButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var parentTd = button.parentNode;
-                var shortDescription = parentTd.querySelector('.short-description');
-                var fullDescription = parentTd.querySelector('.full-description');
+// Attend que le DOM soit entièrement chargé avant d'exécuter le code
+document.addEventListener('DOMContentLoaded', function () {
 
-                if (shortDescription.style.display !== 'none') {
-                    shortDescription.style.display = 'none';
-                    fullDescription.style.display = 'inline';
-                    button.innerText = 'Masquer la description';
-                } else {
-                    shortDescription.style.display = 'inline';
-                    fullDescription.style.display = 'none';
-                    button.innerText = 'plus';
-                }
-            });
+    // Sélectionne tous les éléments avec la classe CSS "show-description" et les stocke dans showButtons
+    var showButtons = document.querySelectorAll('.show-description');
+
+    // Itère sur chaque bouton trouvé précédemment
+    showButtons.forEach(function (button) {
+
+        // Ajoute un écouteur d'événements de clic à chaque bouton
+        button.addEventListener('click', function () {
+
+            // Obtient le parent (élément <td>) du bouton actuellement cliqué
+            var parentTd = button.parentNode;
+
+            // Sélectionne l'élément ayant la classe CSS "short-description" à l'intérieur du parent <td>
+            var shortDescription = parentTd.querySelector('.short-description');
+
+            // Sélectionne l'élément ayant la classe CSS "full-description" à l'intérieur du parent <td>
+            var fullDescription = parentTd.querySelector('.full-description');
+
+            // Vérifie si la description courte est actuellement visible
+            if (shortDescription.style.display !== 'none') {
+                // Cache la description courte et affiche la description complète
+                shortDescription.style.display = 'none';
+                fullDescription.style.display = 'inline';
+                // Modifie le texte du bouton en conséquence
+                button.innerText = 'Masquer la description';
+            } else {
+                // Si la description est masquée, affiche la description courte et cache la description complète
+                shortDescription.style.display = 'inline';
+                fullDescription.style.display = 'none';
+                // Modifie le texte du bouton en conséquence
+                button.innerText = 'plus';
+            }
         });
     });
+});
 </script>
 {% endblock %}
