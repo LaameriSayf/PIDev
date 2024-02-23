@@ -106,7 +106,7 @@ class CategorieController extends AbstractController
         $medicaments = $categorie->getMedicaments();
 
         foreach ($medicaments as $medicament) {
-            $em->remove($medicament);
+            $medicament->setCategorie(null);
         }
     
         // Obtenir le gestionnaire d'entités

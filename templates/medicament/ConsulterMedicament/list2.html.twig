@@ -348,7 +348,8 @@
     <button type="button" class="btn btn-link show-description">plus</button>
 </td>
                                         <td>{{ med.getEtat() }}</td>
-                                        <td>{{ med.getCategorie().getNomCat() }}</td>
+                                       
+                                        <td>{{ med.getCategorie() is not null ? med.getCategorie().getNomCat() : 'Not available' }}</td>
                                          <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a> 
                                       <a href="{{ path('app_deleteMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-danger">Supprimer</button></a></td>
                                     </tr>

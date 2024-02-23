@@ -17,7 +17,7 @@ class MedicamentController extends AbstractController
     #[Route('/medicament', name: 'app_medicament')]
     public function index(): Response
     {
-        return $this->render('medicament/index.html.twig', [
+        return $this->render('medicament/ConsulterMedicament/FrontOffice.html.twig', [
             'controller_name' => 'MedicamentController',
         ]);
     }
@@ -64,6 +64,7 @@ class MedicamentController extends AbstractController
         // Rendre le modèle pour afficher la liste des Medicaments
         return $this->render('medicament/ConsulterMedicament/list2.html.twig', ['list' => $medicament]);
     }
+  
     
     #[Route('/editMedicament/{id}', name: 'app_editMedicament')]
     public function edit(MedicamentRepository $repository, $id, Request $request, ManagerRegistry $doctrine)
