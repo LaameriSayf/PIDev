@@ -24,7 +24,7 @@ class Rendezvous
     #[Assert\Length(max: 3000, maxMessage: 'La longueur maximale est de 3000 caractères.')]
     #[ORM\Column(length: 25555, nullable: true)]
     private ?string $description = null;
-    
+    #[Assert\NotBlank(message: 'Veuillez ajouter la lettre de liaison')]
     #[ORM\Column(length: 2555, nullable: true)]
     private ?string $file = null;
 

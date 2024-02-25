@@ -79,7 +79,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
     public function editRendezvous(RendezvousRepository $repository, $id, Request $request,SluggerInterface $slugger , ManagerRegistry $manager)
     {
         $rendezvous = $repository->find($id);
-        $form = $this->createForm(RendezvousType::class, $rendezvous);
+        $form = $this->createForm(EditRendezType::class, $rendezvous);
         $form->handleRequest($request);
         $em = $manager->getManager();
 

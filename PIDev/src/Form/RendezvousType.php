@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+
 
 class RendezvousType extends AbstractType
 {
@@ -44,9 +46,20 @@ class RendezvousType extends AbstractType
             ->add('description')
             ->add('file' , FileType::class , [
                 'label' => 'lettre de laison',
-                'mapped' => false
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'application/pdf',
+                            'application/msword',
+                            
+                        ],
+                        'mimeTypesMessage' => 'Ajouter un fichier de type pdf ou docx',
+                    ]),
+                ],
+            ])
                 
-                ])
+               
 
                 ->add('Ajouter',SubmitType::class)
             ;
