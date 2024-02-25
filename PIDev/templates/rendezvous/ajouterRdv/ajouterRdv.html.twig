@@ -1,0 +1,142 @@
+{% extends 'baseF.html.twig' %}
+{% block body %}
+<div class="container-fluid page-body-wrapper">
+      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="background-color: DodgerBlue; color: white; ">
+        <ul class="nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Gerer Emploi</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Empoli</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter Emploi</a></li>
+              </ul>
+            </div>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Gérer Rendez-vous</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item "> <a class="nav-link" href="{{ path('app_afficherRendezVous')}}"><i class="fa-duotone fa-calendar-minus"></i> Consulter liste des Rendez-vous </a></li>
+
+              </ul>
+            </div>
+          </li>
+         
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Ajouter un Rendez-vous</h4>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate' , 'enctype': 'multipart/form-data'}}) }}
+
+            <div class="form-group row">
+              <label for="daterendezvous" class="col-sm-3 col-form-label">Date du rendez-vous</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.daterendezvous, {'attr': {'class': 'form-control', 'id': 'daterendezvous'}}) }}
+                {{ form_errors(form.daterendezvous) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="heurerendezvous" class="col-sm-3 col-form-label">Heure du rendez-vous</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.heurerendezvous, {'attr': {'class': 'form-control', 'placeholder': 'heure du rendez-vous'}}) }}
+                {{ form_errors(form.heurerendezvous) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="description" class="col-sm-3 col-form-label">Description</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'description de votre Rendez-vous'}}) }}
+                {{ form_errors(form.description) }}
+              </div>
+            </div>
+
+                  <div class="form-group row">
+                      <label for="file" class="col-sm-3 col-form-label">Lettre de Liaison</label>
+                        <div class="col-sm-9 custom-file">
+                          
+            <label class="custom-file-label" for="{{ form.file.vars.id }}"></label>
+            {{ form_widget(form.file, {'attr': { 'placeholder': 'Lettre de Liaison'}}) }}
+            {{ form_errors(form.file) }}
+        
+    </div>
+</div>
+
+<div class="form-group row">
+    <div class="col-sm-9 offset-sm-3 text-center">
+        {{ form_row(form.Ajouter, {'attr': {'class': 'btn btn-primary'}}) }}
+    </div>
+</div>
+
+
+            {{ form_end(form) }}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    </div>
+  {% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Ajouter!',
+                text: '{{ flashMessage }} 👍',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! 😊',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+
+    {% for flashMessage in app.flashes('error') %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ flashMessage }} 😞',
+                showConfirmButton: true,
+                confirmButtonText: 'OK! 👌',
+            });
+        </script>
+    {% endfor %}
+
+   
+{% endblock %}
+
+{% endblock %}

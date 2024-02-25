@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RendezvousRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RendezvousRepository::class)]
 class Rendezvous
@@ -13,16 +14,17 @@ class Rendezvous
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter une date de votre rendez vous')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $daterendezvous = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter heure de votre rendez vous')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $heurerendezvous = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter une description')]
+    #[Assert\Length(max: 3000, maxMessage: 'La longueur maximale est de 3000 caractères.')]
     #[ORM\Column(length: 25555, nullable: true)]
     private ?string $description = null;
-
+    
     #[ORM\Column(length: 2555, nullable: true)]
     private ?string $file = null;
 
@@ -30,7 +32,7 @@ class Rendezvous
     private ?Emploi $emploi = null;
 
     #[ORM\ManyToOne(inversedBy: 'rendezvouses')]
-    private ?patient $idpatient = null;
+    private ?Patient $idpatient = null;
 
     public function getId(): ?int
     {
@@ -78,7 +80,7 @@ class Rendezvous
         return $this->file;
     }
 
-    public function setFile(?string $file): static
+    public function setFile(?string $file): self
     {
         $this->file = $file;
 
