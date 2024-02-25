@@ -24,7 +24,11 @@ class GlobalUser
 
     #[ORM\Column(type:"integer" , unique: true ,nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
-    #[Assert\Length(min: 8, minMessage: "votre numéro de la carte d'identité doit avoir 8 chiffre")]
+    #[Assert\Length(
+        exactMessage: 'Le CIN doit contenir exactement 8 chiffres.',
+        min: 8,
+        max: 8
+    )]
     #[Assert\Type(type:"integer", message:"Le numéro de CIN doit être un entier.")]
     private ?int $cin = null;
 
@@ -52,6 +56,8 @@ class GlobalUser
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\LessThanOrEqual("today", message: 'La date de naissance ne peut pas être dans le futur')]
+    #[Assert\GreaterThanOrEqual("-100 years", message: 'La personne doit avoir au maximum 100 ans')]
     private ?\DateTimeInterface $datenaissance = null;
 
     #[ORM\Column(nullable: true)]

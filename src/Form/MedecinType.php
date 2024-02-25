@@ -9,6 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class MedecinType extends AbstractType
 {
@@ -33,7 +34,9 @@ class MedecinType extends AbstractType
             ->add('numtel')
             ->add('email')
             
-            ->add('password')
+            ->add('password', PasswordType::class, [
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
+            ])
             ->add('specialite')
             ->add('etat', ChoiceType::class, [
                 'choices' => [

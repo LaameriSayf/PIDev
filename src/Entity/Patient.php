@@ -13,10 +13,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Patient extends GlobalUser 
 {
 
-    #[ORM\Column(type:"integer" , unique: true ,nullable: true)]
     
+    #[ORM\Column(type:"integer" , unique: true ,nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
-    #[Assert\Length(min: 5, minMessage: "votre numéro de la carte jaune doit avoir 5 chiffre seulement")]
+    #[Assert\Length(
+        exactMessage: 'Le numéro de lacarte jaune doit contenir exactement 5 chiffres.',
+        min: 5,
+        max: 5
+    )]
     #[Assert\Type(type:"integer", message:"Le numéro de la carte jaune doit être un entier.")]
     private ?int $numcarte = null;
 
