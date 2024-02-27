@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Medicament;
+use App\Entity\Categorie;
 use App\Form\MedicamentType;
 use App\Repository\MedicamentRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,13 +15,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MedicamentController extends AbstractController
 {
-    #[Route('/medicament', name: 'app_medicament')]
-    public function index(): Response
+  
+  
+    #[Route('/medicament', name: 'app_medicament1')]
+    public function index(ManagerRegistry $doctrine): Response
     {
-        return $this->render('medicament/ConsulterMedicament/FrontOffice.html.twig', [
-            'controller_name' => 'MedicamentController',
-        ]);
-    }
+        // Obtenir le dépôt pour l'entité Medicament
+        $repo = $doctrine->getRepository(Medicament::class);
+        
+        // Récupérer toutes les entités Medicament de la base de données
+        $medicament = $repo->findAll();
+        $repo1 = $doctrine->getRepository(Categorie::class);
+        $categorie = $repo1->findAll();
+    {
+        return $this->render('medicament/FontOffice.html.twig', 
+             ['list' => $medicament,'listCategorie' => $categorie],
+        );
+    }}
     #[Route('/addMedicament', name: 'app_addMedicament')]
     public function addMedicament(Request $req, ManagerRegistry $doctrine): Response
     { 

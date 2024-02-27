@@ -1,0 +1,167 @@
+{% extends 'baseF.html.twig' %}
+
+{% block body %}
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="categorie-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="medicament-chart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="main-panel">        
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Liste des catégories</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Nom catégorie</th>
+                                            <th>Type catégorie</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in listCategorie %}
+                                            <tr>
+                                                <td>{{ i.id }}</td>
+                                                <td>{{ i.getNomCat() }}</td>
+                                                <td>{{ i.getTypeCat() }}</td>
+                                                <td>{{ i.getDescriptionCat() }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title text-center mb-4">Liste des Médicaments</h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Référence</th>
+                                            <th>Nom médicament</th>
+                                            <th>Date d'AMM</th>
+                                            <th>Date d'expiration</th>
+                                            <th>Quantité</th>
+                                            <th>Description</th>
+                                            <th>État</th>
+                                            <th>Catégorie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for med in list %}
+                                            <tr>
+                                                <td>{{ med.id }}</td>
+                                                <td>{{ med.getRefMed() }}</td>
+                                                <td>{{ med.getNomMed() }}</td>
+                                                <td>{{ med.getDateAmm() | date('Y-m-d') }}</td>
+                                                <td>{{ med.getDateExpiration() | date('Y-m-d') }}</td>
+                                                <td>{{ med.getQte() }}</td>
+                                                <td>
+                                                    <span class="short-description">{{ med.getDescription()[:3] ~ '...' }}</span>
+                                                    <span class="full-description" style="display: none;">{{ med.getDescription() }}</span>
+                                                    <button type="button" class="btn btn-link show-description">plus</button>
+                                                </td>
+                                                <td>{{ med.getEtat() }}</td>
+                                                <td>{{ med.getCategorie() is not null ? med.getCategorie().getNomCat() : 'Not available' }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var showButtons = document.querySelectorAll('.show-description');
+
+                showButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var parentTd = button.parentNode;
+                        var fullDescription = parentTd.querySelector('.full-description');
+
+                        if (fullDescription.classList.contains('active')) {
+                            fullDescription.classList.remove('active');
+                            button.innerText = 'plus';
+                        } else {
+                            fullDescription.classList.add('active');
+                            button.innerText = 'Masquer la description';
+                        }
+                    });
+                });
+
+                var categorieChart = new Chart(document.getElementById('categorie-chart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for i in listCategorie %}'{{ i.getNomCat() }}',{% endfor %}],
+                        datasets: [{
+                            label: 'Nombre de catégories',
+                            data: [{% for i in listCategorie %}'{{ loop.index }}',{% endfor %}],
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+                var medicamentChart = new Chart(document.getElementById('medicament-chart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: [{% for med in list %}'{{ med.getNomMed() }}',{% endfor %}],
+                        datasets: [{
+                            label: 'Quantité de médicaments',
+                            data: [{% for med in list %}'{{ med.getQte() }}',{% endfor %}],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+    </div>
+{% endblock %}
