@@ -23,7 +23,9 @@
                   <i class="icon-search"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+               {{ form_start(form) }}
+               {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+               {{ form_end(form) }}
             </div>
           </li>
         </ul>

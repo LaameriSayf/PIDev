@@ -1,150 +1,207 @@
 {% extends 'baseF.html.twig' %}
-
 {% block body %}
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-		<!-- Bootstrap -->
-		<link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/bootstrap.min.css')}}"/>
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/bootstrap.min.css')}}">
 
-		<!-- Slick -->
-		<link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick.css')}}"/>
-		<link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick-theme.css')}}"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick-theme.css')}}">
 
-		<!-- nouislider -->
-		<link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/nouislider.min.css')}}"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/nouislider.min.css')}}">
 
-		<!-- Font Awesome Icon -->
-		<link rel="stylesheet" href="{{asset('front/fontOffice/css/font-awesome.min.css')}}">
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/css/font-awesome.min.css')}}">
 
-		<!-- Custom stlylesheet -->
-		<link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/style.css')}}"/>
-
-
-	<style>
-  .shop-img {
-    height: 300px; /* Adjust the height as needed */
-    overflow: hidden;
-  }
-
-  .shop-img img {
-    width: 100%;
-    height: auto;
-  }
-</style>
-
-<!-- SECTION -->
-<div class="section">
-  <!-- container -->
-  <div class="container">
-    <!-- row -->
-    <div class="row">
-      <!-- shop -->
-      <div class="col-md-4 col-xs-6">
-        <div class="shop">
-          <div class="shop-img">
-            <img src="{{asset('front/fontOffice/img/panadole.png')}}" alt="">
-          </div>
-          <div class="shop-body">
-            <h3>Laptop<br>Collection</h3>
-            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/style.css')}}">
+	
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+             <!-- SEARCH BAR -->
+                        <div class="col-md-12">
+							<div class="header-search">
+								<form>
+									<select class="input-select">
+										<option value="0">All Categories</option>
+										<option value="1">Category 01</option>
+										<option value="1">Category 02</option>
+									</select>
+									{{ form_start(form) }}
+                                    {{ form_widget(form.nom, {'attr': {'class': 'input'}}) }}
+                                    {{ form_end(form) }}
+									
+								</form>
+							</div>
+			            </div>
+             <!-- /SEARCH BAR -->
+            </div>
+            <!-- /row -->
         </div>
-      </div>
-      <!-- /shop -->
-
-      <!-- shop -->
-      <div class="col-md-4 col-xs-6">
-        <div class="shop">
-          <div class="shop-img">
-            <img src="{{asset('front/fontOffice/img/doliprane.png')}}" alt="">
-          </div>
-          <div class="shop-body">
-            <h3>Accessories<br>Collection</h3>
-            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-      </div>
-      <!-- /shop -->
-
-      <!-- shop -->
-      <div class="col-md-4 col-xs-6">
-        <div class="shop">
-          <div class="shop-img">
-            <img src="{{asset('front/fontOffice/img/adol-extra.png')}}" alt="">
-          </div>
-          <div class="shop-body">
-            <h3>Cameras<br>Collection</h3>
-            <a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-          </div>
-        </div>
-      </div>
-      <!-- /shop -->
+        <!-- /container -->
     </div>
-    <!-- /row -->
-  </div>
-  <!-- /container -->
-</div>
-<!-- /SECTION -->
+    <!-- /BREADCRUMB -->
 
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- ASIDE -->
+                <div id="aside" class="col-md-3">
+                    <!-- aside Widget -->
+                    <div class="aside">
+                        <h3 class="aside-title">Categories</h3>
+                        <div class="checkbox-filter">
+                            {% for k in listCategorie %}
+                            <div class="input-checkbox">
+                                <input type="checkbox" id="category-{{ k.id }}">
+                                <label for="category-{{ k.id }}">
+                                    <span></span>
+                                    {{ k.getNomCat() }}
+                                    <small>(120)</small>
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- /aside Widget -->
+                </div>
+                <!-- /ASIDE -->
 
-		<!-- Section -->
-		<div class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
+                <!-- STORE -->
+                <div id="store" class="col-md-9">
+                    <!-- store top filter -->
+                    <div class="store-filter clearfix">
+                        <div class="store-sort">
+                            <label>
+                                Sort By:
+                                <select class="input-select">
+                                    <option value="0">Popular</option>
+                                    <option value="1">Position</option>
+                                </select>
+                            </label>
 
-					<div class="col-md-12">
-						<div class="section-title text-center">
-							<h3 class="title">Liste des médicaments</h3>
-						</div>
-					</div>
-{% for med in list %}
+                           
+							
+                            <label>
+                               <h3 class="title">Liste des médicaments</h3>
+                            </label>
+                            
+                        </div>
+                        <ul class="store-grid">
+                            <li class="active"><i class="fa fa-th"></i></li>
+                            <li><a href="#"><i class="fa fa-th-list"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- /store top filter -->
+ 
+                    <!-- store products -->
+                    <div class="row">
+                        <!-- Section -->
+                        <!-- row -->
+                        <div class="row">
+                            {% for med in list %}
+                            <!-- product -->
+                            <div class="col-md-3 col-xs-6">
+                                <div class="product">
+                                    <div class="product-img">
+                                        <img src="{{asset('front/fontOffice/img/product01.png')}}" alt="">
+                                        <div class="product-label">
+                                            <span class="sale">{{ med.getEtat() }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">{{ med.getRefMed() }}</p>
+                                        <h3 class="product-name"><a href="#">{{ med.getNomMed() }}</a></h3>
+                                        <div class="product-rating">
+                                            <!-- Add your product rating HTML here if needed -->
+                                        </div>
+                                        <div class="product-btns">
+                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
+                                                    class="tooltipp">add to wishlist</span></button>
+                                            <button class="add-to-compare"><i class="fa fa-exchange"></i><span
+                                                    class="tooltipp">add to compare</span></button>
+                                            <button class="quick-view"><i class="fa fa-eye"></i><span
+                                                    class="tooltipp">quick view</span></button>
+                                        </div>
+                                    </div>
+                                    <div class="add-to-cart">
+                                        <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                            {% endfor %}
+                        </div>
+                        <!-- /row -->
+                    </div>
+                 
 
-					<!-- product -->
-					<div class="col-md-3 col-xs-6">
-						<div class="product">
-							<div class="product-img">
-								<img src="{{asset('front/fontOffice/img/product01.png')}}" alt="">
-								<div class="product-label">
-									<span class="sale">{{ med.getEtat() }}</span>
-								</div>
-							</div>
-							<div class="product-body">
-								<p class="product-category">{{ med.getNomMed() }}</p>
-								<h3 class="product-name"><a href="#">{{ med.getRefMed() }}</a></h3>
-								<div class="product-rating">
-								</div>
-								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-									<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-									<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-								</div>
-							</div>
-							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
-						</div>
-					</div>
-					<!-- /product -->
-				
-					{% endfor %}
-
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /SECTION -->
-
-
-
-        <script src="{{asset('front/fontOffice/js/main.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/jquery.min.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/bootstrap.min.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/slick.min.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/nouislider.min.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/jquery.zoom.min.js')}}"></script>
-		<script src="{{asset('front/fontOffice/js/main.js')}}"></script>
+                    <!-- /store products -->
+                </div>
+                <!-- /STORE -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
     </div>
+    <!-- /SECTION -->
+
+    <!-- Start Newsletter Area -->
+    <section class="newsletter section">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-6 col-12">
+                    <!-- Start Newsletter Form -->
+                    <div class="subscribe-text ">
+                        <h6>Sign up for newsletter</h6>
+                        <p class="">Cu qui soleat partiendo urbanitas. Eum aperiri indoctum eu,<br> homero alterum.</p>
+                    </div>
+                    <!-- End Newsletter Form -->
+                </div>
+                <div class="col-lg-6 col-12">
+                    <!-- Start Newsletter Form -->
+                    <div class="subscribe-form ">
+                        <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                            <input name="EMAIL" placeholder="Your email address" class="common-input"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'" required=""
+                                type="email">
+                            <button class="btn">Subscribe</button>
+                        </form>
+                        <ul class="newsletter-follow">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Newsletter Form -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /End Newsletter Area -->
+    <script src="{{asset('front/fontOffice/js/jquery.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/slick.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/nouislider.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/jquery.zoom.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/main.js')}}"></script>
+
 {% endblock %}

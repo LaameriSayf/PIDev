@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Categorie;
+use App\Entity\PropertySearch;
 use App\Form\CategorieType;
+use App\Form\PropertySearchType;
 use App\Repository\CategorieRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,14 +55,28 @@ class CategorieController extends AbstractController
     }
     
     #[Route('/afficherCategorie', name: 'app_afficherCategorie')]
-    public function afficher(ManagerRegistry $doctrine): Response
+    public function afficher(ManagerRegistry $doctrine,Request $request): Response
     {
-        // Méthode pour afficher la liste des catégories
-        $repo = $doctrine->getRepository(Categorie::class);
-        $categorie = $repo->findAll();
-    
+        $propertySearch = new PropertySearch();
+        $form = $this->createForm(PropertySearchType::class,$propertySearch);
+        $form->handleRequest($request);
+       //initialement le tableau des articles est vide, 
+       //c.a.d on affiche les articles que lorsque l'utilisateur clique sur le bouton rechercher
+        $categorie= [];
+        $categorie= $doctrine->getRepository(Categorie::class)->findAll();
+       if($form->isSubmitted() && $form->isValid()) {
+       //on récupère le nom d'article tapé dans le formulaire
+        $nom = $propertySearch->getNom();   
+        if ($nom!="") 
+          //si on a fourni un nom d'article on affiche tous les articles ayant ce nom
+          $categorie= $doctrine->getRepository(Categorie::class)->findBy(['nom_cat' => $nom] );
+        
+       }
+       
+     
+     
         // Rendre le modèle pour afficher la liste des catégories
-        return $this->render('categorie/ConsulterCategorie/list.html.twig', ['listCategorie' => $categorie]);
+        return $this->render('categorie/ConsulterCategorie/list.html.twig', ['form' =>$form->createView(),'listCategorie' => $categorie]);
     }
     
     #[Route('/editCategorie/{id}', name: 'app_editCategorie')]

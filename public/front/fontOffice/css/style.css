@@ -140,7 +140,7 @@ textarea.input {
 }
 
 .input-number input[type="number"] {
-  -moz-appearance: textfield;
+
   height: 40px;
   width: 100%;
   border: 1px solid #E4E7ED;
@@ -807,7 +807,7 @@ textarea.input {
   display: inline-block;
   width: 100px;
   height: 100px;
-  background: #1D7EB6;
+  background: #1D7EB6e6;
   text-align: center;
   border-radius: 50%;
   margin: 0px 5px;
@@ -952,7 +952,7 @@ textarea.input {
 }
 
 .product .product-body .product-rating>i.fa-star {
-  color: #ef233c;
+  color: #1D7EB6;
 }
 
 .product .product-body .product-rating:after {
@@ -1041,7 +1041,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #ef233c;
+  background-color: #1D7EB6;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;
