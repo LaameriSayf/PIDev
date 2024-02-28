@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 
 
@@ -35,7 +37,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
     $form = $this->createForm(RendezvousType::class, $rendezvous);
     $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
+    if ($form->isSubmitted() ) {
         $file = $form->get('file')->getData();
         if($file){ 
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -123,10 +125,34 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
         return $this->render('rendezvous/consulterRdv/afficherRdv.html.twig', ['list'=>$rendezvous]);
     }
 
+    #[Route('/afficherRendezVousMedecin', name: 'app_afficherRendezVousMedecin')]
 
+    public function afficherRendezVousMedcin(ManagerRegistry $doctrine):Response
+    {
+        $repository=$doctrine->getRepository(Rendezvous::class);
+        $rendezvous=$repository->findAll();
+        return $this->render('rendezvous/consulterRdv/afficherRdvMedecin.html.twig', ['list'=>$rendezvous]);
+    }
 
+    #[Route('/searchRendezvousByDate', name: 'app_searchRendezvousByDate')]
+public function searchRendezvousByDate(Request $request, RendezvousRepository $repository):Response
+{
+    $date = $request->query->get('daterendezvous');
 
+    $rendezvous = $repository->findByDate($date);
 
+    $responseArray = [];
+    foreach ($rendezvous as $rdv) {
+        $responseArray[] = [
+            'id' => $rdv->getId(),
+            'daterendezvous' => $rdv->getDaterendezvous()->format('Y-m-d'),
+            'heurerendezvous' => $rdv->getHeurerendezvous()->format('H:i:s'),
+            'description' => $rdv->getDescription(),
+            'file' => $rdv->getFile(),
+        ];
+    }
+
+    return $this->render('rendezvous/consulterRdv/afficherRdvMedecin.html.twig', ['list' => $responseArray]);}
 
 
 
