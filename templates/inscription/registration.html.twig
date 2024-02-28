@@ -1,135 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags-->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Colorlib Templates">
-    <meta name="author" content="Colorlib">
-    <meta name="keywords" content="Colorlib Templates">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign Up Form by Colorlib</title>
 
-    <!-- Title Page-->
-    <title>Au Register Forms by Colorlib</title>
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
 
-    <!-- Icons font CSS-->
-    <link href="{{asset('vendor/mdi-font/css/material-design-iconic-font.min.css')}}" rel="stylesheet" media="all">
-    <link href="{{asset('back/css/signin/vendor/font-awesome-4.7/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
-    <!-- Font special for pages-->
-    <link href="{{asset('https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i')}}" rel="stylesheet">
-
-    <!-- Vendor CSS-->
-    <link href="{{asset('back/css/signin/vendor/select2/select2.min.css')}}" rel="stylesheet" media="all">
-    <link href="{{asset('back/css/signin/vendor/datepicker/daterangepicker.css')}}" rel="stylesheet" media="all">
-
-    <!-- Main CSS-->
-    <link href="{{asset('back/css/signin/css/main.css')}}" rel="stylesheet" media="all">
-    <!-- Custom CSS -->
-    <style>
-        body {
-            background: #4782da; /* Fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #4782da, #56c2d6); /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #4782da, #56c2d6); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        }
-    </style>
+    <!-- Main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-
 <body>
-    <div class="page-wrapper p-t-130 p-b-100 font-poppins">
-        <div class="wrapper wrapper--w680">
-            <div class="card card-4">
-                <div class="card-body">
-                    <h2 class="title">Registration Form</h2>
-                    <form method="POST" novalidate>
-                        <div class="row row-space">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">First Name</label>
-                                    <input class="input--style-4" type="text" name="first_name">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Last Name</label>
-                                    <input class="input--style-4" type="text" name="last_name">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-space">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Birthday</label>
-                                    <div class="input-group-icon">
-                                        <input class="input--style-4 js-datepicker" type="text" name="birthday">
-                                        <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Gender</label>
-                                    <div class="p-t-10">
-                                        <label class="radio-container m-r-45">Male
-                                            <input type="radio" checked="checked" name="gender">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="radio-container">Female
-                                            <input type="radio" name="gender">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row row-space">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Email</label>
-                                    <input class="input--style-4" type="email" name="email">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Phone Number</label>
-                                    <input class="input--style-4" type="text" name="phone">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-space">
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Password</label>
-                                    <input class="input--style-4" type="password" name="password">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <label class="label">Confirm Password</label>
-                                    <input class="input--style-4" type="password" name="confirm_password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-t-15 text-center">
-                            <button class="btn btn--radius-2 btn--blue" type="submit">Create Account</button>
-                        </div>
-                    </form>
+
+<div class="main">
+    <div class="container">
+        <div class="signup-content">
+            <div class="signup-img">
+                <img src="images/signup-img.jpg" alt="Sign Up Image">
+            </div>
+            
+            <div class="signup-form">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'class': 'form'}}) }}
+                
+                <div class="form-group">
+                    {{ form_label(form.numcarte, 'Numéro de la carte jaune') }}
+                    {{ form_widget(form.numcarte, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de la carte jaune'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.numcarte) }}</div>
                 </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.cin, 'CIN') }}
+                    {{ form_widget(form.cin, {'attr': {'class': 'form-control', 'placeholder': 'CIN'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.cin) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.nom, 'Nom') }}
+                    {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.nom) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.prenom, 'Prénom') }}
+                    {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.prenom) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.datenaissance, 'Date de naissance') }}
+                    {{ form_widget(form.datenaissance, {'attr': {'class': 'form-control', 'placeholder': 'Date de naissance'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.datenaissance) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.genre, 'Genre', {'label_attr': {'for': 'exampleInputName1'}}) }}
+                    {{ form_widget(form.genre, {'attr': {'class': 'form-control', 'placeholder': 'Genre', 'id': 'exampleInputName1'}}) }}
+                    <div style ="color:red;"> {{ form_errors(form.genre) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.email, 'Adresse email') }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.email) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.numtel, 'Numéro de téléphone') }}
+                    {{ form_widget(form.numtel, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.numtel) }}</div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.password, 'Password') }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+                    <div class="invalid-feedback">{{ form_errors(form.password) }}</div>
+                </div>
+                
+                <div class="form-group text-center">
+                    {{ form_row(form.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
+                    {{ form_row(form.Annuler, {'attr': {'class': 'btn btn-secondary'}}) }}
+                </div>
+
+                {{ form_end(form) }}
             </div>
         </div>
     </div>
-     
-    <!-- Jquery JS-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <!-- Vendor JS-->
-    <script src="vendor/select2/select2.min.js"></script>
-    <script src="vendor/datepicker/moment.min.js"></script>
-    <script src="vendor/datepicker/daterangepicker.js"></script>
+</div>
 
-    <!-- Main JS-->
-    <script src="js/global.js"></script>
-
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
+<!-- JS -->
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="js/main.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
-<!-- end document-->

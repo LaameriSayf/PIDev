@@ -4,8 +4,14 @@ namespace App\Form;
 
 use App\Entity\Patient;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 
 class RegistrationType extends AbstractType
 {
@@ -15,13 +21,26 @@ class RegistrationType extends AbstractType
             ->add('cin')
             ->add('nom')
             ->add('prenom')
-            ->add('genre')
-            ->add('datenaissance')
+            ->add('genre', ChoiceType::class, [
+                'choices' => [
+                    'Femme' => 'F',
+                    'Homme' => 'H',
+                ],
+                'expanded' => true, // Afficher les choix comme des boutons radio
+                'multiple' => false, // Permettre la sélection d'un seul choix
+            ])
+            ->add('datenaissance', DateType::class, [
+                'widget' => 'single_text', // Afficher en tant qu'entrée texte unique
+                'format' => 'yyyy-MM-dd', // Définir le format de date souhaité
+            ])
             ->add('numtel')
             ->add('email')
-            ->add('password')
-            ->add('interlock')
+            ->add('password', PasswordType::class, [
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
+            ])
             ->add('numcarte')
+            ->add('Ajouter',SubmitType::class)
+            ->add('Annuler',SubmitType::class)
         ;
     }
 

@@ -28,6 +28,14 @@ class AdminController extends AbstractController
         ]);
     }
 
+    
+    #[Route('/home', name: 'home_admin')]
+    public function home(): Response
+    {
+        return $this->render('admin/home.html.twig', []);
+    }
+
+
     #[Route('/addAdmin', name: 'addAdmin')]
     public function addAdmin(Request $req, ManagerRegistry $doctrine): Response
 {
