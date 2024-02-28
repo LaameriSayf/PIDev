@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
@@ -78,7 +77,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
    
 
     #[Route('/editRendezvous/{id}', name: 'app_editRendezvous')]
-    public function editRendezvous(RendezvousRepository $repository, $id, Request $request,SluggerInterface $slugger , ManagerRegistry $manager)
+    public function editRendezvous(RendezvousRepository $repository, $id, Request $request,ManagerRegistry $manager)
     {
         $rendezvous = $repository->find($id);
         $form = $this->createForm(EditRendezType::class, $rendezvous);
