@@ -46,6 +46,9 @@ class PharmacienController extends AbstractController
                 // Réafficher le formulaire avec le message d'erreur
                 return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
             }
+            $password = $pharmacien->getPassword();
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $pharmacien->setPassword($hashedPassword);
             
             $em = $doctrine->getManager();
             $em->persist($pharmacien);

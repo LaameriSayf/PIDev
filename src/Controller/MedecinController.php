@@ -42,6 +42,9 @@ class MedecinController extends AbstractController
             // Réafficher le formulaire avec le message d'erreur
             return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
         }
+        $password = $medecin->getPassword();
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $medecin->setPassword($hashedPassword);
         
         $em = $doctrine->getManager();
         $em->persist($medecin);
