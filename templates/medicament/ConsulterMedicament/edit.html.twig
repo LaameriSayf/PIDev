@@ -269,6 +269,18 @@
     {{ form_widget(myForm.etat, {'attr': {'class': 'form-control', 'placeholder': 'État'}}) }}
     {{ form_errors(myForm.etat) }}
 </div>
+        <div class="form-group">
+            {{ form_label(myForm.image, 'Image') }}
+            {% if currentImage is defined %}
+                <img src="{{ asset('uploads/' ~ currentImage) }}" alt="Current Image" width="100" height="100">
+            {% else %}
+                {{ form_widget(myForm.image, {'attr': {'class': 'form-control', 'placeholder': 'Image'}}) }}
+                {{ form_errors(myForm.image) }}
+            {% endif %}
+        </div>
+</div>
+</div>
+
 {{ form_row(myForm.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
  
     {{ form_end(myForm) }}

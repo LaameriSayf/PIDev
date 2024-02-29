@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Entity;
-
 use App\Repository\MedicamentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -56,6 +55,9 @@ class Medicament
 
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
     private ?Pharmacien $idpharmacien = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     // Getters and setters
    
@@ -169,6 +171,18 @@ class Medicament
     public function setIdpharmacien(?Pharmacien $idpharmacien): static
     {
         $this->idpharmacien = $idpharmacien;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

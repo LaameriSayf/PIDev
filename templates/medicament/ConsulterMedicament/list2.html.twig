@@ -329,6 +329,7 @@
                                         <th>Qte</th>
                                         <th>description</th>
                                         <th>etat</th>
+                                        <th>image</th>
                                         <th>categorie</th>
                                         <th class="text-center">Option</th>
                                           
@@ -348,6 +349,7 @@
     <button type="button" class="btn btn-link show-description">plus</button>
 </td>
                                         <td>{{ med.getEtat() }}</td>
+                                        <td><img src="{{asset('uploads/'~med.getImage()) }}"></td>
                                        
                                         <td>{{ med.getCategorie() is not null ? med.getCategorie().getNomCat() : 'Not available' }}</td>
                                          <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a> 
