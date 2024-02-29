@@ -288,8 +288,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{ path('add_ordonnance')}}">Ajouter ordonnances</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('ordonnance_show')}}">Consulter liste desordonnances</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('add_ordonnance') }}">Ajouter ordonnances</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('ordonnance_show')}}">Consulter liste des ordonnances</a></li>
               </ul>
             </div>
           </li>
@@ -322,8 +322,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for ordonnance in listOrdonnances %}
-                                    <tr>
+                               {% for ordonnance in listOrdonnances %}
+                                <tr>
                                         <td>{{ ordonnance.id }}</td>
                                         <td>{{ ordonnance.medecamentprescrit()}}</td>
                                         <td>{{ordonnance.dateprescription() | date('Y-m-d') }}</td>

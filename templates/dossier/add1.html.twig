@@ -212,7 +212,11 @@
                             
                             
 
-
+                            <div class="form-group">
+                                {{ form_label(form.numdossier, 'Numéro dossier ', {'label_attr': {'for': 'exampleInputNumdossier'}}) }}
+                                {{ form_widget(form.numdossier, {'attr': {'class': 'form-control', 'placeholder': 'Numéro dossier', 'id': 'exampleInputNumDossier'}}) }}
+                                {{ form_errors(form.numdossier) }}
+                            </div>
                             <div class="form-group">
                                 {{ form_label(form.resultatexamen, 'Descriptions Medecins', {'label_attr': {'for': 'exampleInputresultatexamen'}}) }}
                                 {{ form_widget(form.resultatexamen, {'attr': {'class': 'form-control', 'placeholder': 'Description Medecins', 'id': 'exampleInputDatePrescription'}}) }}
@@ -228,13 +232,19 @@
                               {% endfor %}
                              {{ form_errors(form.antecedentspersonnelles) }}
                              </div>
+                       {#  <div class="form-group">
+                        {{ form_label(form.ordonnance, 'Sélectionner Ordonnance :', {'label_attr': {'for': 'exampleInputOrdonnance'}}) }}
+                        {{ form_widget(form.ordonnance, {'attr': {'class': 'form-control', 'id': 'exampleInputOrdonnance'}}) }}
+                        {{ form_errors(form.ordonnance) }}
+                         </div>#}
+                    
+                         <div class="form-group">
+                                {{ form_label(form.DateCreation, 'Date de Création', {'label_attr': {'for': 'exampleInputDateCretion'}}) }}
+                                {{ form_widget(form.DateCreation, {'attr': {'class': 'form-control', 'placeholder': 'Date de création', 'id': 'exampleInputDateCreation'}}) }}
+                                {#{ form_errors(form.DateCreation) }#}
+                           </div>
+                            
 
-                            {#<div class="form-group">
-                                {{ form_label(form.antecedentspersonnelles, 'Antecedants Personnelles', {'label_attr': {'for': 'exampleInputAntecedantsPersonnelles'}}) }}
-                                {{ form_widget(form.antecedentspersonnelles, {'attr': {'class': 'form-control', 'placeholder': 'Antecedant Personnelles', 'id': 'exampleInputAntecedantsPersonnelles'}}) }}
-                                {{ form_errors(form.antecedentspersonnelles) }}
-                            </div>#}
-                          
                             
     
    

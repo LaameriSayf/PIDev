@@ -35,11 +35,10 @@ class Ordonnance
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
     private ?\DateTimeInterface $dateprescription = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ordonnances_patient')]
-    private ?Patient $patient ;
+    #[ORM\ManyToOne(inversedBy: 'ordonnance')]
+    private ?Dossiermedical $dossiermedical = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ordonnances')]
-    private ?Dossiermedical $dossier = null;
+    
 
     public function getRenouvellement(): ?\DateTimeInterface
     {
@@ -89,33 +88,26 @@ class Ordonnance
         return $this;
     }
 
-    public function getPatient(): ?Patient
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(?Patient $patient): static
-    {
-        $this->patient = $patient;
-
-        return $this;
-    }
+    
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDossier(): ?Dossiermedical
+    public function getDossiermedical(): ?Dossiermedical
     {
-        return $this->dossier;
+        return $this->dossiermedical;
     }
 
-    public function setDossier(?Dossiermedical $dossier): static
+    public function setDossiermedical(?Dossiermedical $dossiermedical): static
     {
-        $this->dossier = $dossier;
+        $this->dossiermedical = $dossiermedical;
 
         return $this;
     }
-    
+
+   
+
+   
 
 }

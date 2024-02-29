@@ -290,6 +290,7 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{{ path('add_dossier')}}">Ajouter dossiers</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('show_dossier')}}">Consulter liste desdossiers</a></li>
+                
               </ul>
             </div>
           </li>
@@ -306,38 +307,56 @@
                     <div class="card-body">
                         <h4 class="card-title">Liste desdossierss</h4>
                         <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>id</th>
-                                        <th>Description Medecins</th>
-                                        <th>Antécédents personelles</th>
-                                        <th>Action</th>
-                                       
+                           <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Numéro Dossier</th>
+            <th>Description Médecins</th>
+            <th>Antécédents personnels</th>
+            <th>Détails Ordonnances</th>
+            <th>Date de Création</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dossier in listDossiers %}
+        <tr>
+            <td>{{ dossier.id }}</td>
+            <td>{{ dossier.numdossier }}</td>
+            <td>{{ dossier.resultatexamen }}</td>
+            <td>
+                <ul>
+                    {% for antecedent in dossier.antecedentspersonnelles %}
+                        <li>{{ antecedent }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>
+                <ul>
+            
+                    {% for ordonnance in dossier.ordonnance %}
+                        <li>
+                            <p>ID: {{ ordonnance.id }}</p>
+                            <p>Médicament Prescrit: {{ ordonnance.medecamentprescrit() }}</p>
+                            <p>Date Prescription: {{ ordonnance.dateprescription() | date('Y-m-d') }}</p>
+                            <p>Renouvellement: {{ ordonnance.renouvellement() | date('Y-m-d') }}</p>
+                            <p>Adresse: {{ ordonnance.adresse() }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{dossier.datecreation() | date('Y-m-d H:i:s') }}</td>
+            <td>
+                <a href="{{ path('edit_Dossier', {'id': dossier.id}) }}">
+                    <button type="button" class="btn btn-outline-primary">Modifier</button>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-                                      
-                                      
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for dossier in listDossiers %}
-                                    <tr>
-                                        <td>{{ dossier.id }}</td>
-                                        <td>{{ dossier.resultatexamen}}</td>
-                                         <td>
-                                        <ul>
-                {% for antecedent in dossier.antecedentspersonnelles %}
-                    <li>{{ antecedent }}</li>
-                {% endfor %}
-            </ul>
-        </td>
-                                      
-                                        <td><a href="{{ path('edit_Dossier', {'id': dossier.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a></td>
-  
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>

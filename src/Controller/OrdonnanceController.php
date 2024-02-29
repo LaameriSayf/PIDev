@@ -10,9 +10,12 @@ use App\Form\OrdonnanceType;
 use App\Repository\OrdonnanceRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Constraints\DateTime;
-
+use DateTime;
+//use Symfony\Component\Validator\Constraints\DateTime;
 use App\Entity\Patient;
+use App\Entity\DossierMedical;
+use App\Repository\DossiermedicalRepository;
+use Proxies\__CG__\App\Entity\Dossiermedical as EntityDossiermedical;
 
 class OrdonnanceController extends AbstractController
 {
@@ -23,13 +26,12 @@ class OrdonnanceController extends AbstractController
             'controller_name' => 'OrdonnanceController',
         ]);
     }
-
-
-
     #[Route('/addOrdonnance', name: 'add_ordonnance')]
     public function addOrdonnance(Request $req,ManagerRegistry $doctrine):Response
     { 
+    $dateActuelle = new DateTime();
     $ordonnance=new Ordonnance();
+    $ordonnance ->setDateprescription($dateActuelle);
     $form=$this->createForm(OrdonnanceType::class,$ordonnance);
     $form->handleRequest($req);
 
@@ -38,26 +40,27 @@ class OrdonnanceController extends AbstractController
         $em=$doctrine->getManager();
         $em->persist($ordonnance);
         $em->flush(); 
-        return $this->redirectToRoute('ordonnance_show');
+        return $this->redirectToRoute('show_dossier');
     }
     
     return $this->renderForm("ordonnance/add.html.twig", ["form"=>$form]);
-
-}
-
-
+    }
+    
     #[Route('/showOrdonnance', name: 'ordonnance_show')]
     public function show(ManagerRegistry $doctrine): Response
     {
+  
     $repo=$doctrine->getRepository(Ordonnance::class);
     $ordonnance=$repo->findAll();
+
     return $this->render('ordonnance/show.html.twig', ['listOrdonnances'=>$ordonnance]);
     }
-    
+
 
     #[Route('/ordonnance/edit/{id}', name: 'ordonnance_edit')]
     public function edit(OrdonnanceRepository $repository, $id, Request $request,ManagerRegistry $doctrine)
     {
+   
     $ordonnance= $repository->find($id);
     $form = $this->createForm(OrdonnanceType::class, $ordonnance);
     $form->handleRequest($request);
@@ -90,6 +93,7 @@ class OrdonnanceController extends AbstractController
             
             return $this->redirectToRoute('ordonnance_show');
         }
+        
 
 
 }

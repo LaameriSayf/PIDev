@@ -2,34 +2,33 @@
 
 namespace App\Form;
 
-use App\Entity\Patient;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Ordonnance;
 
-class DossierType extends AbstractType
+
+class DossierMedicalType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-       // ->add('ordonnance', EntityType::class, [
-          //  'class' => Ordonnance::class,
-           //'choice_label' => 'id', 
-           // 'multiple' => true, // Pour permettre la sélection de plusieurs ordonnances
-           // 'expanded' => false, // Afficher la liste déroulante sous forme de liste
-           // 'required' => false, 
-           // 'by_reference' => false, // Important pour que les changements soient bien suivis par Symfony
-            // //Autres options de configuration selon vos besoins
-      // ])
-
+        
+    
        
-        ->add('DateCreation')
+        ->add('ordonnance', EntityType::class, [
+            'class' => Ordonnance::class,
+           'choice_label' => 'id', 
+            'multiple' => true, // Pour permettre la sélection de plusieurs ordonnances
+            'expanded' => false, // Afficher la liste déroulante sous forme de liste
+            'required' => false, 
+            'by_reference' => false, // Important pour que les changements soient bien suivis par Symfony
+             //Autres options de configuration selon vos besoins
+       ])
         ->add('resultatexamen')
-        ->add('numdossier')
         ->add('antecedentspersonnelles', ChoiceType::class, [
             'choices' => [
                 'Hypertension' => 'hypertension artérielle',
@@ -42,15 +41,10 @@ class DossierType extends AbstractType
         ])
         
         
-        ->add('Ajouter', SubmitType::class);
-    
-
-        
-        
-
-            
-        
-        }
+        ->add('Modifier', SubmitType::class)
+      
+        ;
+    }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

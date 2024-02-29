@@ -18,7 +18,7 @@ class Dossiermedical
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 25555, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $resultatexamen = null;
@@ -30,6 +30,22 @@ class Dossiermedical
 
     #[ORM\Column(nullable: true)]
      private ?array $antecedentspersonnelles = [];
+
+    #[ORM\OneToMany(mappedBy: 'dossiermedical', targetEntity: Ordonnance::class)]
+    private Collection $ordonnance;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $DateCreation = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $numdossier = null;
+
+
+   
+    public function __construct()
+    {
+        $this->ordonnance = new ArrayCollection();
+    }
 
     
     public function getId(): ?int
@@ -75,6 +91,65 @@ class Dossiermedical
         return $this;
     }
 
+    /**
+     * @return Collection<int, Ordonnance>
+     */
+    public function getOrdonnance(): Collection
+    {
+        return $this->ordonnance;
+    }
+
+    public function addOrdonnance(Ordonnance $ordonnance): static
+    {
+        if (!$this->ordonnance->contains($ordonnance)) {
+            $this->ordonnance->add($ordonnance);
+            $ordonnance->setDossiermedical($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrdonnance(Ordonnance $ordonnance): static
+    {
+        if ($this->ordonnance->removeElement($ordonnance)) {
+            // set the owning side to null (unless already changed)
+            if ($ordonnance->getDossiermedical() === $this) {
+                $ordonnance->setDossiermedical(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->DateCreation;
+    }
+
+    public function setDateCreation(?\DateTimeInterface $DateCreation): static
+    {
+        $this->DateCreation = $DateCreation;
+
+        return $this;
+    }
+
+    public function getNumdossier(): ?int
+    {
+        return $this->numdossier;
+    }
+
+    public function setNumdossier(?int $numdossier): static
+    {
+        $this->numdossier = $numdossier;
+
+        return $this;
+    }
+
+   
+
+    
+    }
+
 
     
    
@@ -82,4 +157,6 @@ class Dossiermedical
     
 
    
-}
+
+
+

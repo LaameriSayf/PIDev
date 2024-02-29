@@ -220,7 +220,7 @@
                             <div class="form-group">
                                 {{ form_label(form.dateprescription, 'Date de prescrition', {'label_attr': {'for': 'exampleInputDatePrescription'}}) }}
                                 {{ form_widget(form.dateprescription, {'attr': {'class': 'form-control', 'placeholder': 'Date prescription', 'id': 'exampleInputDatePrescription'}}) }}
-                                {{ form_errors(form.dateprescription) }}
+                                {#{{ form_errors(form.dateprescription) }}#}
                             </div>
                             <div class="form-group">
                                 {{ form_label(form.renouvellement, 'Renouvellement', {'label_attr': {'for': 'exampleInputRenouvellement'}}) }}
@@ -231,6 +231,11 @@
                                 {{ form_label(form.adresse, 'Adresse', {'label_attr': {'for': 'exampleInputAdresse'}}) }}
                                 {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': 'Adresse', 'id': 'exampleInputAdresse'}}) }}
                                 {{ form_errors(form.adresse) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.Dossiermedical, 'Dossier Médical', {'label_attr': {'for': 'exampleInputDossierMedical'}}) }}
+                                {{ form_widget(form.Dossiermedical, {'attr': {'class': 'form-control', 'placeholder': 'Dosier M', 'id': 'exampleInputMedecamentPrescrit'}}) }}
+                                {{ form_errors(form.Dossiermedical) }}
                             </div>
                             
     
