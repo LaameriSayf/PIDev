@@ -49,12 +49,6 @@ class RendezvousType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'application/pdf',
-                            'application/msword',
-                            
-                        ],
-                        'mimeTypesMessage' => 'Ajouter un fichier de type pdf ou docx',
                     ]),
                 ],
             ])

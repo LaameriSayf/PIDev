@@ -31,7 +31,7 @@ class Emploi
     #[ORM\Column(length: 25555, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'emploi', targetEntity: rendezvous::class)]
+    #[ORM\OneToMany(mappedBy: 'emploi', targetEntity: Rendezvous::class)]
     private Collection $idrendezvous;
 
     public function __construct()

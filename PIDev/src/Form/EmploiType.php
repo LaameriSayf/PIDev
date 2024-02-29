@@ -3,27 +3,28 @@
 namespace App\Form;
 
 use App\Entity\Emploi;
-use Doctrine\DBAL\Types\DateTimeType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class EmploiType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('start',DateTimeType::class,[
+                'widget' => 'single_text',  
+            ])
+            ->add('end',DateTimeType::class,[
+                'widget' => 'single_text',  
+            ])
             ->add('titre')
-            ->add('start', DateTimeType::class, [
-                'widget' => 'single_text', 
-            ])
-            ->add('end' , DateTimeType::class, [
-                'widget' => 'single_text'
-            ])
+
             ->add('description')
-            ->add('Submit',SubmitType::class)
+            ->add('Submit',SubmitType::class);
         ;
     }
 

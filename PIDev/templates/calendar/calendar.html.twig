@@ -1,15 +1,19 @@
 {% extends 'baseB.html.twig' %}
 
 {% block body %}
+
     <div id="calendrier"></div>
     <title>Emplois du temps</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
 {% block javascripts %}
 <script>
+
         document.addEventListener('DOMContentLoaded', function () {
             let calendarElt = document.querySelector("#calendrier");
             let calendar = new FullCalendar.Calendar(calendarElt, {
+                
+                allDaySlot: false,
                 initialView: 'timeGridWeek',
                 locale: 'fr',  
                 timeZone: 'Africa/Tunis',
@@ -19,6 +23,14 @@
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
 
                 },
+                events: {{ data|raw }},
+                 eventContent: function(info) {
+                return {
+                    html: `<div class="fc-content">${info.event.title}</div>
+                           <div class="fc-description">${info.event.extendedProps.description}</div>`
+                };
+                        },
+
                 
             })
 
@@ -32,7 +44,9 @@
   <style>
         #calendrier{
             width: 50%;
+            height: 100%;
             margin: auto;
+
         }
          #calendrier .fc-header-toolbar .fc-button {
     background-color: #007bff; 
@@ -44,6 +58,14 @@
     color: #fff; 
     border-color: #0056b3; 
   }
+  #calendrier .fc-content {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    #calendrier .fc-description {
+        font-size: 1em;
+    }
     </style>
 {% endblock %}
     

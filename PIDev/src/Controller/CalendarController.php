@@ -2,17 +2,58 @@
 
 namespace App\Controller;
 
+use App\Repository\EmploiRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CalendarController extends AbstractController
 {
-    #[Route('/emploi', name: 'app_calendar')]
-    public function index(): Response
-    {
-        return $this->render('calendar/index.html.twig', [
-            'controller_name' => 'CalendarController',
-        ]);
+    #[Route('/calendar', name: 'app_calendar')]
+    public function index(EmploiRepository $emploi): Response
+    {      $events = $emploi->findAll();
+           $rdvs = [];
+
+           foreach($events as $event){
+            $rdvs[] = [
+                'id' => $event->getId(),
+                'start' => $event->getStart()->format('Y-m-d\TH:i:s'),
+                'end' => $event->getEnd()->format('Y-m-d\TH:i:s'),
+                'titre' => $event->getTitre(),
+                'description' => $event->getDescription(),
+                
+            ];
+        }
+
+        $data = json_encode($rdvs);
+
+        return $this->render('calendar/calendar.html.twig', compact('data'));
     }
-}
+
+       
+    }
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

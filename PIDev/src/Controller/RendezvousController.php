@@ -8,17 +8,10 @@ use App\Form\RendezvousType;
 use App\Repository\RendezvousRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
-
-
-
-
-
 
 class RendezvousController extends AbstractController
 {
@@ -35,24 +28,18 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
 {   $rendezvous = new Rendezvous();
     $form = $this->createForm(RendezvousType::class, $rendezvous);
     $form->handleRequest($request);
-
     if ($form->isSubmitted() ) {
         $file = $form->get('file')->getData();
         if($file){ 
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $slugger->slug($originalFilename);
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-            try{ $file->move('C:\Users\halim\OneDrive\Bureau\PIDev\uploads',
-                $newFilename
-            );} catch(FileException $e){
-            }
-           
-    
-            $rendezvous->setFile($newFilename);        }
-
-
-        $em = $doctrine->getManager();
-        $existingRendezvous = $em->getRepository(Rendezvous::class)->findOneBy([
+            $file->move('C:\Users\halim\OneDrive\Bureau\PIDev-main\PIDev\uploads', $newFilename
+            );
+            $rendezvous->setFile($newFilename);}
+            $em = $doctrine->getManager();
+        //check if the rendez vous exists
+            $existingRendezvous = $em->getRepository(Rendezvous::class)->findOneBy([
             'daterendezvous' => $rendezvous->getDaterendezvous(),
             'heurerendezvous' => $rendezvous->getHeurerendezvous(),
         ]);
