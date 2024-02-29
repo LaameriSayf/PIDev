@@ -39,7 +39,7 @@ class RegistrationType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
             ])
             ->add('numcarte')
-            ->add('Ajouter',SubmitType::class)
+            ->add('Creer',SubmitType::class)
             ->add('Annuler',SubmitType::class)
         ;
     }
