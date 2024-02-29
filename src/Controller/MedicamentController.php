@@ -41,12 +41,32 @@ class MedicamentController extends AbstractController
        
        }
        
+       $em = $doctrine->getManager();
+       $currentPage = $request->query->getInt('page', 1); 
+
+       $itemsPerPage = 7; 
+       $offset = ($currentPage - 1) * $itemsPerPage; 
+
+       $commentRepository = $em->getRepository(Medicament::class);
+
+       
+       $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+
+       $totalItems = $commentRepository->count([]);
+
+       $totalPages = ceil($totalItems / $itemsPerPage);
+
+
+
+
        $repo1 = $doctrine->getRepository(Categorie::class);
        $categorie = $repo1->findAll();
         return $this->render('medicament/FontOffice.html.twig', 
              ['form' =>$form->createView(),
              'list' => $medicament,
-             'listCategorie' => $categorie,],
+             'listCategorie' => $categorie,
+             'currentPage' => $currentPage,
+             'totalPages' => $totalPages,],
         );
     }}
 
@@ -103,8 +123,8 @@ class MedicamentController extends AbstractController
         return $this->renderForm("medicament/AjouterMedicament/add1.html.twig", ["myForm" => $form]);
     }
     
-    #[Route('/afficherMedicament', name: 'app_afficherMedicament')]
-    public function afficher(ManagerRegistry $doctrine): Response
+    #[Route('/afficherMedicament1', name: 'app_afficherMedicament')]
+    public function afficher1(ManagerRegistry $doctrine): Response
     {
         // Obtenir le dépôt pour l'entité Medicament
         $repo = $doctrine->getRepository(Medicament::class);
@@ -115,7 +135,30 @@ class MedicamentController extends AbstractController
         // Rendre le modèle pour afficher la liste des Medicaments
         return $this->render('medicament/ConsulterMedicament/list2.html.twig', ['list' => $medicament]);
     }
-  
+    #[Route('/afficherMedicament', name: 'app_afficherMedicament')]
+    public function afficher(Request $request, ManagerRegistry $doctrine): Response
+    {
+        $em = $doctrine->getManager();
+        $currentPage = $request->query->getInt('page', 1); 
+
+        $itemsPerPage = 7; 
+        $offset = ($currentPage - 1) * $itemsPerPage; 
+
+        $commentRepository = $em->getRepository(Medicament::class);
+
+        
+        $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+
+        $totalItems = $commentRepository->count([]);
+
+        $totalPages = ceil($totalItems / $itemsPerPage);
+
+        return $this->render('medicament/ConsulterMedicament/list2.html.twig', [
+            'list' => $medicament,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+        ]);
+    }
     
     #[Route('/editMedicament/{id}', name: 'app_editMedicament')]
 public function edit(MedicamentRepository $repository, $id, Request $request, ManagerRegistry $doctrine, SluggerInterface $slugger)

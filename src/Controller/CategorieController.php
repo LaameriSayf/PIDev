@@ -72,9 +72,6 @@ class CategorieController extends AbstractController
           $categorie= $doctrine->getRepository(Categorie::class)->findBy(['nom_cat' => $nom] );
         
        }
-       
-     
-     
         // Rendre le modèle pour afficher la liste des catégories
         return $this->render('categorie/ConsulterCategorie/list.html.twig', ['form' =>$form->createView(),'listCategorie' => $categorie]);
     }

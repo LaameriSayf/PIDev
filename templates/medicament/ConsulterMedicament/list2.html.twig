@@ -369,6 +369,19 @@
     <!-- partial -->
 </div>
 </div>
+<div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% for page in 1..totalPages %}
+                            <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_afficherMedicament', {'page': page}) }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
 <script>
 // Attend que le DOM soit entièrement chargé avant d'exécuter le code
 document.addEventListener('DOMContentLoaded', function () {

@@ -16,7 +16,37 @@
 
     <!-- Custom stlylesheet -->
     <link rel="stylesheet" href="{{asset('front/fontOffice/style.css')}}">
-	
+    <link rel="stylesheet" href="{{ asset('front/fontOffice/mdb/css/mdb.min.css') }}">
+
+    <style>
+    .rating {
+        font-size: 15px;
+        cursor: pointer;
+        direction: rtl;
+        unicode-bidi: bidi-override; /* Ajoutez cette ligne pour inverser la direction des étoiles */
+    }
+
+    .rating span {
+        color: #E4E7ED;
+        display: inline-block;
+        font-family: FontAwesome;
+        content: "\f006";
+    }
+
+    .rating span:hover,
+    .rating span:hover ~ span {
+        color: #1D7EB6;
+    }
+    .product-image {
+        width: 100px; /* Remplacez 100px par la largeur souhaitée */
+        height: 100px; /* Remplacez 100px par la hauteur souhaitée */
+        /* Vous pouvez également ajouter d'autres styles comme object-fit pour contrôler le comportement de redimensionnement */
+        object-fit: cover;
+    }
+</style>
+
+    
+  
     <!-- BREADCRUMB -->
     <div id="breadcrumb" class="section">
         <!-- container -->
@@ -96,7 +126,7 @@
                         </ul>
                     </div>
                     <!-- /store top filter -->
- 
+
                     <!-- store products -->
                     <div class="row">
                         <!-- Section -->
@@ -107,23 +137,27 @@
                             <div class="col-md-3 col-xs-6">
                                 <div class="product">
                                     <div class="product-img">
-                                        <img src="{{asset('uploads/'~med.getImage()) }}">
-                                        <div class="product-label">
-                                            <span class="sale">{{ med.getEtat() }}</span>
-                                        </div>
-                                    </div>
+            <img class="product-image" src="{{asset('uploads/'~med.getImage()) }}">
+            <div class="product-label">
+                <span class="sale">{{ med.getEtat() }}</span>
+            </div>
+        </div>
                                     <div class="product-body">
                                         <p class="product-category">{{ med.getRefMed() }}</p>
                                         <h3 class="product-name"><a href="#">{{ med.getNomMed() }}</a></h3>
-                                        <div class="product-rating">
-                                            <!-- Add your product rating HTML here if needed -->
-                                        </div>
+                                    <div class="rating" data-rating="3">
+  <span data-value="1" onclick="rateStar(1)">★</span>
+  <span data-value="2" onclick="rateStar(2)">★</span>
+  <span data-value="3" onclick="rateStar(3)">★</span>
+  <span data-value="4" onclick="rateStar(4)">★</span>
+  <span data-value="5" onclick="rateStar(5)">★</span>
+</div>
                                         <div class="product-btns">
-                                            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                    class="tooltipp">add to wishlist</span></button>
+                                            <button class="add-to-wishlist"><i class="fa fa-thumbs-up"></i><span
+                                                    class="tooltipp">J'aime</span></button>
                                             
-                                            <button class="quick-view"><i class="fa fa-eye"></i><span
-                                                    class="tooltipp">quick view</span></button>
+                                            <button class="quick-view"><i class="fa fa-thumbs-down"></i><span
+                                                    class="tooltipp">J'aime pas</span></button>
                                         </div>
                                     </div>
                                     <div class="add-to-cart">
@@ -148,7 +182,19 @@
         <!-- /container -->
     </div>
     <!-- /SECTION -->
-
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% for page in 1..totalPages %}
+                    <li class="page-item {% if page == currentPage %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_medicament1', {'page': page}) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
     <!-- Start Newsletter Area -->
     <section class="newsletter section">
         <div class="container">
@@ -197,5 +243,26 @@
     <script src="{{asset('front/fontOffice/js/nouislider.min.js')}}"></script>
     <script src="{{asset('front/fontOffice/js/jquery.zoom.min.js')}}"></script>
     <script src="{{asset('front/fontOffice/js/main.js')}}"></script>
+   <script>
+    function rateStar(value) {
+        // Mettre à jour la valeur de notation dans l'attribut 'data-rating'
+        document.querySelector('.rating').setAttribute('data-rating', value);
+
+        // Mettre à jour le style des étoiles
+        const stars = document.querySelectorAll('.rating span');
+        stars.forEach((star, index) => {
+            if (index < value) {
+                star.style.color = '#1D7EB6';  // Couleur des étoiles sélectionnées
+            } else {
+                star.style.color = '#E4E7ED';  // Couleur des étoiles non sélectionnées
+            }
+        });
+
+        // Vous pouvez également envoyer la valeur sélectionnée au serveur via une requête AJAX
+        // en utilisant la variable 'value'
+    }
+</script>
+
+   
 
 {% endblock %}
