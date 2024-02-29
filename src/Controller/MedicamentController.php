@@ -7,6 +7,7 @@ use App\Entity\Categorie;
 use App\Entity\PropertySearch;
 use App\Form\MedicamentType;
 use App\Form\PropertySearchType;
+use App\Repository\MedecinRepository;
 use App\Repository\MedicamentRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,55 +22,50 @@ class MedicamentController extends AbstractController
   
   
     #[Route('/medicament', name: 'app_medicament1')]
-    public function index(ManagerRegistry $doctrine,Request $request): Response
+    public function index(ManagerRegistry $doctrine, Request $request): Response
     {
-       
-        {
         $propertySearch = new PropertySearch();
-        $form = $this->createForm(PropertySearchType::class,$propertySearch);
+        $form = $this->createForm(PropertySearchType::class, $propertySearch);
         $form->handleRequest($request);
-       //initialement le tableau des articles est vide, 
-       //c.a.d on affiche les articles que lorsque l'utilisateur clique sur le bouton rechercher
-        $medicament= [];
-        $medicament= $doctrine->getRepository(Medicament::class)->findAll();
-       if($form->isSubmitted() && $form->isValid()) {
-       //on récupère le nom d'article tapé dans le formulaire
-        $nom = $propertySearch->getNom();   
-        if ($nom!="") 
-          //si on a fourni un nom d'article on affiche tous les articles ayant ce nom
-          $medicament=  $doctrine->getRepository(Medicament::class)->findBy(['nom_med' => $nom] );
-       
-       }
-       
-       $em = $doctrine->getManager();
-       $currentPage = $request->query->getInt('page', 1); 
-
-       $itemsPerPage = 7; 
-       $offset = ($currentPage - 1) * $itemsPerPage; 
-
-       $commentRepository = $em->getRepository(Medicament::class);
-
-       
-       $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
-
-       $totalItems = $commentRepository->count([]);
-
-       $totalPages = ceil($totalItems / $itemsPerPage);
-
-
-
-
-       $repo1 = $doctrine->getRepository(Categorie::class);
-       $categorie = $repo1->findAll();
-        return $this->render('medicament/FontOffice.html.twig', 
-             ['form' =>$form->createView(),
-             'list' => $medicament,
-             'listCategorie' => $categorie,
-             'currentPage' => $currentPage,
-             'totalPages' => $totalPages,],
-        );
-    }}
-
+    
+        $em = $doctrine->getManager();
+        $currentPage = $request->query->getInt('page', 1);
+        $itemsPerPage = 5;
+        $offset = ($currentPage - 1) * $itemsPerPage;
+    
+        $commentRepository = $em->getRepository(Medicament::class);
+    
+        // Si le formulaire est soumis et valide, effectuer la recherche
+        if ($form->isSubmitted() && $form->isValid()) {
+            $nom = $propertySearch->getNom();
+            if ($nom) {
+                // Si le nom est fourni, rechercher par nom
+                $medicament = $commentRepository->findBy(['nom_med' => $nom], null, $itemsPerPage, $offset);
+            } else {
+                // Sinon, afficher tous les médicaments paginés
+                $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+            }
+        } else {
+            // Si le formulaire n'est pas soumis, afficher tous les médicaments paginés
+            $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+        }
+    
+        // Calculer le nombre total de pages
+        $totalItems = $commentRepository->count([]);
+        $totalPages = ceil($totalItems / $itemsPerPage);
+    
+        $repo1 = $doctrine->getRepository(Categorie::class);
+        $categorie = $repo1->findAll();
+    
+        return $this->render('medicament/FontOffice.html.twig', [
+            'form' => $form->createView(),
+            'list' => $medicament,
+            'listCategorie' => $categorie,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+        ]);
+    }
+    
 
     #[Route('/addMedicament', name: 'app_addMedicament')]
     public function addMedicament(Request $req, ManagerRegistry $doctrine,SluggerInterface $slugger): Response
@@ -235,4 +231,14 @@ public function edit(MedicamentRepository $repository, $id, Request $request, Ma
         
         // Rediriger vers la route pour afficher la liste des Medicaments
         return $this->redirectToRoute('app_afficherMedicament');
-    }}
+    }
+    #[Route('/showMedicament/{id}', name: 'app_show')]
+    public function show($id,MedicamentRepository $repo): Response
+    {
+        $medicaments = $repo->find($id);
+        return $this->render('medicament/DetailMedicament.html.twig',['id'=>$id,
+        'list' => $medicaments,
+        ]);
+    }
+
+}
