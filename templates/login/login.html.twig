@@ -30,21 +30,48 @@
                         </div>
                     
 						{{ form_start(login_form, {'attr': {'novalidate': 'novalidate'}}) }}
-                        <div class="form-group mb-3">
-                            {{ form_row(login_form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
-                        </div>
-                        <div class="form-group mb-3">
-                            {{ form_row(login_form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
-                        </div>
-                        <div class="form-group d-md-flex justify-content-between">
-                            <div class="w-70 text-md-right p-3 cl-4">
-                                <a href="{{asset('#')}}">Forgot Password? Cliquer ici</a>
-                            </div>
-                            <div class="w-30">
-                                {{ form_row(login_form.Submit, {'attr': {'class': 'btn btn-primary px-4'}}) }}
-                            </div>
-                        </div>
-                        {{ form_end(login_form) }}
+
+{% if login_form.vars.errors|length > 0 %}
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            {% for error in login_form.vars.errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<div class="form-group mb-3">
+    {{ form_row(login_form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email'}}) }}
+    {% if login_form.email.vars.errors|length > 0 %}
+        <ul class="errors">
+            {% for error in login_form.email.vars.errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+<div class="form-group mb-3">
+    {{ form_row(login_form.password, {'attr': {'class': 'form-control', 'placeholder': 'Password'}}) }}
+    {% if login_form.password.vars.errors|length > 0 %}
+        <ul class="errors">
+            {% for error in login_form.password.vars.errors %}
+                <li>{{ error.message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
+<div class="form-group d-md-flex justify-content-between">
+    <div class="w-70 text-md-right p-3 cl-4">
+        <a href="{{asset('#')}}">Forgot Password? Cliquer ici</a>
+    </div>
+    <div class="w-30">
+        {{ form_row(login_form.Submit, {'attr': {'class': 'btn btn-primary px-4'}}) }}
+    </div>
+</div>
+{{ form_end(login_form) }}
+
                     </div>
                 </div>
             </div>

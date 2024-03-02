@@ -17,9 +17,6 @@ use Doctrine\Persistence\Mapping\ClassMetadata;
 
 class LoginController extends AbstractController{
 
-
-
-
     #[Route('/login', name: 'login')]
     public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine): Response
     {
@@ -37,7 +34,7 @@ class LoginController extends AbstractController{
                 return $this->redirectToRoute("app_afficherAdmin"); 
             }
             
-            return $this->redirectToRoute("login"); 
+            $login_form->addError(new FormError('Adresse email ou mot de passe incorrect.')); 
         }
         
         return $this->renderForm("login/login.html.twig", ["login_form" => $login_form]);

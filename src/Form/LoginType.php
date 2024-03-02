@@ -14,18 +14,20 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class LoginType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('email', EmailType::class, [
-            'attr' => ['class' => 'form-control', 'placeholder' => 'Email'],
-            'constraints' => [
-                new NotBlank(['message' => 'Veuillez saisir votre adresse email']),
-                new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.']),
-            ],
-        ])
+            ->add('email', EmailType::class, [
+                'attr' => ['class' => 'form-control', 'placeholder' => 'Email'],
+                'constraints' => [
+                    new NotBlank(['message' => 'Veuillez saisir votre adresse email']),
+                    new Email(['message' => 'L\'adresse email "{{ value }}" n\'est pas valide.']),
+                ],
+                'error_bubbling' => false,
+            ])
             ->add('password', PasswordType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
+                'error_bubbling' => false,
             ])
             ->add('Submit',SubmitType::class)
         ;
