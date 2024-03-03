@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Admin;
 use App\Entity\GlobalUser;
+use App\Entity\Medecin;
+use App\Entity\Patient;
+use App\Entity\Pharmacien;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +25,7 @@ class LoginController extends AbstractController{
     public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine): Response
     {
         $user = new GlobalUser();
+        
         $login_form = $this->createForm(LoginType::class, $user);
         $login_form->handleRequest($request);
         
@@ -31,7 +36,17 @@ class LoginController extends AbstractController{
             $existingAdmin = $doctrine->getRepository(GlobalUser::class)->findOneBy(['email' => $email]);
             
             if ($existingAdmin && password_verify($password, $existingAdmin->getPassword())) {
-                return $this->redirectToRoute("app_afficherAdmin"); 
+                //return $this->redirectToRoute("app_afficherAdmin");
+                if ($existingAdmin instanceof Admin) {
+                    return $this->redirectToRoute("app_afficherAdmin");
+                } elseif ($existingAdmin  instanceof Patient) {
+                    return $this->redirectToRoute("app_afficherPatient");
+                } elseif ($existingAdmin instanceof Medecin) {
+                    return $this->redirectToRoute("app_afficherMedecin");
+                } elseif ($existingAdmin  instanceof Pharmacien) {
+                    return $this->redirectToRoute("app_afficherPharmacien");
+                }
+
             }
             
             $login_form->addError(new FormError('Adresse email ou mot de passe incorrect.')); 
@@ -41,4 +56,4 @@ class LoginController extends AbstractController{
     }
     }
 
-
+ 
