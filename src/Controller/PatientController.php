@@ -16,6 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use App\Form\PatientType;
 use App\Form\RegistrationType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 
@@ -43,6 +44,14 @@ class PatientController extends AbstractController
             if ($existingPatient) {
                 $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
                 return $this->renderForm("inscription/registration.html.twig", ["form" => $form]);
+            }
+            // Handle image upload
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+                $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+                $imageFile->move($this->getParameter('image_directory'), $newFilename);
+                $patient->setImage($newFilename);
             }
 
             // Crypter le mot de passe avant de le persister

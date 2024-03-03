@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class PatientType extends AbstractType
 {
@@ -45,9 +46,15 @@ class PatientType extends AbstractType
                 'multiple' => false,
                 'label' => 'Interlock', 
             ])
+            ->add('image', FileType::class, [
+                'label' => 'Event Image',
+                'required' => false,
+                'mapped' => false, // Do not map this field to the entity property
+            ])
             ->add('numcarte')
             ->add('Ajouter',SubmitType::class)
             ->add('Annuler',SubmitType::class)
+            
         ;
     }
 

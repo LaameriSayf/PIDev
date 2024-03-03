@@ -95,6 +95,10 @@ class GlobalUser
     #[ORM\Column(nullable: true)]
     private ?bool $interlock = null;
 
+    #[ORM\Column(type:"string", nullable:true)]
+    //#[assert\NotNull(message:"image is required")]
+    private ?string $image;
+
     #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Commentaire::class)]
     private Collection $commentaires;
 
@@ -219,6 +223,17 @@ class GlobalUser
     public function setInterlock(?bool $interlock): static
     {
         $this->interlock = $interlock;
+
+        return $this;
+    }
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

@@ -73,6 +73,11 @@
                     {{ form_widget(form.numtel, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone'}}) }}
                     <div class="invalid-feedback">{{ form_errors(form.numtel) }}</div>
                 </div>
+                 <div class="form-group">
+                    {{ form_label(form.image, "New Image") }}
+                    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.image) }}
+                </div>
                 
                 <div class="form-group">
                     {{ form_label(form.password, 'Password') }}

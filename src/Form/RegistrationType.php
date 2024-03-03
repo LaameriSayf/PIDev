@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 
 class RegistrationType extends AbstractType
@@ -39,8 +40,14 @@ class RegistrationType extends AbstractType
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
             ])
             ->add('numcarte')
+            ->add('image', FileType::class, [
+                'label' => 'Event Image',
+                'required' => false,
+                'mapped' => false, // Do not map this field to the entity property
+            ])
             ->add('Creer',SubmitType::class)
             ->add('Annuler',SubmitType::class)
+
         ;
     }
 

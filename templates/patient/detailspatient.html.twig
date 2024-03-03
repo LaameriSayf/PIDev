@@ -327,6 +327,9 @@
                 <p><strong>email:</strong> {{ patient.email }}</p>
                 <p><strong>Password:</strong> {{ patient.password }}</p>
                 <p><strong>Interlock:</strong> {{ patient.interlock }}</p>
+                {% if patient.image %}
+                    <img src="{{ asset('uploads/images/' ~ patient.image) }}" alt="{{ patient.nom }}" class="img-fluid">
+                {% endif %}
             </div>
              
             </div>
