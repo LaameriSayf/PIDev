@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
 use App\Form\MedecinType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 class MedecinController extends AbstractController
@@ -42,6 +43,14 @@ class MedecinController extends AbstractController
             // Réafficher le formulaire avec le message d'erreur
             return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
         }
+         // Handle image upload
+         $imageFile = $form->get('image')->getData();
+
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $medecin->setImage($newFilename);
+         }
         $password = $medecin->getPassword();
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $medecin->setPassword($hashedPassword);

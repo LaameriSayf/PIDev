@@ -326,6 +326,9 @@
                 <p><strong>email:</strong> {{ admin.email }}</p>
                 <p><strong>Password:</strong> {{ admin.password }}</p>
                 <p><strong>Interlock:</strong> {{ admin.interlock }}</p>
+                {% if admin.image %}
+                    <img src="{{ asset('uploads/images/' ~ admin.image) }}" alt="{{ admin.nom }}" class="img-fluid">
+                {% endif %}
             </div>
              
             </div>

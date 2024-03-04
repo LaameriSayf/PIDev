@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class AdminType extends AbstractType
 {
@@ -44,6 +45,11 @@ class AdminType extends AbstractType
                 'expanded' => true,
                 'multiple' => false,
                 'label' => 'Interlock', // Ajoutez une étiquette pour le champ interlock
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Event Image',
+                'required' => false,
+                'mapped' => false, // Do not map this field to the entity property
             ])
             ->add('Ajouter', SubmitType::class)
             ->add('Annuler', SubmitType::class);

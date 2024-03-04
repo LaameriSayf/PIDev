@@ -3,6 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Admin;
+use App\Entity\GlobalUser;
+use App\Entity\Medecin;
+use App\Entity\Patient;
+use App\Entity\Pharmacien;
 use App\Repository\AdminRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,9 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
 use App\Form\AdminType;
+use App\Repository\GlobalUserRepository;
+use App\Repository\MedecinRepository;
+use App\Repository\MedicamentRepository;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
+use App\Repository\PatientRepository;
+use App\Repository\PharmacienRepository;
 
 
 
@@ -30,11 +39,26 @@ class AdminController extends AbstractController
 
 
     #[Route('/home', name: 'home_admin')]
-    public function home(): Response
+    public function home(Request $request, GlobalUserRepository $GlobalUserRepository, AdminRepository $adminRepository, PatientRepository $patientRepository,PharmacienRepository $pharmacienRepository, MedecinRepository $medecinRepository): Response
     {
-        return $this->render('admin/home.html.twig', []);
+        $nbadmins = $adminRepository->countAllAdmin();
+        $nbpatients = $patientRepository->countAllPatient();
+        $nbpharmaciens = $pharmacienRepository->countAllPharmacien();
+        $nbmedecins = $medecinRepository->countAllMedecin();
+        $users = $medecinRepository->findAll();
+        
+
+        return $this->render('admin/home.html.twig', [
+            'nbadmins' => $nbadmins,
+            'nbpatients' => $nbpatients,
+            'nbpharmaciens' => $nbpharmaciens,
+            'nbmedecins' => $nbmedecins,
+            'user' => $users,
+            
+        ]);
     }
 
+    
 
     #[Route('/addAdmin', name: 'addAdmin')]
     public function addAdmin(Request $request, ManagerRegistry $doctrine): Response
@@ -52,6 +76,13 @@ class AdminController extends AbstractController
                 return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
             }
             
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+                $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+                $imageFile->move($this->getParameter('image_directory'), $newFilename);
+                $admin->setImage($newFilename);
+            }
             // Crypter le mot de passe avant de le persister
             $password = $admin->getPassword();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

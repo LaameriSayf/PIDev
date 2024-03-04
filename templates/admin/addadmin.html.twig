@@ -180,7 +180,7 @@
 
         <!-- ************************************************************************************************** -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('home_admin') }}">home</a>
+                <a class="nav-link" href="{{ path('home_admin') }}">Dashboard</a>
             </li>
           <!-- ******************************************************************************************************* -->
           
@@ -356,6 +356,11 @@
         {{ form_widget(myForm.numtel, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone', 'id': 'exampleInputName1'}}) }}
         <div style ="color:red;"> {{ form_errors(myForm.numtel) }} </div>
     </div>
+    <div class="form-group">
+                    {{ form_label(myForm.image, "Image") }}
+                    {{ form_widget(myForm.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(myForm.image) }}
+      </div>
     <div class="form-group">
         {{ form_label(myForm.password, 'Password', {'label_attr': {'for': 'exampleInputName1'}}) }}
         {{ form_widget(myForm.password, {'attr': {'class': 'form-control', 'placeholder': 'password', 'id': 'exampleInputName1'}}) }}

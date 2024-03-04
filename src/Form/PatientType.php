@@ -47,7 +47,7 @@ class PatientType extends AbstractType
                 'label' => 'Interlock', 
             ])
             ->add('image', FileType::class, [
-                'label' => 'Event Image',
+                'label' => 'Patient Image',
                 'required' => false,
                 'mapped' => false, // Do not map this field to the entity property
             ])

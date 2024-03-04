@@ -30,6 +30,14 @@ class AdminRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function countAllAdmin(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id) as adminCount')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return Admin[] Returns an array of Admin objects
 //     */

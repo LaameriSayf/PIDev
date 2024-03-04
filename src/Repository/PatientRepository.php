@@ -21,6 +21,15 @@ class PatientRepository extends ServiceEntityRepository
         parent::__construct($registry, Patient::class);
     }
 
+
+    public function countAllPatient(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id) as patientCount')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return Patient[] Returns an array of Patient objects
 //     */

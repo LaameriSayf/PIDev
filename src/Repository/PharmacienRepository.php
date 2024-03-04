@@ -21,6 +21,15 @@ class PharmacienRepository extends ServiceEntityRepository
         parent::__construct($registry, Pharmacien::class);
     }
 
+
+    public function countAllPharmacien(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id) as pharmacienCount')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
 //    /**
 //     * @return Pharmacien[] Returns an array of Pharmacien objects
 //     */
