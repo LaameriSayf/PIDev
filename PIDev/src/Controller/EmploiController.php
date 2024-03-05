@@ -29,8 +29,21 @@ class EmploiController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             
             $em = $doctrine->getManager();
+            //check if the rendez vous exists
+            $existingEmplois = $em->getRepository(Emploi::class)->findOneBy([
+                'daterendezvous' => $emploi->getStart(),
+                'heurerendezvous' => $emploi->getEnd(),
+            ]);
+    
+            if ($existingEmplois !== null) {
+                $this->addFlash('error', 'Rendez-vous déjà existant.');
+                return $this->redirectToRoute('app_addRendezvous');
+       
+    }
+    
             $em->persist($emploi);
             $em->flush();
+            $this->addFlash('success', 'Emplois ajouté avec succès.');
             return $this->redirectToRoute('app_addEmploi');
 
         }
