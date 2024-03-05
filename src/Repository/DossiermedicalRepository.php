@@ -24,17 +24,19 @@ class DossiermedicalRepository extends ServiceEntityRepository
 //    /**
 //     * @return Dossiermedical[] Returns an array of Dossiermedical objects
 //     */
-    //  public function findByUser($id): array
-      //  {
-             // return $this->createQueryBuilder('d')
-              //  ->andWhere('d.patient = :val')
-              //////  ->setParameter('val', $id)
-//->orderBy('d.datedecreation', 'ASC')
+       //public function findByNumdossier($numdossier): array
+        //{
+           //  return $this->createQueryBuilder('d')
+               // ->andWhere('d.numdossier = :numdossier')
+               // ->setParameter('numdossier', $numdossier)
+               // ->orderBy('d.datedecreation', 'ASC')
                // ->setMaxResults(10)
-               // ->getQuery()
-                //->getResult()
-    /// ;
- // }
+                 // ->getQuery()
+                 //->getResult()
+                    //;
+                   // }
+ 
+
 
 //    public function findOneBySomeField($value): ?Dossiermedical
 //    {

@@ -92,6 +92,19 @@ class DossierController extends AbstractController
         'Form' => $Form->createView(),
     ]);
 }
+   //#[Route('/searchDossier', name: 'search_dossier')]
+   // public function searchDossier(Request $request, DossiermedicalRepository $dossierRepository): Response
+    //{
+    //$numDossier = $request->query->get('numdossier');
+
+    // Utilisez le repository pour rechercher les dossiers médicaux par numéro de dossier
+    //$dossiers = $dossierRepository->findByNumdossier($numDossier);
+
+    // Retournez une réponse, par exemple, au format JSON ou à une vue Twig
+  //  return $this->render('show1.html.twig', [
+       // 'dossiers' => $dossiers,
+    //]);
+}
 
 
 
@@ -99,4 +112,4 @@ class DossierController extends AbstractController
     
 
    
-}
+

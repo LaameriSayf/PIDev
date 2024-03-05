@@ -11,22 +11,53 @@
         &nbsp; &nbsp;<a class="navbar-brand brand-logo mr-5" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/medimedi.jpg')}}" class="mr-2" alt="logo"/></a>
         <a class="navbar-brand brand-logo-mini" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/logo-mini.svg')}}" alt="logo"/></a>
       </div>
-      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
         </button>
         <ul class="navbar-nav mr-lg-2">
           <li class="nav-item nav-search d-none d-lg-block">
-            <div class="input-group">
-              <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                <span class="input-group-text" id="search">
-                  <i class="icon-search"></i>
-                </span>
-              </div>
-              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
-            </div>
-          </li>
-        </ul>
+          <div class="input-group">
+          <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
+          <span class="input-group-text" id="searchButton">
+            <i class="icon-search"></i>
+          </span>
+         </div>
+          <input type="text" class="form-control" id="searchInput" placeholder="chercher par Numéro" aria-label="search" aria-describedby="searchButton">
+         </div>
+
+
+
+<script>
+    document.getElementById('searchButton').addEventListener('click', function() {
+        var searchString = document.getElementById('searchInput').value.toLowerCase();
+        var dossierRows = document.querySelectorAll('.table-striped tbody tr');
+
+        dossierRows.forEach(function(row) {
+            var numdossier = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
+            if (numdossier.includes(searchString)) {
+                row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
+            } else {
+                row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
+            }
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+        var searchValue = this.value.toLowerCase();
+        var dossierRows = document.querySelectorAll('.table-striped tbody tr');
+
+        dossierRows.forEach(function(row) {
+            var numdossier = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
+            if (numdossier.includes(searchValue)) {
+                row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
+            } else {
+                row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
+            }
+        });
+    });
+</script>
+
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
@@ -354,6 +385,7 @@
             </td>
         </tr>
         {% endfor %}
+      
     </tbody>
 </table>
 
