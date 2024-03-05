@@ -1,0 +1,42 @@
+{# templates/medicament/ConsulterMedicament/stat.html.twig #}
+
+{% extends 'baseB.html.twig' %}
+
+{% block title %}Statistiques des commentaires{% endblock %}
+
+{% block body %}
+    <h1>Statistiques des commentaires par médicament</h1>
+
+    <div style="width:40%; height:40%"><canvas id="myChart"  style="max-width: 50%;"></canvas></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <script>
+    var labels = {{ labels|raw }};
+    var data = {{ data|raw }};
+
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Nombre de médicament',
+                data: data,
+                backgroundColor: ['red', 'blue'], // Rouge pour les étiquettes, bleu pour les données
+                borderColor: 'white',              // Bordure en blanc
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+{% endblock %}

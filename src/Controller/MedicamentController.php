@@ -30,7 +30,7 @@ class MedicamentController extends AbstractController
     
         $em = $doctrine->getManager();
         $currentPage = $request->query->getInt('page', 1);
-        $itemsPerPage = 5;
+        $itemsPerPage = 8;
         $offset = ($currentPage - 1) * $itemsPerPage;
     
         $commentRepository = $em->getRepository(Medicament::class);
@@ -65,8 +65,6 @@ class MedicamentController extends AbstractController
             'totalPages' => $totalPages,
         ]);
     }
-    
-
     #[Route('/addMedicament', name: 'app_addMedicament')]
     public function addMedicament(Request $req, ManagerRegistry $doctrine,SluggerInterface $slugger): Response
     { 
@@ -228,7 +226,7 @@ public function edit(MedicamentRepository $repository, $id, Request $request, Ma
         
         // Enregistrer les modifications dans la base de données
         $em->flush();
-        
+        $this->addFlash('success', 'Médicament est supprimé avec succès.');
         // Rediriger vers la route pour afficher la liste des Medicaments
         return $this->redirectToRoute('app_afficherMedicament');
     }
@@ -240,5 +238,37 @@ public function edit(MedicamentRepository $repository, $id, Request $request, Ma
         'list' => $medicaments,
         ]);
     }
+    #[Route('/stat', name: 'app_stat')]
+    public function stat(MedicamentRepository $repo): Response
+    {
+        $medicaments = $repo->findall();
+        return $this->render('medicament/ConsulterMedicament/stat1.html.twig',[
+        'list' => $medicaments,
+        ]);
+    }
+    #[Route('/blog', name: 'blog')]
+public function statistiquesMedicament(): Response
+{
+    $entityManager = $this->getDoctrine()->getManager();
+    
+    // Récupérer les statistiques des médicaments par catégorie et état
+    $medicamentStats = $entityManager->getRepository(Medicament::class)->getMedicamentStats();
+
+    // Convertir les résultats en un format adapté pour Chart.js
+    $labels = [];
+    $data = [];
+
+    foreach ($medicamentStats as $medicamentStat) {
+        $labels[] = $medicamentStat['etat'];
+        $data[] = $medicamentStat['nombreMedicament'];
+    }
+
+    return $this->render(
+        'medicament/ConsulterMedicament/stat.html.twig',
+        ['labels' => json_encode($labels), 'data' => json_encode($data)]
+    );
+}
+    
+
 
 }

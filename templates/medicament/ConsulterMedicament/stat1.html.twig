@@ -1,0 +1,68 @@
+{% extends 'baseB.html.twig' %}
+
+{% block title %}Hello MedicamentController!{% endblock %}
+
+{% block body %}
+
+<!-- Statistics Section -->
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Statistiques</h4>
+            <ul>
+                <li>Total des médicaments: {{ list|length }}</li>
+                <!-- Add more statistics as needed -->
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Chart Section -->
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Graphique de Statistiques</h4>
+            <canvas id="medicationChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var medications = {{ list|json_encode|raw }}; // Pass the medications data to JavaScript
+
+        // Extract medication names and quantities for the chart
+        var medicationNames = medications.map(function (med) {
+            return med.getNomMed();
+        });
+
+        var medicationQuantities = medications.map(function (med) {
+            return med.getQte();
+        });
+
+        // Create a bar chart
+        var ctx = document.getElementById('medicationChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: medicationNames,
+                datasets: [{
+                    label: 'Quantité',
+                    data: medicationQuantities,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
