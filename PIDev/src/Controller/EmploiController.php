@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Form\EmploiType;
 use App\Entity\Emploi;
+use App\Repository\EmploiRepository;
 
 class EmploiController extends AbstractController
 {
@@ -53,56 +54,72 @@ class EmploiController extends AbstractController
 
 
 }
-#[Route('/editEmploi/{id}/edit', name: 'app_editEmploi', methods: ['PUT'])]
-public function editEmploi(Emploi $emploi, Request $request,ManagerRegistry $doctrine)
-{
-    $data = json_decode($request->getContent(), true); // Utilisez json_decode
+#[Route('/editEmploi/{id}/edit', name: 'app_editEmploiiii', methods: ['PUT'])]
+    public function editEmploiCalendar($id, Request $request, ManagerRegistry $manager): Response
+    {
+        $entityManager = $manager->getManager();
+        $emploiRepository = $entityManager->getRepository(Emploi::class);
 
-    if (
-        isset($data['id']) && !empty($data['id']) &&
-        isset($data['titre']) && !empty($data['titre']) &&
-        isset($data['start']) && !empty($data['start']) &&
-        isset($data['end']) && !empty($data['end']) &&
-        isset($data['description']) && !empty($data['description'])
+        // Find the Emploi entity by ID
+        $emploi = $emploiRepository->find($id);
 
-    ) { $code = 200;
         if (!$emploi) {
+            return new Response('Emploi not found', 404);
+        }
 
-        $emploi = new Emploi;
-        $code = 201;
+        $data = json_decode($request->getContent(), true);
 
-    }
-       
-        $emploi->setTitre($data['titre']);
-        $emploi->setStart(new \DateTime($data['start']));
-        $emploi->setEnd(new \DateTime($data['end']));
-        $emploi->setDescription($data['description']);
+      
+            $code = 200;
 
-        // Effectuer la mise à jour dans la base de données, par exemple avec Doctrine
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($emploi);
-        $entityManager->flush();
+            $emploi->setTitre($data['titre']);
+            $emploi->setStart(new \DateTime($data['start']));
+            $emploi->setEnd(new \DateTime($data['end']));
+            $emploi->setDescription($data['description']);
 
-        return new Response('ok',$code);
+            // Update the database using Doctrine
+            $entityManager->flush();
 
-
-    }else {
-            return new Response('donnees incompletes',404);
+            return new Response('ok', $code);
         
+    }
+#[Route('/editEmploi/{id}', name: 'app_editEmploi')]
+    public function editEmploi(EmploiRepository $repository, $id, Request $request,ManagerRegistry $manager)
+    {
+        $emploi = $repository->find($id);
+        $form = $this->createForm(EmploiType::class, $emploi);
+        $form->handleRequest($request);
+        $em = $manager->getManager();
+
+        if ($form->isSubmitted()&& $form->isValid()) {
+           
+                $em->persist($emploi);
+                $em->flush();
+                $this->addFlash('success', 'Emploi mis a jour avec succès.');
+            }
+            
+        
+    
+        return $this->render('emploi/ajouterEmploi/editEmploi.html.twig', [
+            'form' => $form->createView(),
+            'emploi'=>$emploi,
+        ]);
+    }
+    #[Route('/deleteEmploi/{id}', name: 'app_deleteEmploi')]
+    public function deleteRendezvous($id, EmploiRepository $repository,ManagerRegistry $manager)
+    {
+
+        $emploi = $repository->find($id);
+        $em = $manager->getManager();
+        $em->remove($emploi);
+        $em->flush();
+        $this->addFlash('success', 'Rendez vous annuler!');
+
+       return $this->redirectToRoute('app_afficherRendezVous');
+
+
 
 
     }
 
-
-
-    
-
-
-
-
-
-
-
-
-}
 }

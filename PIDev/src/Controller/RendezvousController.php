@@ -34,8 +34,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
             $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
             $safeFilename = $slugger->slug($originalFilename);
             $newFilename = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
-            $file->move('C:\Users\Mega-PC\Desktop\PIDev\PIDev\uploads
-            ', $newFilename
+            $file->move('C:\Users\Mega-PC\Desktop\PIDev\PIDev\uploads', $newFilename
             );
             $rendezvous->setFile($newFilename);}
             $em = $doctrine->getManager();

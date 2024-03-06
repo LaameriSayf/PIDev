@@ -1,11 +1,14 @@
-{% extends 'baseB.html.twig' %}
+{% extends 'baseF.html.twig' %}
 
 {% block body %}
+    <h1>Emplois du temps</h1>
 
-    <div id="calendrier"></div>
-    <title>Emplois du temps</title>
+    <link href="path/to/bootstrap.min.css" rel="stylesheet">
+    <link href="path/to/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
+    <div id="calendrier"></div>
+
 {% block javascripts %}
 <script>
 
@@ -26,28 +29,63 @@
                 events: {{ data|raw }},
                  eventContent: function(info) {
                 return {
-                    html: `<div class="fc-content">${info.event.titre}</div>
-                           <div class="fc-description">${info.event.extendedProps.description}</div>`
-                };
+                    html: `<div class="fc-content">${info.event.extendedProps.titre}</div>
+                           <div class="fc-description">${info.event.extendedProps.description}</div>
+                           <div class="fc-description">
+                            <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                       </div>`
+                    };
                         },
                         editable:true,
                         eventResizableFromStart: true,
 
                 
             })
-
+            ///editEmploi/{id}/edit
             calendar.on('eventChange',(e) => {
-                let url = `/api/${e.event.id}/edit`
+
+                let url = `/editEmploi/${e.event.id}/edit`;
                  let donnees = {
-                "title": e.event.titre,
-                "description": e.event.extendedProps.description,
+
+                "titre": e.event.extendedProps.titre,
                 "start": e.event.start,
                 "end": e.event.end,
+                "description": e.event.extendedProps.description,
                  }
                  console.log(donnees)
+            let xhr = new XMLHttpRequest
+
+            xhr.open("PUT", url)
+            xhr.send(JSON.stringify(donnees))
 
                 
             })
+             calendarElt.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-event')) {
+            let eventId = event.target.getAttribute('data-event-id');
+
+            // Confirm deletion
+            if (confirm("Are you sure you want to delete this event?")) {
+                // Delete the event from the calendar
+                calendar.getEventById(eventId).remove();
+
+                // Send a request to delete the event on the server
+                fetch(`/deleteEmploi/${eventId}`, {
+                    method: 'DELETE',
+                }).then(response => {
+                    if (response.ok) {
+                        // Event deleted successfully
+                        console.log('Event deleted successfully');
+                    } else {
+                        // Handle error
+                        console.error('Failed to delete event');
+                    }
+                });
+            }
+        }
+    });
 
             calendar.render();
         });
@@ -81,9 +119,40 @@
 
         #calendrier .fc-description {
             font-size: 0.8em; /* Adjust the font size for event descriptions */
-            color: #3c3c3c; /* Optionally, set a color for event descriptions */
+            color: #fff; /* Optionally, set a color for event descriptions */
         }
     </style>
 {% endblock %}
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Ajouter!',
+                text: '{{ flashMessage }} 👍',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! 😊',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+
+    {% for flashMessage in app.flashes('error') %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ flashMessage }} 😞',
+                showConfirmButton: true,
+                confirmButtonText: 'OK! 👌',
+            });
+        </script>
+    {% endfor %}
+    {% endblock %}
+
     
 {% endblock %}
