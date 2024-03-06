@@ -12,23 +12,26 @@
         document.addEventListener('DOMContentLoaded', function () {
             let calendarElt = document.querySelector("#calendrier");
             let calendar = new FullCalendar.Calendar(calendarElt, {
+                
                 allDaySlot: false,
-                initialView: 'timeGridWeek',
+                initialView: 'dayGridMonth',
                 locale: 'fr',  
                 timeZone: 'Africa/Tunis',
                 headerToolbar: {
                     left: 'prev,next today',    
                     center: 'title',
-                    right: 'dayGridMonth'
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
 
                 },
                 events: {{ data|raw }},
                  eventContent: function(info) {
                 return {
-                    html: `<div class="fc-content">${info.event.title}</div>
+                    html: `<div class="fc-content">${info.event.titre}</div>
                            <div class="fc-description">${info.event.extendedProps.description}</div>`
                 };
                         },
+                        editable:true,
+                        eventResizableFromStart: true,
 
                 
             })
@@ -40,32 +43,33 @@
 {% endblock %}
 
 {% block stylesheets %}
-  <style>
-        #calendrier{
-            width: 50%;
-            height: 100%;
+    <style>
+        #calendrier {
+            width: 80%; /* Adjust the width to your preference */
             margin: auto;
-             
-
         }
-         #calendrier .fc-header-toolbar .fc-button {
-    background-color: #007bff; 
-    color: #fff; 
-    border-color: #007bff; 
-         }
-  #calendrier .fc-header-toolbar .fc-button:hover {
-    background-color: #0056b3; 
-    color: #fff; 
-    border-color: #0056b3; 
-  }
-  #calendrier .fc-content {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
 
-    #calendrier .fc-description {
-        font-size: 1em;
-    }
+        #calendrier .fc-header-toolbar .fc-button {
+            background-color: #007bff;
+            color: #fff;
+            border-color: #007bff;
+        }
+
+        #calendrier .fc-header-toolbar .fc-button:hover {
+            background-color: #0056b3;
+            color: #fff;
+            border-color: #0056b3;
+        }
+
+        #calendrier .fc-content {
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        #calendrier .fc-description {
+            font-size: 0.8em; /* Adjust the font size for event descriptions */
+            color: #3c3c3c; /* Optionally, set a color for event descriptions */
+        }
     </style>
 {% endblock %}
     

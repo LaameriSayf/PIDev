@@ -31,8 +31,8 @@ class EmploiController extends AbstractController
             $em = $doctrine->getManager();
             //check if the rendez vous exists
             $existingEmplois = $em->getRepository(Emploi::class)->findOneBy([
-                'daterendezvous' => $emploi->getStart(),
-                'heurerendezvous' => $emploi->getEnd(),
+                'start' => $emploi->getStart(),
+                'end' => $emploi->getEnd(),
             ]);
     
             if ($existingEmplois !== null) {
@@ -53,4 +53,35 @@ class EmploiController extends AbstractController
 
 
 }
+#[Route('/editEmploi/{id}/edit', name: 'app_editEmploi', methods: ['PUT'])]
+
+public function editEmploi(?Calendar $calendar,Request $request): Response
+    {
+
+        $data = json_encode($request->getContent());
+        if( 
+        isset($data->id) && !empty($data->id)&&
+        isset($data->titre) && !empty($data->titre)&&
+        isset($data->start) && !empty($data->start)&&
+        isset($data->end) && !empty($data->end)&&
+        isset($data->description) && !empty($data->description)&&
+        ){
+            if(!$calendar){
+                $calendar = new Calendar;
+            }
+        }else{
+
+            return new Response('Donnes incompletes',404);
+        }
+
+        }
+    
+
+
+
+
+
+
+
+
 }
