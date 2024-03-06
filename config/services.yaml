@@ -22,3 +22,13 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Service\MyGmailMailerService:
+        arguments:
+            $mailerConfig:
+                host: 'smtp.gmail.com'
+                port: 587
+                username: 'abdessalemchaouch9217@gmail.com'
+                password: 'vejw oftx iuii rwos'
+                encryption: 'tls' # adjust based on your SMTP configuration
+                fromAddress: 'abdessalemchaouch9217@gmail.com'
+                fromName: 'PIDev'

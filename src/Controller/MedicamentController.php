@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Service\MyGmailMailerService;
 use App\Entity\Medicament;
 use App\Entity\Categorie;
 use App\Entity\PropertySearch;
@@ -20,7 +20,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class MedicamentController extends AbstractController
 {
   
-  
+    private MyGmailMailerService $mailerService;
+    public function __construct(MyGmailMailerService $mailerService)
+    {
+        
+        $this->mailerService = $mailerService;
+    }
     #[Route('/medicament', name: 'app_medicament1')]
     public function index(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -108,7 +113,11 @@ class MedicamentController extends AbstractController
             
             // Enregistrer les modifications dans la base de données
             $em->flush();
-            
+            $this->mailerService->sendEmail(
+                "abdessalemchaouch9217@gmail.com",
+                'Medicament est bien ajoute',
+                $this->renderView('Email/eliTheb.html.twig',["medicament"=>$medicament])
+            );
             // Rediriger vers la route pour afficher la liste des Medicaments
             return $this->redirectToRoute('app_afficherMedicament');
         }
@@ -238,15 +247,8 @@ public function edit(MedicamentRepository $repository, $id, Request $request, Ma
         'list' => $medicaments,
         ]);
     }
+ 
     #[Route('/stat', name: 'app_stat')]
-    public function stat(MedicamentRepository $repo): Response
-    {
-        $medicaments = $repo->findall();
-        return $this->render('medicament/ConsulterMedicament/stat1.html.twig',[
-        'list' => $medicaments,
-        ]);
-    }
-    #[Route('/blog', name: 'blog')]
 public function statistiquesMedicament(): Response
 {
     $entityManager = $this->getDoctrine()->getManager();

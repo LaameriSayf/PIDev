@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use App\Service\MyGmailMailerService;
 use App\Entity\Categorie;
 use App\Entity\PropertySearch;
 use App\Form\CategorieType;
@@ -16,6 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategorieController extends AbstractController
 {
+    private MyGmailMailerService $mailerService;
+    public function __construct(MyGmailMailerService $mailerService)
+    {
+        
+        $this->mailerService = $mailerService;
+    }
     #[Route('/categorie', name: 'app_categorie')]
     public function index(): Response
     {
@@ -45,7 +51,11 @@ class CategorieController extends AbstractController
     
             // Enregistrer les modifications dans la base de données
             $em->flush();
-    
+            $this->mailerService->sendEmail(
+                "abdessalemchaouch9217@gmail.com",
+                'Categorie est bien ajoute',
+                $this->renderView('Email/eliTheb.html.twig')
+            );
             // Rediriger vers la route pour afficher la liste des catégories
             return $this->redirectToRoute('app_afficherCategorie');
         }

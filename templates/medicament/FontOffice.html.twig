@@ -84,17 +84,17 @@
                     <div class="aside">
                         <h3 class="aside-title">Categories</h3>
                         <div class="checkbox-filter">
-                            {% for k in listCategorie %}
-                            <div class="input-checkbox">
-                                <input type="checkbox" id="category-{{ k.id }}">
-                                <label for="category-{{ k.id }}">
-                                    <span></span>
-                                    {{ k.getNomCat() }}
-                                    <small>(120)</small>
-                                </label>
-                            </div>
-                            {% endfor %}
-                        </div>
+    {% for k in listCategorie %}
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-{{ k.id }}" class="category-checkbox" data-category="{{ k.id }}">
+            <label for="category-{{ k.id }}">
+                <span></span>
+                {{ k.getNomCat() }}
+                <small>(120)</small>
+            </label>
+        </div>
+    {% endfor %}
+</div>
                     </div>
                     <!-- /aside Widget -->
                 </div>
@@ -118,52 +118,52 @@
                     <!-- /store top filter -->
 
                     <!-- store products -->
-                    <div class="row">
-                        <!-- Section -->
-                        <!-- row -->
-                        <div class="row">
-                            {% for med in list %}
-                            <!-- product -->
-                            <div class="col-md-3 col-xs-6">
-                                <div class="product">
-                                    <div class="product-img">
-            <img class="product-image" src="{{asset('uploads/'~med.getImage()) }}">
-            <div class="product-label">
-                <span class="sale">{{ med.getEtat() }}</span>
-            </div>
-        </div>
-                                    <div class="product-body">
-                                        <p class="product-category">{{ med.getRefMed() }}</p>
-                                        <h3 class="product-name"><a href="#">{{ med.getNomMed() }}</a></h3>
-                                    <div class="rating" data-rating="3">
-  <span data-value="1" onclick="rateStar(1)"><i class="fa fa-star"></i></span>
-  <span data-value="2" onclick="rateStar(2)"><i class="fa fa-star"></i></span>
-  <span data-value="3" onclick="rateStar(3)"><i class="fa fa-star"></i></span>
-  <span data-value="4" onclick="rateStar(4)"><i class="fa fa-star"></i></span>
-  <span data-value="5" onclick="rateStar(5)"><i class="fa fa-star"></i></span>
-</div>
-                                        <div class="product-btns">
-                                            <button class="add-to-wishlist"><i class="fa fa-thumbs-up"></i><span
-                                                    class="tooltipp">J'aime</span></button>
-                                            
-                                            <button class="quick-view"><i class="fa fa-thumbs-down"></i><span
-                                                    class="tooltipp">J'aime pas</span></button>
-                                        </div>
-                                    </div>
-                                    <div class="add-to-cart">
-                                        <button class="add-to-cart-btn"><i class="fa fa-eye"></i> <a href={{ path('app_show',{'id':med.id})}}> Voir details</a>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /product -->
-                            {% endfor %}
+<div class="row">
+    <!-- Section -->
+    <!-- row -->
+    <div class="row">
+        {% for med in list %}
+            <!-- product -->
+            <div class="col-md-3 col-xs-6" data-category="{{ med.getCategorie().getId() }}">
+                <div class="product">
+                    <div class="product-img">
+                        <img class="product-image" src="{{asset('uploads/'~med.getImage()) }}">
+                        <div class="product-label">
+                            <span class="sale">{{ med.getEtat() }}</span>
                         </div>
-                        <!-- /row -->
                     </div>
-                 
+                    <div class="product-body">
+                        <p class="product-category">{{ med.getRefMed() }}</p>
+                        <h3 class="product-name"><a href="#">{{ med.getNomMed() }}</a></h3>
+                        <div class="rating" data-rating="3">
+                            <span data-value="1" onclick="rateStar(1)"><i class="fa fa-star"></i></span>
+                            <span data-value="2" onclick="rateStar(2)"><i class="fa fa-star"></i></span>
+                            <span data-value="3" onclick="rateStar(3)"><i class="fa fa-star"></i></span>
+                            <span data-value="4" onclick="rateStar(4)"><i class="fa fa-star"></i></span>
+                            <span data-value="5" onclick="rateStar(5)"><i class="fa fa-star"></i></span>
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-thumbs-up"></i><span
+                                    class="tooltipp">J'aime</span></button>
+                            <button class="quick-view"><i class="fa fa-thumbs-down"></i><span
+                                    class="tooltipp">J'aime pas</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-eye"></i> <a
+                                href={{ path('app_show',{'id':med.id})}}> Voir details</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+        {% endfor %}
+    </div>
+    <!-- /row -->
+</div>
+<!-- /store products -->
 
-                    <!-- /store products -->
+                 
                 </div>
                 <!-- /STORE -->
             </div>
@@ -252,7 +252,39 @@
         // en utilisant la variable 'value'
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
 
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                filterProducts();
+            });
+        });
+
+        function filterProducts() {
+            const selectedCategories = Array.from(checkboxes)
+                .filter(function (checkbox) {
+                    return checkbox.checked;
+                })
+                .map(function (checkbox) {
+                    return checkbox.getAttribute('data-category');
+                });
+
+            const products = document.querySelectorAll('.col-md-3.col-xs-6');
+
+            products.forEach(function (product) {
+                const productCategory = product.getAttribute('data-category');
+
+                if (selectedCategories.length === 0 || selectedCategories.includes(productCategory)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
    
 
 {% endblock %}
