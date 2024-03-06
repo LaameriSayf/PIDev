@@ -10,7 +10,7 @@
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
         &nbsp; &nbsp;<a class="navbar-brand brand-logo mr-5" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/medimedi.jpg')}}" class="mr-2" alt="logo"/></a>
         <a class="navbar-brand brand-logo-mini" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/logo-mini.svg')}}" alt="logo"/></a>
-      </div>
+       </div>
      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
           <span class="icon-menu"></span>
@@ -19,65 +19,64 @@
           <li class="nav-item nav-search d-none d-lg-block">
           <div class="input-group">
           <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-          <span class="input-group-text" id="searchButton">
-            <i class="icon-search"></i>
-          </span>
-         </div>
-          <input type="text" class="form-control" id="searchInput" placeholder="chercher par Numéro" aria-label="search" aria-describedby="searchButton">
-         </div>
-
-
+    <span class="input-group-text" id="searchButton">
+        <i class="icon-search"></i>
+    </span>
+</div>
+<input type="text" class="form-control" id="searchInput" placeholder="Chercher Dossier Médical" aria-label="search" aria-describedby="searchButton">
+</div>
 
 <script>
-    document.getElementById('searchButton').addEventListener('click', function() {
-        var searchString = document.getElementById('searchInput').value.toLowerCase();
-        var dossierRows = document.querySelectorAll('.table-striped tbody tr');
+document.getElementById('searchButton').addEventListener('click', function() {
+    var searchString = document.getElementById('searchInput').value.toLowerCase();
+    var dossierRows = document.querySelectorAll('.table-striped tbody tr');
 
-        dossierRows.forEach(function(row) {
-            var numdossier = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
-            if (numdossier.includes(searchString)) {
-                row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
-            } else {
-                row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
-            }
-        });
+    dossierRows.forEach(function(row) {
+        var dossierId = row.querySelector('td:nth-child(1)').innerText.toLowerCase(); // Modifier le sélecteur pour récupérer l'ID du dossier médical
+        if (dossierId.includes(searchString)) {
+            row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
+        } else {
+            row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
+        }
     });
+});
 
-    document.getElementById('searchInput').addEventListener('input', function() {
-        var searchValue = this.value.toLowerCase();
-        var dossierRows = document.querySelectorAll('.table-striped tbody tr');
+document.getElementById('searchInput').addEventListener('input', function() {
+    var searchValue = this.value.toLowerCase();
+    var dossierRows = document.querySelectorAll('.table-striped tbody tr');
 
-        dossierRows.forEach(function(row) {
-            var numdossier = row.querySelector('td:nth-child(2)').innerText.toLowerCase();
-            if (numdossier.includes(searchValue)) {
-                row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
-            } else {
-                row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
-            }
-        });
+    dossierRows.forEach(function(row) {
+        var dossierId = row.querySelector('td:nth-child(1)').innerText.toLowerCase(); // Modifier le sélecteur pour récupérer l'ID du dossier médical
+        if (dossierId.includes(searchValue)) {
+            row.style.display = ''; // Afficher la ligne si elle correspond à la recherche
+        } else {
+            row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas à la recherche
+        }
     });
+});
 </script>
+
 
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+           {# <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
               <i class="icon-bell mx-0"></i>
               <span class="count"></span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-              <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+            </a>#}
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" {#aria-labelledby="notificationDropdown"#}>
+             {# <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>#}
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
+                 {# <div class="preview-icon bg-success">
                     <i class="ti-info-alt mx-0"></i>
-                  </div>
+                  </div>#}
                 </div>
-                <div class="preview-item-content">
+                {#<div class="preview-item-content">
                   <h6 class="preview-subject font-weight-normal">Application Error</h6>
                   <p class="font-weight-light small-text mb-0 text-muted">
                     Just now
                   </p>
-                </div>
+                </div>#}
               </a>
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
@@ -85,12 +84,12 @@
                     <i class="ti-settings mx-0"></i>
                   </div>
                 </div>
-                <div class="preview-item-content">
+              {#  <div class="preview-item-content">
                   <h6 class="preview-subject font-weight-normal">Settings</h6>
                   <p class="font-weight-light small-text mb-0 text-muted">
                     Private message
                   </p>
-                </div>
+                </div>#}
               </a>
               <a class="dropdown-item preview-item">
                 <div class="preview-thumbnail">
@@ -98,39 +97,39 @@
                     <i class="ti-user mx-0"></i>
                   </div>
                 </div>
-                <div class="preview-item-content">
+               {# <div class="preview-item-content">
                   <h6 class="preview-subject font-weight-normal">New user registration</h6>
                   <p class="font-weight-light small-text mb-0 text-muted">
                     2 days ago
                   </p>
-                </div>
+                </div>#}
               </a>
             </div>
           </li>
           <li class="nav-item nav-profile dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+           {# <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
               <img src="{{asset('back/images/faces/face28.jpg')}}" alt="profile"/>
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-              <a class="dropdown-item">
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">#}
+             {##<a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
                 Settings
-              </a>
-              <a class="dropdown-item">
+              </a>#}
+              {#<a class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
                 Logout
-              </a>
+              </a>#}
             </div>
           </li>
-          <li class="nav-item nav-settings d-none d-lg-flex">
+         {#<li class="nav-item nav-settings d-none d-lg-flex">
             <a class="nav-link" href="#">
-              <i class="icon-ellipsis"></i>
+              <i class="icon-ellipsis"></i>#}
             </a>
           </li>
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+      {#  <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
           <span class="icon-menu"></span>
-        </button>
+        </button>#}
       </div>
     </nav>
     <!-- partial -->
@@ -319,9 +318,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{ path('add_dossier')}}">Ajouter dossiers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('add_dossier')}}">Ajouter dossiers</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('show_dossier')}}">Consulter liste desdossiers</a></li>
-                
               </ul>
             </div>
           </li>
@@ -348,6 +346,8 @@
             <th>Détails Ordonnances</th>
             <th>Date de Création</th>
             <th>Action</th>
+             
+
         </tr>
     </thead>
     <tbody>
@@ -373,9 +373,13 @@
                             <p>Date Prescription: {{ ordonnance.dateprescription() | date('Y-m-d') }}</p>
                             <p>Renouvellement: {{ ordonnance.renouvellement() | date('Y-m-d') }}</p>
                             <p>Adresse: {{ ordonnance.adresse() }}</p>
+                           
                         </li>
                     {% endfor %}
                 </ul>
+                 {#{% for patient in dossier.patient%}
+                        <li>{{ patient.id }}</li>
+                    {% endfor %}#}
             </td>
             <td>{{dossier.datecreation() | date('Y-m-d H:i:s') }}</td>
             <td>
@@ -383,6 +387,7 @@
                     <button type="button" class="btn btn-outline-primary">Modifier</button>
                 </a>
             </td>
+            
         </tr>
         {% endfor %}
       

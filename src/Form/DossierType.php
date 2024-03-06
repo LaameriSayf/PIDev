@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Ordonnance;
 
+
 class DossierType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -30,6 +31,10 @@ class DossierType extends AbstractType
         ->add('DateCreation')
         ->add('resultatexamen')
         ->add('numdossier')
+      //// ->add('patient', EntityType::class, [
+         //////'class' => Patient::class,
+         ///'choice_label' => 'id',
+        /// 'placeholder' => 'Sélectionnez un patient',])
         ->add('antecedentspersonnelles', ChoiceType::class, [
             'choices' => [
                 'Hypertension' => 'hypertension artérielle',
@@ -43,6 +48,8 @@ class DossierType extends AbstractType
         
         
         ->add('Ajouter', SubmitType::class);
+      
+    
     
 
         

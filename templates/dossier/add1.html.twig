@@ -187,7 +187,7 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{ path('add_dossier')}}">Ajouter Dossier Medical</a></li>
+               <li class="nav-item"><a class="nav-link" href="{{ path('add_dossier')}}">Ajouter dossiers</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('show_dossier')}}">Consulter liste des dossiers</a></li> 
               </ul>
             </div>
@@ -232,8 +232,8 @@
                               {% endfor %}
                              {{ form_errors(form.antecedentspersonnelles) }}
                              </div>
-                       {#  <div class="form-group">
-                        {{ form_label(form.ordonnance, 'Sélectionner Ordonnance :', {'label_attr': {'for': 'exampleInputOrdonnance'}}) }}
+                        {# <div class="form-group">
+                        {#{{ form_label(form., 'Sélectionner Ordonnance :', {'label_attr': {'for': 'exampleInputOrdonnance'}}) }}
                         {{ form_widget(form.ordonnance, {'attr': {'class': 'form-control', 'id': 'exampleInputOrdonnance'}}) }}
                         {{ form_errors(form.ordonnance) }}
                          </div>#}
@@ -241,8 +241,14 @@
                          <div class="form-group">
                                 {{ form_label(form.DateCreation, 'Date de Création', {'label_attr': {'for': 'exampleInputDateCretion'}}) }}
                                 {{ form_widget(form.DateCreation, {'attr': {'class': 'form-control', 'placeholder': 'Date de création', 'id': 'exampleInputDateCreation'}}) }}
-                                {#{ form_errors(form.DateCreation) }#}
+                                {#{{form_errors(form.DateCreation)  }}#}
+
                            </div>
+                          {# <div class="form-group">
+                                {{ form_label(form.patient, 'patient', {'label_attr': {'for': 'exampleInputPatient'}}) }}
+                                {{ form_widget(form.patient, {'attr': {'class': 'form-control', 'placeholder': 'patient', 'id': 'exampleInputPatient'}}) }}
+                                {{ form_errors(form.patient) }}
+                            </div>#}
                             
 
                             

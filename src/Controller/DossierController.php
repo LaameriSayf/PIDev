@@ -17,6 +17,7 @@ use DateTime;
 use App\Repository\DossiermedicalRepository as RepositoryDossiermedicalRepository;
 use Container3bVtg3K\getDossiermedicalRepositoryService;
 
+
 class DossierController extends AbstractController
 {
     #[Route('/dossier', name: 'app_dossier')]
@@ -29,28 +30,26 @@ class DossierController extends AbstractController
     #[Route('/addDossier', name: 'add_dossier')]
     public function addDossier(Request $req,ManagerRegistry $doctrine):Response
     { 
+    
     $dateActuelle = new DateTime();
     $dossiers=new Dossiermedical();
     $dossiers ->setDateCreation($dateActuelle);
-    $form=$this->createForm(DossierType::class,$dossiers);
+    $form=$this->createForm(DossierType::class,$dossiers);  
     $form->handleRequest($req);
 
     if ($form->isSubmitted() && $form->isValid()){
         
-        //$entityManager = $doctrine->getManager();
-        //$ordonnance_id = $req->request->get('ordonnance_id');
-        //$ordonnance = $entityManager->getRepository(Patient::class)->find($ordonnance_id);
- 
         $em=$doctrine->getManager();
-         // Récupérer les ordonnances associées au dossier
-        // $ordonnances = $form->get('ordonnance')->getData();
+        // Récupérer l'ID du patient depuis la requête
+       // $patientId = $req->get('patient_id');
+        // Récupérer le patient depuis la base de données
+       // $patient = $em->getRepository(Patient::class)->find($patientId);
+        //if (!$patient) {
+           // throw $this->createNotFoundException('Patient non trouvé pour l\'ID '.$patientId);
+      //  }
+        // Associer le dossier médical au patient
+       // $dossiers->setPatient($patient);
 
-         // Associer les ordonnances sélectionnées au dossier médical
-        // foreach ($ordonnances as $ordonnance) {
-            // $dossiers->addOrdonnance($ordonnance);
-        // }
-
-        //$dossiers->setPatient($patient);
         $em->persist($dossiers);
         $em->flush(); 
         return $this->redirectToRoute('show_dossier');
@@ -65,8 +64,10 @@ class DossierController extends AbstractController
     #[Route('/showDossier', name: 'show_dossier')]
     public function show(ManagerRegistry $doctrine): Response
     {
-    $repo=$doctrine->getRepository(Dossiermedical::class);
-    $dossiers=$repo->findAll();
+    //$repo=$doctrine->getRepository(Dossiermedical::class);
+    //$dossiers=$repo->findAll();
+    $repo = $doctrine->getRepository(Dossiermedical::class);
+    $dossiers = $repo->findAll();
     return $this->render('dossier/show1.html.twig', ['listDossiers'=>$dossiers]);
     }
     
@@ -104,7 +105,22 @@ class DossierController extends AbstractController
   //  return $this->render('show1.html.twig', [
        // 'dossiers' => $dossiers,
     //]);
+     
+   // #[Route('/creerDossier/{patientId}', name: 'creer_dossier')]
+    //public function addDossierForPatient($patientId, DossiermedicalRepository $dossierRepo): Response
+ //  {
+       //$dossier = $dossierRepo->createDossierForPatient($patientId);
+
+       ////if (!$dossier) {
+           // Handle the case where the dossier could not be created (e.g., patient not found).
+          /// throw $this->createNotFoundException('Patient not found for ID ' . $patientId);
+       //}
+////
+       // Redirect to a route where you can display the dossier or confirm creation.
+      // return $this->redirectToRoute('show_dossier', ['id' => $dossier->getId()]);
+  // }
 }
+
 
 
 

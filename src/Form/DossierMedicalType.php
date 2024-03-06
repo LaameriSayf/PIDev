@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Dossiermedical;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -9,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Ordonnance;
+use App\Entity\Patient;
 
 
 class DossierMedicalType extends AbstractType
@@ -39,7 +41,7 @@ class DossierMedicalType extends AbstractType
             'multiple' => true, // Pour le choix multiple
             'expanded' => true, // Afficher les choix sous forme de cases à cocher
         ])
-        
+       
         
         ->add('Modifier', SubmitType::class)
       
@@ -49,7 +51,7 @@ class DossierMedicalType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'data_class' => Dossiermedical::class,
         ]);
     }
 }

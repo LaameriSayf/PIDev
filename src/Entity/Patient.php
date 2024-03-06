@@ -3,18 +3,20 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
+use App\Repository\DossiermedicalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use App\Entity\Ordonnance; 
+use App\Entity\Dossiermedical;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 class Patient extends Admin
 {
-    #[ORM\Id]
+   #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id;
+     private ?int $id;
 
     #[ORM\Column(nullable: true)]
     private ?int $numcarte = null;
@@ -23,11 +25,13 @@ class Patient extends Admin
     #[ORM\OneToMany(mappedBy: 'idpatient', targetEntity: Rendezvous::class)]
     private Collection $rendezvouses;
 
+    #[ORM\OneToOne(mappedBy: 'patient', cascade: ['persist', 'remove'])]
+    private ?Dossiermedical $dossiermedical = null;
   
-    public function getId(): ?int
-    {
+   public function getId(): ?int
+   {
         return $this->id;
-    }
+   }
 
     public function getNumcarte(): ?int
     {
@@ -77,5 +81,28 @@ class Patient extends Admin
         return $this;
     }
 
+    public function getDossiermedical(): ?Dossiermedical
+    {
+        return $this->dossiermedical;
+    }
+
+    public function setDossiermedical(?Dossiermedical $dossiermedical): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($dossiermedical === null && $this->dossiermedical !== null) {
+            $this->dossiermedical->setPatient(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($dossiermedical !== null && $dossiermedical->getPatient() !== $this) {
+            $dossiermedical->setPatient($this);
+        }
+
+        $this->dossiermedical = $dossiermedical;
+
+        return $this;
+    }
+
+   
    
 }

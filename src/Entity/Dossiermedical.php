@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use PHPUnit\Util\Json;
+
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: DossiermedicalRepository::class)]
@@ -24,10 +25,7 @@ class Dossiermedical
     private ?string $resultatexamen = null;
 
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(nullable: true)]
-    private ?Patient $patient = null;
-
+    
     #[ORM\Column(nullable: true)]
      private ?array $antecedentspersonnelles = [];
 
@@ -39,6 +37,9 @@ class Dossiermedical
 
     #[ORM\Column(nullable: true)]
     private ?int $numdossier = null;
+
+    #[ORM\OneToOne(inversedBy: 'dossiermedical', cascade: ['persist', 'remove'])]
+    private ?Patient $patient = null;
 
 
    
@@ -65,19 +66,6 @@ class Dossiermedical
         return $this;
     }
 
-    
-
-    public function getPatient(): ?Patient
-    {
-        return $this->patient;
-    }
-
-    public function setPatient(Patient $patient): static
-    {
-        $this->patient = $patient;
-
-        return $this;
-    }
 
     public function getAntecedentspersonnelles(): array
     {
@@ -144,6 +132,21 @@ class Dossiermedical
 
         return $this;
     }
+
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): static
+    {
+        $this->patient = $patient;
+
+        return $this;
+    }
+    
+ 
+
 
    
 
