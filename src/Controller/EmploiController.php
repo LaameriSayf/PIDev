@@ -54,13 +54,35 @@ class EmploiController extends AbstractController
 
 }
 
-    
+#[Route('/editEmploi/{id}/edit', name: 'app_editEmploi', methods: ['PUT'])]
+public function editEmploi(Emploi $emploi, Request $request){
+
+$donnes = json_encode($request->getContent());
+if(
+    isset($donnes->id) && !empty($donnes->id)  &&
+    isset($donnes->titre) && !empty($donnes->titre)  &&
+    isset($donnes->start) && !empty($donnes->start)  &&
+    isset($donnes->end) && !empty($donnes->end)  &&
+    isset($donnes->description) && !empty($donnes->description)  
+    ){
+        $code = 200;
+        if (!$emploi){
+            $emploi = new Emploi;
+            $code = 201;
+           
+        }
+        $emploi->setTitre($donnes->titre);
+        $emploi->setDescription($donnes->description);
+        $emploi->setStart($donnes->start);
+        $emploi->setEnd($donnes->end);
+        $em = $this->getDoctrine() -> getManager();
+        $em -> persist($emploi);
+        $em->flush();
+        return new Response('Done',$code);
 
 
-
-
-
-
-
+    }else{
+        return new Response('Donnes incompletes',404);
+    }
 
 }
