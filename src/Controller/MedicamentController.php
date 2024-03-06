@@ -9,7 +9,10 @@ use App\Form\MedicamentType;
 use App\Form\PropertySearchType;
 use App\Repository\MedecinRepository;
 use App\Repository\MedicamentRepository;
+use Doctrine\ORM\Cache\EntityCacheKey;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -125,8 +128,52 @@ class MedicamentController extends AbstractController
         // Rendre le modèle de formulaire s'il n'est pas valide ou non soumis
         return $this->renderForm("medicament/AjouterMedicament/add1.html.twig", ["myForm" => $form]);
     }
+    #[Route('/afficherMedicament', name: 'app_afficherMedicament')]
     
-    #[Route('/afficherMedicament1', name: 'app_afficherMedicament')]
+        public function listMedicaments(Request $request,  ManagerRegistry $doctrine)
+{
+    $propertySearch = new PropertySearch();
+    $form = $this->createForm(PropertySearchType::class, $propertySearch);
+    $form->handleRequest($request);
+
+    $em = $doctrine->getManager();
+    $currentPage = $request->query->getInt('page', 1);
+    $itemsPerPage = 8;
+    $offset = ($currentPage - 1) * $itemsPerPage;
+
+    $commentRepository = $em->getRepository(Medicament::class);
+
+    // Si le formulaire est soumis et valide, effectuer la recherche
+    if ($form->isSubmitted() && $form->isValid()) {
+        $nom = $propertySearch->getNom();
+        if ($nom) {
+            // Si le nom est fourni, rechercher par nom
+            $medicament = $commentRepository->findBy(['nom_med' => $nom], null, $itemsPerPage, $offset);
+        } else {
+            // Sinon, afficher tous les médicaments paginés
+            $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+        }
+    } else {
+        // Si le formulaire n'est pas soumis, afficher tous les médicaments paginés
+        $medicament = $commentRepository->findBy([], null, $itemsPerPage, $offset);
+    }
+
+    // Calculer le nombre total de pages
+    $totalItems = $commentRepository->count([]);
+    $totalPages = ceil($totalItems / $itemsPerPage);
+
+
+    return $this->render('medicament/ConsulterMedicament/list2.html.twig', [
+        'form' => $form->createView(),
+        'list' => $medicament,
+        'currentPage' => $currentPage,
+        'totalPages' => $totalPages,
+    ]);
+}
+
+
+
+    #[Route('/afficherMedicament1', name: 'app_afficherMedicament1')]
     public function afficher1(ManagerRegistry $doctrine): Response
     {
         // Obtenir le dépôt pour l'entité Medicament
@@ -138,7 +185,7 @@ class MedicamentController extends AbstractController
         // Rendre le modèle pour afficher la liste des Medicaments
         return $this->render('medicament/ConsulterMedicament/list2.html.twig', ['list' => $medicament]);
     }
-    #[Route('/afficherMedicament', name: 'app_afficherMedicament')]
+    #[Route('/afficherMedicament2', name: 'app_afficherMedicament2')]
     public function afficher(Request $request, ManagerRegistry $doctrine): Response
     {
         $em = $doctrine->getManager();
