@@ -38,12 +38,10 @@ class MedecinController extends AbstractController
         // Vérifier si le cin existe déjà dans la base de données
         $existingMedecin = $doctrine->getRepository(Medecin::class)->findOneBy(['cin' => $cin]);
         if ($existingMedecin) {
-            // Afficher un message d'erreur
             $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
-            // Réafficher le formulaire avec le message d'erreur
             return $this->renderForm("medecin/addmedecin.html.twig", ["myForm" => $form]);
         }
-         // Handle image upload
+        
          $imageFile = $form->get('image')->getData();
 
          if ($imageFile instanceof UploadedFile) {

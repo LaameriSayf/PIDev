@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\AbstractType;
 use App\Form\PharmacienTypeType;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
 
@@ -45,6 +46,13 @@ class PharmacienController extends AbstractController
                 $form->get('cin')->addError(new FormError('Le CIN existe déjà.'));
                 // Réafficher le formulaire avec le message d'erreur
                 return $this->renderForm("admin/addadmin.html.twig", ["myForm" => $form]);
+            }
+            $imageFile = $form->get('image')->getData();
+
+            if ($imageFile instanceof UploadedFile) {
+                $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+                $imageFile->move($this->getParameter('image_directory'), $newFilename);
+                $pharmacien->setImage($newFilename);
             }
             $password = $pharmacien->getPassword();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);

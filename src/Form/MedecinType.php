@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class MedecinType extends AbstractType
 {
@@ -36,6 +37,11 @@ class MedecinType extends AbstractType
             
             ->add('password', PasswordType::class, [
                 'attr' => ['class' => 'form-control', 'placeholder' => 'Password', 'id' => 'password-input'],
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Medecin Image',
+                'required' => false,
+                'mapped' => false, // Do not map this field to the entity property
             ])
             ->add('specialite')
             ->add('etat', ChoiceType::class, [

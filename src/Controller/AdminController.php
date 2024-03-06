@@ -83,7 +83,7 @@ class AdminController extends AbstractController
                 $imageFile->move($this->getParameter('image_directory'), $newFilename);
                 $admin->setImage($newFilename);
             }
-            // Crypter le mot de passe avant de le persister
+            
             $password = $admin->getPassword();
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $admin->setPassword($hashedPassword);

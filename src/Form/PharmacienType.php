@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class PharmacienType extends AbstractType
 {
@@ -46,6 +47,11 @@ class PharmacienType extends AbstractType
                 'label' => 'Interlock', // Ajoutez une étiquette pour le champ interlock
             ])
             ->add('poste')
+            ->add('image', FileType::class, [
+                'label' => 'Pharmacien Image',
+                'required' => false,
+                'mapped' => false, // Do not map this field to the entity property
+            ])
             ->add('Ajouter',SubmitType::class)
             ->add('Annuler',SubmitType::class)
         ;

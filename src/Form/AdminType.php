@@ -47,7 +47,7 @@ class AdminType extends AbstractType
                 'label' => 'Interlock', // Ajoutez une étiquette pour le champ interlock
             ])
             ->add('image', FileType::class, [
-                'label' => 'Event Image',
+                'label' => 'admin Image',
                 'required' => false,
                 'mapped' => false, // Do not map this field to the entity property
             ])

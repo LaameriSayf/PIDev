@@ -94,6 +94,14 @@ public function addPatient(Request $req, ManagerRegistry $doctrine): Response
             // Réafficher le formulaire avec le message d'erreur
             return $this->renderForm("patient/addpatient.html.twig", ["myForm" => $form]);
         }
+        // Handle image upload
+        $imageFile = $form->get('image')->getData();
+
+        if ($imageFile instanceof UploadedFile) {
+            $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move($this->getParameter('image_directory'), $newFilename);
+            $patient->setImage($newFilename);
+        }
         $password = $patient->getPassword();
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $patient->setPassword($hashedPassword);
