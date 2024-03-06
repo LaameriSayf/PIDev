@@ -53,6 +53,47 @@ class EmploiController extends AbstractController
 
 
 }
+#[Route('/editEmploi/{id}/edit', name: 'app_editEmploi', methods: ['PUT'])]
+public function editEmploi(Emploi $emploi, Request $request,ManagerRegistry $doctrine)
+{
+    $data = json_decode($request->getContent(), true); // Utilisez json_decode
+
+    if (
+        isset($data['id']) && !empty($data['id']) &&
+        isset($data['titre']) && !empty($data['titre']) &&
+        isset($data['start']) && !empty($data['start']) &&
+        isset($data['end']) && !empty($data['end']) &&
+        isset($data['description']) && !empty($data['description'])
+
+    ) { $code = 200;
+        if (!$emploi) {
+
+        $emploi = new Emploi;
+        $code = 201;
+
+    }
+       
+        $emploi->setTitre($data['titre']);
+        $emploi->setStart(new \DateTime($data['start']));
+        $emploi->setEnd(new \DateTime($data['end']));
+        $emploi->setDescription($data['description']);
+
+        // Effectuer la mise à jour dans la base de données, par exemple avec Doctrine
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($emploi);
+        $entityManager->flush();
+
+        return new Response('ok',$code);
+
+
+    }else {
+            return new Response('donnees incompletes',404);
+        
+
+
+    }
+
+
 
     
 
@@ -63,4 +104,5 @@ class EmploiController extends AbstractController
 
 
 
+}
 }
