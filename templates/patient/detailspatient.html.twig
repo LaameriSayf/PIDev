@@ -317,9 +317,14 @@
         </div>
         </div>
             <div>
+           <p>{% if patient.image %}
+    <img src="{{ asset('uploads/images/' ~ patient.image) }}" alt="{{ patient.nom }}" class="img-fluid rounded-circle">
+{% else %}
+    <img src="{{ asset('images/default-profile.png') }}" alt="Profil par défaut" class="img-fluid rounded-circle">
+{% endif %}</p>
                 <strong>Numéro de la carte jaune:</strong> {{ patient.numcarte }}
-                <p><strong>Cin:</strong> {{ patient.Cin }}<p>
-                <p><strong>Nom:</strong> {{ patient.nom }}<p>
+                <p><strong>Cin:</strong> {{ patient.Cin }}</p>
+                <p><strong>Nom:</strong> {{ patient.nom }}</p>
                 <p><strong>Prenom:</strong> {{ patient.prenom }}</p>
                 <p><strong>Genre:</strong> {{ patient.genre }}</p>
                 <p><strong>Date de naissance:</strong> {{ patient.datenaissance|date('Y-m-d') }}</p>
@@ -327,9 +332,7 @@
                 <p><strong>email:</strong> {{ patient.email }}</p>
                 <p><strong>Password:</strong> {{ patient.password }}</p>
                 <p><strong>Interlock:</strong> {{ patient.interlock }}</p>
-                {% if patient.image %}
-                    <img src="{{ asset('uploads/images/' ~ patient.image) }}" alt="{{ patient.nom }}" class="img-fluid">
-                {% endif %}
+                
             </div>
              
             </div>

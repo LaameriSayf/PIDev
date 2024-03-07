@@ -81,24 +81,42 @@ $listPharmacien = $searchQuery !== '' ?
 return $this->render('Pharmacien/consulterpharmacien.html.twig', [ 'listPharmacien' => $listPharmacien, 'searchQuery' => $searchQuery, ]);
  }
  
-#[Route('/editPharmacien/{id}', name: 'app_editPharmacien')]
-public function edit(PharmacienRepository $repository, $id, Request $request)
-{
-    $pharmacien = $repository->find($id);
-    $form = $this->createForm(PharmacienType::class, $pharmacien);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->flush(); 
-        return $this->redirectToRoute("app_afficherPharmacien");
-    }
-
-
-
-return $this->render('pharmacien/editpharmacien.html.twig', [
-    'myForm' => $form->createView(),
-]);
-}
+ #[Route('/editPharmacien/{id}', name: 'app_editPharmacien')]
+ public function edit(PharmacienRepository $repository, $id, Request $request)
+ {
+     $pharmacien = $repository->find($id);
+     $form = $this->createForm(PharmacienType::class, $pharmacien);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $pharmacien->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $pharmacien->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherPharmacien");
+     }
+     
+     return $this->render('pharmacien/editpharmacien.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+ 
 #[Route('/deletePharmacien/{id}', name: 'app_deletePharmacien')]
     public function delete($id, PharmacienRepository $repository)
     {

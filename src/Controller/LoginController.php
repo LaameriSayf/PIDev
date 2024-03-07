@@ -11,18 +11,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Form\LoginType;
 use App\Repository\GlobalUserRepository;
+use Doctrine\ORM\Mapping\Id;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormError;
-use Doctrine\Persistence\Mapping\ClassMetadata;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 class LoginController extends AbstractController{
 
     #[Route('/login', name: 'login')]
-    public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine): Response
+    public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine , SessionInterface $s): Response
     {
         $user = new GlobalUser();
         
@@ -32,10 +32,15 @@ class LoginController extends AbstractController{
         if ($login_form->isSubmitted()) {
             $email = $user->getEmail();
             $password = $user->getPassword();
+           
+           
             
             $existingAdmin = $doctrine->getRepository(GlobalUser::class)->findOneBy(['email' => $email]);
             
+            
             if ($existingAdmin && password_verify($password, $existingAdmin->getPassword())) {
+                $id = $existingAdmin->getid();
+                $s->set('id', $id);
                 //return $this->redirectToRoute("app_afficherAdmin");
                 if ($existingAdmin instanceof Admin) {
                     return $this->redirectToRoute("app_afficherAdmin");
@@ -59,6 +64,8 @@ class LoginController extends AbstractController{
     {
         return $this->redirectToRoute("app_home");
     }
+
+
     }
 
  

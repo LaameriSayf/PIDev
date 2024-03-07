@@ -20,24 +20,16 @@ use App\Repository\MedecinRepository;
 use App\Repository\MedicamentRepository;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Repository\PatientRepository;
 use App\Repository\PharmacienRepository;
-
-
+use Doctrine\ORM\Mapping\Id;
 
 class AdminController extends AbstractController
 {    
     
-    #[Route('/admin', name: 'app_admin')]
-    public function index(): Response
-    {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
-    }
-
-
+    
     #[Route('/home', name: 'home_admin')]
     public function home(Request $request, GlobalUserRepository $GlobalUserRepository, AdminRepository $adminRepository, PatientRepository $patientRepository,PharmacienRepository $pharmacienRepository, MedecinRepository $medecinRepository): Response
     {
@@ -112,24 +104,43 @@ $listAdmin = $searchQuery !== '' ?
 return $this->render('Admin/consulteradmin.html.twig', [ 'listAdmin' => $listAdmin, 'searchQuery' => $searchQuery, ]);
  }
  
-#[Route('/editAdmin/{id}', name: 'app_editAdmin')]
+ #[Route('/editAdmin/{id}', name: 'app_editAdmin')]
 public function edit(AdminRepository $repository, $id, Request $request)
 {
     $admin = $repository->find($id);
     $form = $this->createForm(AdminType::class, $admin);
     $form->handleRequest($request);
+    
     if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer le nouveau mot de passe depuis le formulaire
+        $newPassword = $form->get('password')->getData();
+
+        // Vérifier si un nouveau mot de passe a été fourni
+        if ($newPassword) {
+            // Chiffrer le nouveau mot de passe
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            $admin->setPassword($hashedPassword);
+        }
+        $imageFile = $form->get('image')->getData();
+
+        if ($imageFile instanceof UploadedFile) {
+            $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move($this->getParameter('image_directory'), $newFilename);
+            $admin->setImage($newFilename);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->flush(); 
+        
         return $this->redirectToRoute("app_afficherAdmin");
     }
-
-
-
-return $this->render('admin/editadmin.html.twig', [
-    'myForm' => $form->createView(),
-]);
+    
+    return $this->render('admin/editadmin.html.twig', [
+        'myForm' => $form->createView(),
+    ]);
 }
+
+ 
 #[Route('/deleteAdmin/{id}', name: 'app_deleteAdmin')]
     public function delete($id, AdminRepository $repository)
     {
@@ -147,8 +158,8 @@ return $this->render('admin/editadmin.html.twig', [
         return $this->redirectToRoute('app_afficherAdmin');
     }
     #[Route('/ShowAdmin/{id}', name: 'app_showAdmin')]
-    public function showAdmin($id, AdminRepository $repository)
-    {
+    public function showAdmin($id, AdminRepository $repository,SessionInterface $s)
+    {   
         $admin = $repository->find($id);
 
         if (!$admin) {
@@ -157,5 +168,16 @@ return $this->render('admin/editadmin.html.twig', [
         return $this->render('admin/detailsadmin.html.twig',['admin' =>$admin]);
     }
 
-      
+    #[Route('/ShowAdmins', name: 'app_showAdmins')]
+    public function showAdmins(AdminRepository $repository,SessionInterface $s,GlobalUserRepository $repo)
+    {   $id = $s->get('id');
+        $admin = $repo->find($id);
+
+        if (!$admin) {
+            return $this->redirectToRoute('app_afficherAdmin');
+        }
+        return $this->render('admin/editprofile.html.twig',['admin' =>$admin]);
+    }
 }
+
+      

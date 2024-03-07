@@ -317,6 +317,11 @@
         </div>
         </div>
             <div>
+             <p>{% if pharmacien.image %}
+    <img src="{{ asset('uploads/images/' ~ pharmacien.image) }}" alt="{{ pharmacien.nom }}" class="img-fluid rounded-circle">
+{% else %}
+    <img src="{{ asset('images/default-profile.png') }}" alt="Profil par défaut" class="img-fluid rounded-circle">
+{% endif %}</p>
                 <strong>Cin:</strong> {{ pharmacien.Cin() }}
                 <p><strong>Nom:</strong> {{ pharmacien.nom }}</p>
                 <p><strong>Prenom:</strong> {{ pharmacien.prenom }}</p>
@@ -326,9 +331,7 @@
                 <p><strong>email:</strong> {{ pharmacien.email }}</p>
                 <p><strong>Password:</strong> {{ pharmacien.password }}</p>
                 <p><strong>Interlock:</strong> {{ pharmacien.interlock }}</p>
-                {% if pharmacien.image %}
-                    <img src="{{ asset('uploads/images/' ~ pharmacien.image) }}" alt="{{ pharmacien.nom }}" class="img-fluid">
-                {% endif %}
+               
             </div>
              
             </div>

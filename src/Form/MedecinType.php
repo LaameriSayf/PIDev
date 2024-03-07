@@ -11,6 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 class MedecinType extends AbstractType
 {
@@ -29,8 +32,11 @@ class MedecinType extends AbstractType
                 'multiple' => false, // Permettre la sélection d'un seul choix
             ])
             ->add('datenaissance', DateType::class, [
-                'widget' => 'single_text', // Afficher en tant qu'entrée texte unique
-                'format' => 'yyyy-MM-dd', // Définir le format de date souhaité
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'constraints' => [
+                    new Assert\Callback([$this, 'validateAge']),
+                ],
             ])
             ->add('numtel')
             ->add('email')
@@ -73,4 +79,20 @@ class MedecinType extends AbstractType
             'data_class' => Medecin::class,
         ]);
     }
+    public function validateAge($value, ExecutionContextInterface $context)
+{
+    // Récupérer la date de naissance
+    $datenaissance = $value;
+
+    // Calculer l'âge
+    $now = new \DateTime();
+    $age = $now->diff($datenaissance)->y;
+
+    // Vérifier si l'âge est inférieur à 23 ans
+    if ($age < 23) {
+        $context->buildViolation('Vous devez avoir au moins 23 ans.')
+            ->atPath('datenaissance')
+            ->addViolation();
+    }
+}
 }

@@ -317,8 +317,13 @@
         </div>
         </div>
             <div>
-                <p><strong>Cin:</strong> {{ medecin.Cin() }}<p>
-                <p><strong>Nom:</strong> {{ medecin.nom }}<p>
+            <p>{% if medecin.image %}
+    <img src="{{ asset('uploads/images/' ~ medecin.image) }}" alt="{{ medecin.nom }}" class="img-fluid rounded-circle">
+{% else %}
+    <img src="{{ asset('images/default-profile.png') }}" alt="Profil par défaut" class="img-fluid rounded-circle">
+{% endif %}</p>
+                <p><strong>Cin:</strong> {{ medecin.Cin() }}</p>
+                <p><strong>Nom:</strong> {{ medecin.nom }}</p>
                 <p><strong>Prenom:</strong> {{medecin.prenom }}</p>
                 <p><strong>Genre:</strong> {{ medecin.genre }}</p>
                 <p><strong>Date de naissance:</strong> {{ medecin.datenaissance|date('Y-m-d') }}</p>
@@ -328,9 +333,7 @@
                 <p><strong>Password:</strong> {{ medecin.password }}</p>
                  <p><strong>Etat:</strong> {{ medecin.etat }}</p>
                 <p><strong>Interlock:</strong> {{ medecin.interlock }}</p>
-                {% if medecin.image %}
-                    <img src="{{ asset('uploads/images/' ~ medecin.image) }}" alt="{{ medecin.nom }}" class="img-fluid">
-                {% endif %}
+                
             </div>
              
             </div>

@@ -317,6 +317,11 @@
         </div>
         </div>
             <div>
+             <p>{% if admin.image %}
+    <img src="{{ asset('uploads/images/' ~ admin.image) }}" alt="{{ admin.nom }}" class="img-fluid rounded-circle">
+{% else %}
+    <img src="{{ asset('images/default-profile.png') }}" alt="Profil par défaut" class="img-fluid rounded-circle">
+{% endif %}</p>
                 <strong>Cin:</strong> {{ admin.Cin() }}
                 <p><strong>Nom:</strong> {{ admin.nom }}</p>
                 <p><strong>Prenom:</strong> {{ admin.prenom }}</p>
@@ -326,9 +331,7 @@
                 <p><strong>email:</strong> {{ admin.email }}</p>
                 <p><strong>Password:</strong> {{ admin.password }}</p>
                 <p><strong>Interlock:</strong> {{ admin.interlock }}</p>
-                {% if admin.image %}
-                    <img src="{{ asset('uploads/images/' ~ admin.image) }}" alt="{{ admin.nom }}" class="img-fluid">
-                {% endif %}
+                
             </div>
              
             </div>

@@ -15,7 +15,6 @@ use App\Form\MedecinType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
 class MedecinController extends AbstractController
 {
     #[Route('/medecin', name: 'app_medecin')]
@@ -25,6 +24,7 @@ class MedecinController extends AbstractController
             'controller_name' => 'MedecinController',
         ]);
     }
+   
     #[Route('/addMedecin', name: 'addMedecin')]
     public function addMedecin(Request $req, ManagerRegistry $doctrine): Response
 {
@@ -77,24 +77,42 @@ return $this->render('medecin/consultermedecin.html.twig', [ 'listMedecin' => $l
  
 
     
-    #[Route('/editMedecin/{id}', name: 'app_editMedecin')]
-public function edit(MedecinRepository $repository, $id, Request $request)
-{
-    $medecin = $repository->find($id);
-    $form = $this->createForm(MedecinType::class, $medecin);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
-        return $this->redirectToRoute("app_afficherMedecin");
-    }
-
-
-
-return $this->render('medecin/editmedecin.html.twig', [
-    'myForm' => $form->createView(),
-]);
-}
+ #[Route('/editMedecin/{id}', name: 'app_editMedecin')]
+ public function edit(MedecinRepository $repository, $id, Request $request)
+ {
+     $medecin = $repository->find($id);
+     $form = $this->createForm(MedecinType::class, $medecin);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $medecin->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $medecin->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherMedecin");
+     }
+     
+     return $this->render('medecin/editmedecin.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+ 
 #[Route('/deleteMedecin/{id}', name: 'app_deleteMedecin')]
     public function delete($id, MedecinRepository $repository)
     {

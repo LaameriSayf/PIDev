@@ -132,24 +132,42 @@ return $this->render('patient/consulterpatient.html.twig', [ 'listPatient' => $l
 
 
     
-    #[Route('/editPatient/{id}', name: 'app_editPatient')]
-public function edit(PatientRepository $repository, $id, Request $request)
-{
-    $patient = $repository->find($id);
-    $form = $this->createForm(PatientType::class, $patient);
-    $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $em = $this->getDoctrine()->getManager();
-        $em->flush(); // Correction : Utilisez la méthode flush() sur l'EntityManager pour enregistrer les modifications en base de données.
-        return $this->redirectToRoute("app_afficherPatient");
-    }
-
-
-
-return $this->render('patient/editpatient.html.twig', [
-    'myForm' => $form->createView(),
-]);
-}
+ #[Route('/editPatient/{id}', name: 'app_editpatient')]
+ public function edit(PatientRepository $repository, $id, Request $request)
+ {
+     $patient = $repository->find($id);
+     $form = $this->createForm(PatientType::class, $patient);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $patient->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $patient->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherPatient");
+     }
+     
+     return $this->render('patient/editpatient.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+ 
 #[Route('/deletePatient/{id}', name: 'app_deletePatient')]
     public function delete($id, PatientRepository $repository)
     {
