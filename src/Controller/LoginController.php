@@ -22,43 +22,49 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class LoginController extends AbstractController{
 
     #[Route('/login', name: 'login')]
-    public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine , SessionInterface $s): Response
-    {
-        $user = new GlobalUser();
-        
-        $login_form = $this->createForm(LoginType::class, $user);
-        $login_form->handleRequest($request);
-        
-        if ($login_form->isSubmitted()) {
-            $email = $user->getEmail();
-            $password = $user->getPassword();
-           
-           
-            
-            $existingAdmin = $doctrine->getRepository(GlobalUser::class)->findOneBy(['email' => $email]);
-            
-            
-            if ($existingAdmin && password_verify($password, $existingAdmin->getPassword())) {
-                $id = $existingAdmin->getid();
+public function login(GlobalUserRepository $repository, Request $request, ManagerRegistry $doctrine , SessionInterface $s): Response
+{
+    $user = new GlobalUser();
+    
+    $login_form = $this->createForm(LoginType::class, $user);
+    $login_form->handleRequest($request);
+    
+    if ($login_form->isSubmitted()) {
+        $email = $user->getEmail();
+        $password = $user->getPassword();
+
+        $existingAdmin = $doctrine->getRepository(GlobalUser::class)->findOneBy(['email' => $email]);
+
+        if ($existingAdmin) {
+            // Vérification de l'accès interdit
+            if ($existingAdmin->isInterlock() == 1) {
+                // Message d'erreur pour l'accès interdit ou bloqué
+                $login_form->addError(new FormError('Accès interdit ou bloqué.'));
+            } elseif (password_verify($password, $existingAdmin->getPassword())) {
+                $id = $existingAdmin->getId();
                 $s->set('id', $id);
-                //return $this->redirectToRoute("app_afficherAdmin");
+                
                 if ($existingAdmin instanceof Admin) {
                     return $this->redirectToRoute("app_afficherAdmin");
-                } elseif ($existingAdmin  instanceof Patient) {
+                } elseif ($existingAdmin instanceof Patient) {
                     return $this->redirectToRoute("app_afficherPatient");
                 } elseif ($existingAdmin instanceof Medecin) {
                     return $this->redirectToRoute("app_afficherMedecin");
-                } elseif ($existingAdmin  instanceof Pharmacien) {
+                } elseif ($existingAdmin instanceof Pharmacien) {
                     return $this->redirectToRoute("app_afficherPharmacien");
                 }
-
+            } else {
+                // Erreur d'authentification
+                $login_form->addError(new FormError('Adresse email ou mot de passe incorrect.'));
             }
-            
-            $login_form->addError(new FormError('Adresse email ou mot de passe incorrect.')); 
+        } else {
+            // Erreur d'authentification
+            $login_form->addError(new FormError('Adresse email ou mot de passe incorrect.'));
         }
-        
-        return $this->renderForm("login/login.html.twig", ["login_form" => $login_form]);
     }
+    
+    return $this->renderForm("login/login.html.twig", ["login_form" => $login_form]);
+}
     #[Route('/logout', name: 'app_logout')]
     public function logout()
     {
