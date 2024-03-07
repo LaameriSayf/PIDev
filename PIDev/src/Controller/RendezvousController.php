@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Rendezvous;
+use App\Entity\Emploi;
+
 use App\Form\EditRendezType;
 use App\Form\RendezvousType;
 use App\Repository\RendezvousRepository;
@@ -12,6 +14,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 class RendezvousController extends AbstractController
 {
@@ -88,7 +93,6 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
     #[Route('/deleteRendezvous/{id}', name: 'app_deleteRendezvous')]
     public function deleteRendezvous($id, RendezvousRepository $repository,ManagerRegistry $manager)
     {
-
         $rendezVous = $repository->find($id);
         $em = $manager->getManager();
         $em->remove($rendezVous);
@@ -97,10 +101,9 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
 
        return $this->redirectToRoute('app_afficherRendezVous');
 
-
-
-
     }
+
+
     #[Route('/afficherRendezVous', name: 'app_afficherRendezVous')]
 
     public function afficherRendezVous(ManagerRegistry $doctrine):Response
@@ -111,6 +114,8 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
         return $this->render('rendezvous/consulterRdv/afficherRdv.html.twig', ['list'=>$rendezvous]);
     }
 
+    //Afficher rendez vous back office
+
     #[Route('/afficherRendezVousMedecin', name: 'app_afficherRendezVousMedecin')]
 
     public function afficherRendezVousMedcin(ManagerRegistry $doctrine):Response
@@ -119,29 +124,52 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
         $rendezvous=$repository->findAll();
         return $this->render('rendezvous/consulterRdv/afficherRdvMedecin.html.twig', ['list'=>$rendezvous]);
     }
-
-    #[Route('/searchRendezvousByDate', name: 'app_searchRendezvousByDate')]
-public function searchRendezvousByDate(Request $request, RendezvousRepository $repository):Response
-{
-    $date = $request->query->get('daterendezvous');
-
-    $rendezvous = $repository->findByDate($date);
-
-    $responseArray = [];
-    foreach ($rendezvous as $rdv) {
-        $responseArray[] = [
-            'id' => $rdv->getId(),
-            'daterendezvous' => $rdv->getDaterendezvous()->format('Y-m-d'),
-            'heurerendezvous' => $rdv->getHeurerendezvous()->format('H:i:s'),
-            'description' => $rdv->getDescription(),
-            'file' => $rdv->getFile(),
-        ];
-    }
-
-    return $this->render('rendezvous/consulterRdv/afficherRdvMedecin.html.twig', ['list' => $responseArray]);}
-
-
-
-
     
+
+   
+    #[Route('/acceptRendezvous/{id}', name: 'app_acceptRendezvous')]
+    public function acceptRendezvous($id, RendezvousRepository $repository, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
+    {
+        $rendezvous = $repository->find($id);
+        if (!$rendezvous) {
+            return new JsonResponse(['error' => 'Rendezvous not found'], Response::HTTP_NOT_FOUND);
+        }
+        
+        $rendezvous->setEtat(true);
+        return $this->redirectToRoute('app_afficherR');
+    
+    
+    }
+    #[Route('/afficherRendezVousAccepter', name: 'app_afficherR')]
+
+    public function afficherRendezVousMedcinAceepte(ManagerRegistry $doctrine):Response
+    {
+        $repository=$doctrine->getRepository(Rendezvous::class);
+        $rendezvous=$repository->findAll();
+        return $this->render('rendezvous/consulterRdv/acceptedRendezvous.html.twig', ['list'=>$rendezvous]);
+    }   
+
+    #[Route('/afficherRendezVousAnnuler', name: 'app_afficherN')]
+    public function afficherRendezVousMedcinAnuler(ManagerRegistry $doctrine):Response
+    {
+        $repository=$doctrine->getRepository(Rendezvous::class);
+        $rendezvous=$repository->findAll();
+        return $this->render('rendezvous/consulterRdv/rejectedRdv.html.twig', ['list'=>$rendezvous]);
+    }
+    
+    #[Route('/rejectedRendezvous/{id}', name: 'app_rejectedRendezvous')]
+    public function rejectedRendezvous($id, RendezvousRepository $repository, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
+    {
+        $rendezvous = $repository->find($id);
+        if (!$rendezvous) {
+            return new JsonResponse(['error' => 'Rendezvous not found'], Response::HTTP_NOT_FOUND);
+        }
+        
+        $rendezvous->setEtat(false);
+        return $this->redirectToRoute('app_afficherN');
+    
+    
+    }
+   
+        
 }

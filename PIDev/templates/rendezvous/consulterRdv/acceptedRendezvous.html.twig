@@ -261,7 +261,6 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherRendezVousMedecin')}}">Consulter liste des rendez-vous</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_calendar')}}">Consulter Calendar</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherR')}}">Consulter liste des rendez-vous accepter</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherN')}}">Consulter liste des rendez-vous annuler</a></li>
               </ul>
             </div>
@@ -290,7 +289,7 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Liste des RendezVous</h4>
+                        <h4 class="card-title">Liste des rendez-vous accepter</h4>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -299,10 +298,8 @@
                                         <th>date du rendez-vous</th>
                                         <th>heure rendez vous</th>
                                         <th>description</th>
-                                        <th>etat</th>
                                         <th>file</th>
-                                        <th>Actions</th>
-
+                                        <th>etat</th>
 
                                         
                                           
@@ -310,19 +307,14 @@
                                 </thead>
                                 <tbody>
                                    {% for rdv in list %}
+                                   {% if rdv.etat == 1 %}
     <tr>
         <td>{{ rdv.id }}</td>
         <td>{{ rdv.daterendezvous | date('Y-m-d') }}</td>
         <td>{{ rdv.heurerendezvous | date('H:i:s') }}</td>
         <td>{{ rdv.description }}</td>
-        <td> {% if rdv.etat == 1 %}
-                <p style="color: green;"><i class="fas fa-check-circle"></i> Accepted</p>
-            {% else %}
-                <p style="color: red;"><i class="fas fa-times-circle"></i> Rejected</p>
-                
-            {% endif %}</td>
         <td>
-                {% if rdv.file %}
+ {% if rdv.file %}
                 <a href="{{ asset('uploads/' ~ rdv.file) }}" download="{{ rdv.file }}">
                     <i class="fas fa-file"></i> Lettre de Liaison
                 </a>
@@ -331,14 +323,18 @@
             {% endif %} 
         
         </td>
-        <td>             
-                        <a class="btn btn-primary btn-sm" href="{{ path('app_acceptRendezvous', {'id': rdv.id}) }}">Accepter</a>
-                        <a class="btn btn-danger btn-sm" href="{{ path('app_rejectedRendezvous', {'id': rdv.id}) }}">Annuler</a>
-                   </td>
 
+        <td>  
+           
+                    <p style="color: green;"><i class="fas fa-check-circle"></i> Accepted</p>
 
-             </tr>
-                {% endfor %}
+       
+        </td>
+        
+                    {% endif %} 
+
+    </tr>
+{% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -347,7 +343,10 @@
             </div>
         </div>
     </div>
-   
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <!-- Ajoutez ici le code du pied de page si nécessaire -->
+    <!-- partial -->
 </div>
 </div>
 {% endblock %}

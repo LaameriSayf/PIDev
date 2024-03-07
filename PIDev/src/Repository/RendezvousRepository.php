@@ -21,6 +21,12 @@ class RendezvousRepository extends ServiceEntityRepository
         parent::__construct($registry, Rendezvous::class);
     }
 
+    public function findAndAssignEmploiById($emploiId)
+    {
+        // Récupérez l'emploi depuis la base de données en utilisant son identifiant
+        return $this->find($emploiId);
+    }
+
     public function findByDate($date)
     {
         return $this->createQueryBuilder('r')

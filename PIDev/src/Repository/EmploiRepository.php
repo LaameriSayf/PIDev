@@ -21,6 +21,8 @@ class EmploiRepository extends ServiceEntityRepository
         parent::__construct($registry, Emploi::class);
     }
 
+   
+
 //    /**
 //     * @return Emploi[] Returns an array of Emploi objects
 //     */

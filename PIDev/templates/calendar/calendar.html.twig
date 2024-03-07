@@ -31,6 +31,7 @@
                         html: `<div class="fc-content">
                                     <div class="fc-content">${info.event.extendedProps.titre}</div>
                                     <div class="fc-content">${info.event.extendedProps.description}</div>
+                                    
                                     <div class="fc-content">
                                         <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">Delete</button>
                                     </div>
@@ -94,6 +95,20 @@
                     });
                 }
             });
+            // ACCEPT RENDEZ VOUS
+            document.addEventListener('rendezvousAccepted', function (event) {
+            const eventData = event.detail;
+
+            // Add the new event to the calendar
+            calendar.addEvent({
+                id: eventData.id,
+                daterendezvous: eventData.daterendezvous,
+                heurerendezvous: eventData.heurerendezvous,
+                description: eventData.extendedProps.description,
+
+                // Add any other properties you need
+            });
+        });
 
             calendar.render();
         });

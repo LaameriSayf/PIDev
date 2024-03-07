@@ -34,6 +34,9 @@ class Rendezvous
     #[ORM\ManyToOne(inversedBy: 'rendezvouses')]
     private ?Patient $idpatient = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $etat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -107,6 +110,18 @@ class Rendezvous
     public function setIdpatient(?patient $idpatient): static
     {
         $this->idpatient = $idpatient;
+
+        return $this;
+    }
+
+    public function isEtat(): ?bool
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?bool $etat): static
+    {
+        $this->etat = $etat;
 
         return $this;
     }

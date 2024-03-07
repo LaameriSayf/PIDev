@@ -9,6 +9,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+
 
 
 class EmploiType extends AbstractType
@@ -16,11 +19,19 @@ class EmploiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('start',DateType::class,[
+            ->add('start',DateTimeType::class,[
                 'widget' => 'single_text',  
             ])
-            ->add('end',DateType::class,[
-                'widget' => 'single_text',  
+            ->add('end',DateTimeType::class,[
+                'widget' => 'single_text', 
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'propertyPath' => 'parent["start"].data',
+                        'message' => 'La date de fin doit etre  superieure a la date de debut.'
+
+                    ]),
+
+                ] 
             ])
             ->add('titre')
             ->add('description')
