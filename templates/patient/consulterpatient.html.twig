@@ -279,7 +279,7 @@
         <ul class="nav">
           <!-- ************************************************************************************************** -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ path('home_admin') }}">home</a>
+                <a class="nav-link" href="{{ path('home_admin') }}">tableau de bord</a>
             </li>
           <!-- ******************************************************************************************************* -->
           
@@ -439,7 +439,7 @@
                                         <td>{{ i.getPrenom() }}</td>
                                         <td>{{ i.getEmail() }}</td>
                                         <td><a href="{{ path('app_showPatient', {'id': i.id}) }}"><button type="button" class="btn btn-outline-primary">Détails</button></a></td>
-                                        <td><a href="{{ path('app_editPatient', {'id': i.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a></td>
+                                        <td><a href="{{ path('app_editpatient', {'id': i.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a></td>
                                         <td><a href="{{ path('app_deletePatient', {'id': i.id}) }}"><button type="button" class="btn btn-danger">Supprimer</button></a></td>
                                     </tr>
                                     {% endfor %}

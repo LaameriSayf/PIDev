@@ -177,12 +177,6 @@
       <!-- partial:../../partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-
-        <!-- ************************************************************************************************** -->
-            <li class="nav-item">
-                <a class="nav-link" href="{{ path('home_admin') }}">tableau de bord</a>
-            </li>
-          <!-- ******************************************************************************************************* -->
           
           
           <li class="nav-item">
@@ -207,7 +201,7 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{path('addPatient')}}">Ajouter Patients</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('addPatient')}}"> Ajouter Patients</a></li>
                 <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherPatient')}}"> Consulter liste des patients</a></li>
               </ul>
             </div>
@@ -220,8 +214,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{path('addMedecin')}}">Ajouter Médecins</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{path('app_afficherMedecin')}}">Consulter liste des Médecins</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('addMedecin')}}">Ajouter Medecin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_afficherMedecin')}}">Consulter liste des Medecin</a></li>
               </ul>
             </div>
           </li>
@@ -233,7 +227,7 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{path('addPharmacien')}}">Ajouter Pharmaciens</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('addPharmacien')}}">Ajouter Pharmacien</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{path('app_afficherPharmacien')}}">Consulter liste des Pharmaciens</a></li>
               </ul>
             </div>
@@ -299,7 +293,7 @@
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Catégories</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des catégories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des Catégories</a></li>
               </ul>
             </div>
           </li>
@@ -307,93 +301,45 @@
         </ul>
       </nav>
       <!-- partial -->
-      
-      <div class="main-panel">        
-        <div class="content-wrapper">
-          <div class="row">
-           
-          
-            <div class="col-12 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Ajouter Administrateur</h4>
-                  
-                      {{ form_start(myForm, {'attr': {'novalidate': 'novalidate'}}) }}
-                      <div class="form-group">
-        {{ form_label(myForm.cin, 'CIN', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.cin, {'attr': {'class': 'form-control', 'placeholder': 'CIN', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.cin) }} </div>
-    </div>
-     <div class="form-group">
-        {{ form_label(myForm.nom, 'Nom', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.nom) }} </div>
-    </div>
-     <div class="form-group">
-        {{ form_label(myForm.prenom, 'Prénom', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.prenom, {'attr': {'class': 'form-control', 'placeholder': 'prenom', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.prenom) }} </div>
-    </div>
-    
-    <div class="form-group">
-        {{ form_label(myForm.datenaissance, 'Date de naissance', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.datenaissance, {'attr': {'class': 'form-control', 'placeholder': 'Date de naissance', 'id': 'exampleInputName1'}}) }}
-         <div style ="color:red;"> {{ form_errors(myForm.datenaissance) }} </div>
-    </div>
-    <div class="form-group">
-        {{ form_label(myForm.genre, 'Genre', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.genre, {'attr': {'class': 'form-control', 'placeholder': 'Genre', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.genre) }}</div>
-    </div>
-     
-    <div class="form-group">
-        {{ form_label(myForm.email, 'Adresse email', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Adresse email', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.email) }}</div>
-    </div>
-    <div class="form-group">
-        {{ form_label(myForm.numtel, 'Numéro de téléphone', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.numtel, {'attr': {'class': 'form-control', 'placeholder': 'Numéro de téléphone', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.numtel) }} </div>
-    </div>
-    <div class="form-group">
-                    {{ form_label(myForm.image, "Image") }}
-                    {{ form_widget(myForm.image, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(myForm.image) }}
-      </div>
-    <div class="form-group">
-        {{ form_label(myForm.password, 'Password', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.password, {'attr': {'class': 'form-control', 'placeholder': 'password', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.password) }} </div>
-    </div>
-    <div class="form-group">
-        {{ form_label(myForm.interlock, 'Interlock', {'label_attr': {'for': 'exampleInputName1'}}) }}
-        {{ form_widget(myForm.interlock, {'attr': {'class': 'form-control', 'placeholder': 'interlock', 'id': 'exampleInputName1'}}) }}
-        <div style ="color:red;"> {{ form_errors(myForm.interlock) }} </div>
-    </div>
-   
-<div class="form-group text-center">
-    <div class="btn-group">
-        {{ form_row(myForm.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
-        {{ form_row(myForm.Annuler, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
-    </div>
-</div>
- 
-    {{ form_end(myForm) }}
-                </div>
-              </div>
-            </div>
 
         
-      
-          </div>
+        
+<div class="main-panel">        
+    <div class="content-wrapper">
+        <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                <a href="{{ path('app_editPharmacienp') }}" class="btn btn-primary">Edit</a>
+                <a href="{{ path('app_afficherPharmacien') }}" class="btn btn-secondary">Back to list</a>
+            </div>
         </div>
-        <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-      
-        <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
+        </div>
+            <div>
+             <p>{% if pharmacien.image %}
+    <img src="{{ asset('uploads/images/' ~ pharmacien.image) }}" alt="{{ pharmacien.nom }}" class="img-fluid rounded-circle">
+{% else %}
+    <img src="{{ asset('images/default-profile.png') }}" alt="Profil par défaut" class="img-fluid rounded-circle">
+{% endif %}</p>
+                <strong>Cin:</strong> {{ pharmacien.Cin() }}
+                <p><strong>Nom:</strong> {{ pharmacien.nom }}</p>
+                <p><strong>Prenom:</strong> {{ pharmacien.prenom }}</p>
+                <p><strong>Genre:</strong> {{ pharmacien.genre }}</p>
+                <p><strong>Date de naissance:</strong> {{ pharmacien.datenaissance|date('Y-m-d') }}</p>
+                <p><strong>Numéro de télephone:</strong> {{ pharmacien.numtel }}</p>
+                <p><strong>email:</strong> {{ pharmacien.email }}</p>
+                <p><strong>Password:</strong> {{ pharmacien.password }}</p>
+                <p><strong>Interlock:</strong> {{ pharmacien.interlock }}</p>
+                
+            </div>
+             
+            </div>
+        </div>
     </div>
-    </div>
-{% endblock %}
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <!-- Ajoutez ici le code du pied de page si nécessaire -->
+    <!-- partial -->
+</div>
+
+        {% endblock %}

@@ -83,7 +83,7 @@ $listPharmacien = $searchQuery !== '' ?
         $repository->findAll(); 
 return $this->render('Pharmacien/consulterpharmacien.html.twig', [ 'listPharmacien' => $listPharmacien, 'searchQuery' => $searchQuery, ]);
  }
- 
+
  #[Route('/editPharmacien/{id}', name: 'app_editPharmacien')]
  public function edit(PharmacienRepository $repository, $id, Request $request)
  {
@@ -156,6 +156,46 @@ return $this->render('Pharmacien/consulterpharmacien.html.twig', [ 'listPharmaci
         }
         return $this->render('pharmacien/editprofilepharmacien.html.twig',['pharmacien' =>$pharmacien]);
     }
+    
+    #[Route('/editPharmacienp', name: 'app_editPharmacienp')]
+ public function editp(PharmacienRepository $repository, Request $request,SessionInterface $s)
+ {
+    
+    $id = $s->get('id');
+       
+     $admin = $repository->find($id);
+     $form = $this->createForm(PharmacienType::class, $admin);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $admin->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $admin->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherPharmacien");
+     }
+     
+     return $this->render('pharmacien/editprofilephar2.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+ 
 
       
 }

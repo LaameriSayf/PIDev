@@ -178,6 +178,48 @@ public function edit(AdminRepository $repository, $id, Request $request)
         }
         return $this->render('admin/editprofile.html.twig',['admin' =>$admin]);
     }
+
+    
+ #[Route('/editAdminp', name: 'app_editAdminp')]
+ public function editp(AdminRepository $repository, Request $request,SessionInterface $s)
+ {
+    
+    $id = $s->get('id');
+       
+     $admin = $repository->find($id);
+     $form = $this->createForm(AdminType::class, $admin);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $admin->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $admin->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherAdmin");
+     }
+     
+     return $this->render('admin/editprofile2.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+ 
+  
 }
 
       

@@ -151,4 +151,43 @@ return $this->render('medecin/consultermedecin.html.twig', [ 'listMedecin' => $l
         }
         return $this->render('medecin/editprofilemedecin.html.twig',['medecin' =>$medecin]);
     }
+    #[Route('/editMedecinp', name: 'app_editMedecinp')]
+ public function editp(MedecinRepository $repository, Request $request,SessionInterface $s)
+ {
+    
+    $id = $s->get('id');
+       
+     $medecin = $repository->find($id);
+     $form = $this->createForm(MedecinType::class, $medecin);
+     $form->handleRequest($request);
+     
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Récupérer le nouveau mot de passe depuis le formulaire
+         $newPassword = $form->get('password')->getData();
+ 
+         // Vérifier si un nouveau mot de passe a été fourni
+         if ($newPassword) {
+             // Chiffrer le nouveau mot de passe
+             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+             $medecin->setPassword($hashedPassword);
+         }
+         $imageFile = $form->get('image')->getData();
+ 
+         if ($imageFile instanceof UploadedFile) {
+             $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+             $imageFile->move($this->getParameter('image_directory'), $newFilename);
+             $medecin->setImage($newFilename);
+         }
+ 
+         $em = $this->getDoctrine()->getManager();
+         $em->flush(); 
+         
+         return $this->redirectToRoute("app_afficherMedecin");
+     }
+     
+     return $this->render('medecin/editprofilemedecin2.html.twig', [
+         'myForm' => $form->createView(),
+     ]);
+ }
+    
 }

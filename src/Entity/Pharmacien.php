@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PharmacienRepository::class)]
-class Pharmacien extends Admin
+class Pharmacien extends GlobalUser 
 {
 
     #[ORM\Column(nullable: true)]
