@@ -29,5 +29,31 @@ public function getMedicamentStats()
         ->getQuery()
         ->getResult();
 }
-
+public function getMedicamentStats1()
+{
+    return $this->createQueryBuilder('m')
+        ->select('m.nom_med, SUM(m.Qte) as totalQte') // Utilisez SUM pour obtenir la somme de la quantité
+        ->groupBy('m.nom_med')
+        ->getQuery()
+        ->getResult();
+}
+public function getCategorieStats()
+{
+        
+    return $this->createQueryBuilder('m')
+    ->select('c.nom_cat AS categorie, COUNT(m.id) AS nombreMedicament')
+    ->leftJoin('m.categorie', 'c') // Utilisez leftJoin pour inclure les Medicaments sans categorie
+    ->groupBy('c.id')
+    ->getQuery()
+    ->getResult();
+}
+public function getTop5ExpiringMedicaments()
+{
+    return $this->createQueryBuilder('m')
+        ->where('m.date_expiration >= CURRENT_DATE()') // Filtre pour inclure uniquement les médicaments non expirés
+        ->orderBy('m.date_expiration', 'ASC') // Triez par date d'expiration croissante
+        ->setMaxResults(5) // Limitez les résultats à 5
+        ->getQuery()
+        ->getResult();
+}
 }

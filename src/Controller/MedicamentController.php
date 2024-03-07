@@ -296,13 +296,15 @@ public function edit(MedicamentRepository $repository, $id, Request $request, Ma
     }
  
     #[Route('/stat', name: 'app_stat')]
-public function statistiquesMedicament(): Response
+public function statistiquesMedicament(ManagerRegistry $doctrine,MedicamentRepository $medicamentRepository): Response
 {
-    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager = $doctrine->getManager();
     
     // Récupérer les statistiques des médicaments par catégorie et état
+    $top5Medicaments = $medicamentRepository->getTop5ExpiringMedicaments();
     $medicamentStats = $entityManager->getRepository(Medicament::class)->getMedicamentStats();
-
+    $medicamentStats1 = $entityManager->getRepository(Medicament::class)->getMedicamentStats1();
+    $categorieStats = $entityManager->getRepository(Medicament::class)->getCategorieStats();
     // Convertir les résultats en un format adapté pour Chart.js
     $labels = [];
     $data = [];
@@ -311,12 +313,31 @@ public function statistiquesMedicament(): Response
         $labels[] = $medicamentStat['etat'];
         $data[] = $medicamentStat['nombreMedicament'];
     }
+    //////////////////////////////////////////
+    $labels1 = [];
+    $data1 = [];
 
+    foreach ($medicamentStats1 as $medicamentStat) {
+        $labels1[] = $medicamentStat['nom_med'];
+        $data1[] = $medicamentStat['totalQte'];
+    }
+///////////////////////////////////////////////////////
+$labels2 = [];
+    $data2 = [];
+
+    foreach ($categorieStats as $medicamentStat1) {
+        $labels2[] = $medicamentStat1['categorie'];
+        $data2[] = $medicamentStat1['nombreMedicament'];
+    }
     return $this->render(
         'medicament/ConsulterMedicament/stat.html.twig',
-        ['labels' => json_encode($labels), 'data' => json_encode($data)]
+        ['labels' => json_encode($labels), 'data' => json_encode($data),
+        'labels1' => json_encode($labels1), 'data1' => json_encode($data1),
+        'labels2' => json_encode($labels2), 'data2' => json_encode($data2),
+        'medicaments' => $top5Medicaments,]
     );
 }
+
     
 
 

@@ -51,10 +51,11 @@ class CategorieController extends AbstractController
     
             // Enregistrer les modifications dans la base de données
             $em->flush();
+            $this->addFlash('success', 'Catégorie est ajoutée avec succès.');
             $this->mailerService->sendEmail(
                 "abdessalemchaouch9217@gmail.com",
                 'Categorie est bien ajoute',
-                $this->renderView('Email/eliTheb.html.twig')
+                $this->renderView('Email/categoriemail.html.twig')
             );
             // Rediriger vers la route pour afficher la liste des catégories
             return $this->redirectToRoute('app_afficherCategorie');
@@ -103,7 +104,7 @@ class CategorieController extends AbstractController
     
             // Enregistrer les modifications dans la base de données
             $em->flush();
-    
+            $this->addFlash('success', 'Catégorie est bien modifié.');
             // Rediriger vers la route pour afficher la liste des catégories
             return $this->redirectToRoute("app_afficherCategorie");
         }
@@ -139,7 +140,9 @@ class CategorieController extends AbstractController
     
         // Enregistrer les modifications dans la base de données
         $em->flush();
-    
+        $this->addFlash('success', 'Catégorie est supprimé avec succès.');
+        
+       
         // Rediriger vers la route pour afficher la liste des catégories
         return $this->redirectToRoute('app_afficherCategorie');
     }
