@@ -1,0 +1,83 @@
+1- enable 
+ config t
+hostname ZA-Brains
+
+2-ZA-Switch5# show ip interface brief //pour vérifier la plage 
+// en pc4 ouvrir le cli
+ZA-PC4(config-if)# ip address 192.168.10.1 255.255.255.0
+ZA-PC4(config-if)# no shutdown
+ZA-PC4(config-if)# exit
+ZA-PC4(config)# exit
+
+
+3-show version // affichier la version ansi que les appareils
+24	
+2
+version 15.0(2)SE4
+
+4-config t
+//hostname nom
+//mdp: enable secret mdp
+//arreter la recherche DNS : no ip domain-lookup
+//mdp console :line console0 ---> password mdp ---> login ---> end
+//message du jour MOTD banner: motd #message #
+//line vty: line vty 0 15 ---> password mdp ---> login --->end
+//cryptage du mdp service password-encryption
+
+5-addresse passerelle ip default-gateway 192.168.10.254
+
+//configuration du interface vlan 1(d'apres le commutateur) : interface vlan 1 ---> ip address 192.168 ... 255.255.255.0
+
+pour tester la connectivité d'apres un poste:
+cliquer sur le pc
+open desktop --> command prompt : telnet 192.168.10.253
+utiliser le mdp du line vty
+pour tester(ping) : enable-> mdp pwdpriv
+
+
+//////// Gestion des tables du commutation ///////////
+1-Testez  la connectivité entre ZA-PC4 et ZA-Switch5.
+ping + ip
+
+2-Affichez le contenu de la table de commutation du commutateur ZA-Switch5.
+show mac address-table
+3-	Vous souhaitez supprimer le contenu de la table de commutation afin d’y intégrer une entrée statique.
+a-	Appliquez la commande nécessaire pour vider la table de commutation.
+
+clear mac-address table
+
+b-	Configurez une entrée statique sur l’interface SVI (interface VLAN 1).
+Quelle commande avez-vous utilisée?
+mac address-table static 0090.0C09.31D2 vlan 1 interface f0/1
+
+4-	Supprimez cette entrée statique afin de privilégier l’auto-apprentissage.
+Quelle commande avez-vous utilisée?
+no mac address-table static 0090.0C09.31D2 vlan 1 interface f0/1
+
+///////Partie 3 : Gestion de la sécurité des ports du commutateur///////////////////
+
+
+a.	Commencez par récupérer l’adresse MAC du poste de travail ZA-PC4.
+NB : Pour ceci, pour pouvez utiliser la commande ipconfig /all en invite de commande sur le poste de travail.
+
+b.	Faites la configuration nécessaire pour une sécurité de port statique avec l’adresse MAC de ZA-PC4. 
+switchport mode access
+switchport port-security
+switchport port-security  mac-address 0090.0C09.31D2
+                           maximum 1
+			  violation protect
+
+c.	Vérifiez la sécurité des ports de l’interface F0/1 du commutateur ZA-Switch5.
+Quelle commande avez-vous utilisée ?
+
+show port-security (ou ajouter l'adresse ip a la fin)
+
+d.	Testez la connectivité entre le commutateur ZA-Switch5 et le poste de travail ZA-PC4. Est-ce que le Ping a abouti ? Pourquoi ?
+ping + addresse ip
+
+le test est aboutit car aucune violation est détecté
+
+e.	Pour tester le comportement du commutateur en cas de violation, vous avez décidé de brancher le poste de travail ZA-PC5 sur l’interface F0/1.
+
+
+

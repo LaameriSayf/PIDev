@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\Admin;
-use App\Entity\Blog;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,18 +20,6 @@ class AdminRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Admin::class);
     }
-    public function findUsersWhoRatedBlog(Blog $blog): array
-    {
-        return $this->createQueryBuilder('u')
-            ->join('u.rate', 'r')
-            ->andWhere('r.blog = :blog')
-            ->setParameter('blog', $blog)
-            ->getQuery()
-            ->getResult();
-    }
-
-
-    
 
 //    /**
 //     * @return Admin[] Returns an array of Admin objects

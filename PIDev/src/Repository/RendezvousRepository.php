@@ -21,6 +21,15 @@ class RendezvousRepository extends ServiceEntityRepository
         parent::__construct($registry, Rendezvous::class);
     }
 
+    public function findByDate($date)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.daterendezvous = :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Rendezvous[] Returns an array of Rendezvous objects
 //     */

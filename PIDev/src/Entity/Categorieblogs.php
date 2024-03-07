@@ -5,8 +5,6 @@ namespace App\Entity;
 use App\Repository\CategorieblogsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints as Assert;
-
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CategorieblogsRepository::class)]
@@ -18,17 +16,12 @@ class Categorieblogs
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\NotBlank(message:'Ce champ est obligatoire !!')]
-    #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $titrecategorie = null;
 
-
     #[ORM\Column(length: 2555, nullable: true)]
-    #[Assert\NotBlank(message:'Ce champ est obligatoire !!')]
-
     private ?string $descriptioncategorie = null;
 
-    #[ORM\OneToMany(mappedBy: 'categorieblogs', targetEntity: Blog::class)]
+    #[ORM\OneToMany(mappedBy: 'categorieblogs', targetEntity: blog::class)]
     private Collection $idblog;
 
     public function __construct()

@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: EmploiRepository::class)]
 class Emploi
@@ -17,18 +19,19 @@ class Emploi
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: 'Veuillez ajouter un titre')]
     private ?string $titre = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter une date de debut')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $start = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter une date de fin')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $end = null;
-
+    #[Assert\NotBlank(message: 'Veuillez ajouter une description')]
     #[ORM\Column(length: 25555, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\OneToMany(mappedBy: 'emploi', targetEntity: rendezvous::class)]
+    #[ORM\OneToMany(mappedBy: 'emploi', targetEntity: Rendezvous::class)]
     private Collection $idrendezvous;
 
     public function __construct()
