@@ -16,7 +16,9 @@ use App\Repository\DossiermedicalRepository;
 use DateTime;
 use App\Repository\DossiermedicalRepository as RepositoryDossiermedicalRepository;
 use Container3bVtg3K\getDossiermedicalRepositoryService;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DossierController extends AbstractController
 {
@@ -38,6 +40,15 @@ class DossierController extends AbstractController
     $form->handleRequest($req);
 
     if ($form->isSubmitted() && $form->isValid()){
+        // Handle image upload
+        $imageFile = $form->get('image')->getData();
+
+        if ($imageFile instanceof UploadedFile) {
+            $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move($this->getParameter('image_directory'), $newFilename);
+            $dossiers->setImage($newFilename);
+        }
+
         
         $em=$doctrine->getManager();
         // Récupérer l'ID du patient depuis la requête
@@ -90,6 +101,14 @@ class DossierController extends AbstractController
      $Form = $this->createForm(DossierMedicalType::class, $dossier);
      $Form->handleRequest($request);
      if ($Form->isSubmitted() && $Form->isValid()) {
+        // Handle image upload
+        $imageFile = $Form->get('image')->getData();
+
+        if ($imageFile instanceof UploadedFile) {
+            $newFilename = md5(uniqid()) . '.' . $imageFile->guessExtension();
+            $imageFile->move($this->getParameter('image_directory'), $newFilename);
+            $dossier->setImage($newFilename);
+        }
         $em=$doctrine->getManager();
         $ordonnances = $Form->get('ordonnance')->getData();
         foreach ($ordonnances as $ordonnance) {

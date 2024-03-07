@@ -340,6 +340,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
     <thead>
         <tr>
             <th>id</th>
+            <th>Image</th>
             <th>Numéro Dossier</th>
             <th>Description Médecins</th>
             <th>Antécédents personnels</th>
@@ -354,6 +355,11 @@ document.getElementById('searchInput').addEventListener('input', function() {
         {% for dossier in listDossiers %}
         <tr>
             <td>{{ dossier.id }}</td>
+            <td>
+              {% if dossier.image %}
+                  <img src="{{ asset('uploads/images/' ~ dossier.image) }}" alt="{{ dossier.id }}" class="rectangle-image">
+              {% endif %}
+            </td>
             <td>{{ dossier.numdossier }}</td>
             <td>{{ dossier.resultatexamen }}</td>
             <td>
@@ -363,20 +369,10 @@ document.getElementById('searchInput').addEventListener('input', function() {
                     {% endfor %}
                 </ul>
             </td>
-            <td>
-                <ul>
-            
-                    {% for ordonnance in dossier.ordonnance %}
-                        <li>
-                            <p>ID: {{ ordonnance.id }}</p>
-                            <p>Médicament Prescrit: {{ ordonnance.medecamentprescrit() }}</p>
-                            <p>Date Prescription: {{ ordonnance.dateprescription() | date('Y-m-d') }}</p>
-                            <p>Renouvellement: {{ ordonnance.renouvellement() | date('Y-m-d') }}</p>
-                            <p>Adresse: {{ ordonnance.adresse() }}</p>
-                           
-                        </li>
-                    {% endfor %}
-                </ul>
+             <td>
+               <a href="{{ path('ordonnancedetail_show', {'id': dossier.id}) }}">Voir ordonnance</a>
+              </td>
+
                  {#{% for patient in dossier.patient%}
                         <li>{{ patient.id }}</li>
                     {% endfor %}#}

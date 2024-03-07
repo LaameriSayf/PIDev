@@ -38,6 +38,10 @@ class Ordonnance
     #[ORM\ManyToOne(inversedBy: 'ordonnance')]
     private ?Dossiermedical $dossiermedical = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ordonnances')]
+    private ?Patient $idpatient = null;
+
+    
     
 
     public function getRenouvellement(): ?\DateTimeInterface
@@ -105,6 +109,20 @@ class Ordonnance
 
         return $this;
     }
+
+    public function getIdpatient(): ?Patient
+    {
+        return $this->idpatient;
+    }
+
+    public function setIdpatient(?Patient $idpatient): static
+    {
+        $this->idpatient = $idpatient;
+
+        return $this;
+    }
+
+   
 
    
 

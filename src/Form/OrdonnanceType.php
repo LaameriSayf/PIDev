@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Patient;
 use App\Entity\Ordonnance;
 use App\Entity\Dossiermedical;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,12 +27,13 @@ class OrdonnanceType extends AbstractType
             //     'class'=>Patient::class,
             //     'choice_label'=>'nom'
             // ])
-            // ->add('patient', EntityType::class, [
-            //     'class' => Patient::class,
-            //     'choice_label' => 'nom', // Nom de la propriété de l'entité Patient à afficher dans le champ
-            //     'placeholder' => 'Sélectionner un patient', // Optionnel : texte à afficher comme option vide
-            //     // Vous pouvez ajouter d'autres options selon vos besoins
-            // ])
+             /*->add('patient', EntityType::class, [
+                'class' => Patient::class,
+                'choice_label' => 'nom', // Nom de la propriété de l'entité Patient à afficher dans le champ
+               'placeholder' => 'Sélectionner un patient', // Optionnel : texte à afficher comme option vide
+              // Vous pouvez ajouter d'autres options selon vos besoins
+             ])*/
+            //->add('idpatient')
             ->add('Dossiermedical', EntityType::class, [
                 'class' => Dossiermedical::class,
                 'choice_label' => function ($dossiermedical) {
@@ -53,6 +55,7 @@ class OrdonnanceType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Ordonnance::class,
+            
         ]);
     }
 }

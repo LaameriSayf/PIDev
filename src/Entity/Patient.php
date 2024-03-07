@@ -27,7 +27,18 @@ class Patient extends Admin
 
     #[ORM\OneToOne(mappedBy: 'patient', cascade: ['persist', 'remove'])]
     private ?Dossiermedical $dossiermedical = null;
-  
+
+    #[ORM\OneToMany(mappedBy: 'idpatient', targetEntity: Ordonnance::class)]
+    private Collection $ordonnances;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->ordonnances = new ArrayCollection();
+    }
+
+   
+   
    public function getId(): ?int
    {
         return $this->id;
@@ -102,6 +113,37 @@ class Patient extends Admin
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Ordonnance>
+     */
+    public function getOrdonnances(): Collection
+    {
+        return $this->ordonnances;
+    }
+
+    public function addOrdonnance(Ordonnance $ordonnance): static
+    {
+        if (!$this->ordonnances->contains($ordonnance)) {
+            $this->ordonnances->add($ordonnance);
+            $ordonnance->setIdpatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrdonnance(Ordonnance $ordonnance): static
+    {
+        if ($this->ordonnances->removeElement($ordonnance)) {
+            // set the owning side to null (unless already changed)
+            if ($ordonnance->getIdpatient() === $this) {
+                $ordonnance->setIdpatient(null);
+            }
+        }
+
+        return $this;
+    }
+
 
    
    

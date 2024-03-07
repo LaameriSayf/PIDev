@@ -32,11 +32,20 @@ class OrdonnanceController extends AbstractController
     $dateActuelle = new DateTime();
     $ordonnance=new Ordonnance();
     $ordonnance ->setDateprescription($dateActuelle);
+   
+    // Récupérer l'instance du patient
+    //$patient = $doctrine->getRepository(Patient::class)->find($idpatient);
+    
+    // Associer l'ordonnance au patient
+    //$ordonnance->setIdpatient(null);
+               
     $form=$this->createForm(OrdonnanceType::class,$ordonnance);
     $form->handleRequest($req);
 
     if ($form->isSubmitted() && $form->isValid()){
+       
         
+        //$ordonnance->setIdpatient($patient); 
         $em=$doctrine->getManager();
         $em->persist($ordonnance);
         $em->flush(); 
@@ -56,8 +65,8 @@ class OrdonnanceController extends AbstractController
         // Convertir la date en objet DateTime si nécessaire
         $dateObj = new DateTime($date);
 
-        // Récupérer les dossiers médicaux filtrés par date
-        $dossiers = $repo->findByDate($dateObj);}
+        // Récupérer les ordonnances filtrés par date
+        $ordonnance = $repo->findByDate($dateObj);}
         else {
             $ordonnance= $repo->findBy([], ['dateprescription' => 'DESC']);
   
@@ -66,6 +75,57 @@ class OrdonnanceController extends AbstractController
 
     return $this->render('ordonnance/show.html.twig', ['listOrdonnances'=>$ordonnance]);
     }
+
+    
+}/*
+#[Route('/showOrdonnance/{id}', name: 'ordonnancedetail_show')]
+    public function showdetail(ManagerRegistry $doctrine,OrdonnanceRepository $repo,Request $req,$id,DossiermedicalRepository $rep): Response
+    {
+        $dossier= $repo->find($id);
+        $ordonnance=$dossier->getOrdonnance();
+    // Récupérer la date depuis la requête
+    $date = $req->query->get('date');
+    // Vérifier si une date a été fournie dans la requête
+    if ($date) {
+        // Convertir la date en objet DateTime si nécessaire
+        $dateObj = new DateTime($date);
+
+        // Récupérer les ordonnances filtrés par date
+        $ordonnance = $repo->findByDate($dateObj);}
+        else {
+            $ordonnance= $repo->findBy([], ['dateprescription' => 'DESC']);
+  
+    //$repo=$doctrine->getRepository(Ordonnance::class);
+   // $ordonnance=$repo->findAll();
+
+    return $this->render('ordonnance/show.html.twig', ['listOrdonnances'=>$ordonnance]);
+    }
+}*/
+#[Route('/showOrdonnance/{id}', name: 'ordonnancedetail_show')]
+public function showdetail(ManagerRegistry $doctrine,OrdonnanceRepository $repo,Request $req,$id,DossiermedicalRepository $rep): Response {
+    // Find the dossier by its ID
+    $dossier = $rep->find($id);
+
+    // Retrieve the prescription from the dossier
+    //$ordonnance = $repo->findBy(['dossiermedical' => $dossier]);
+
+    // Retrieve the date from the request
+    $date = $req->query->get('date');
+
+    // Check if a date is provided in the request
+    if ($date) {
+        // Convert the date string into a DateTime object
+        $dateObj = new DateTime($date);
+    
+        // Fetch prescriptions filtered by date and dossier
+        $ordonnance = $repo->findBy(['dateprescription' => $dateObj, 'dossiermedical' => $dossier], ['dateprescription' => 'DESC']);
+    } else {
+        // If no date provided, fetch all prescriptions sorted by date for the given dossier
+        $ordonnance = $repo->findBy(['dossiermedical' => $dossier], ['dateprescription' => 'DESC']);
+    }
+
+    // Render the view with the retrieved prescriptions
+    return $this->render('ordonnance/show.html.twig', ['listOrdonnances' => $ordonnance]);
 }
 
 

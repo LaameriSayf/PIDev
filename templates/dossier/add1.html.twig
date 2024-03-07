@@ -217,6 +217,11 @@
                                 {{ form_widget(form.numdossier, {'attr': {'class': 'form-control', 'placeholder': 'Numéro dossier', 'id': 'exampleInputNumDossier'}}) }}
                                 {{ form_errors(form.numdossier) }}
                             </div>
+                            <div class="mb-3">
+                    {{ form_label(form.image, "New Image") }}
+                    {{ form_widget(form.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(form.image) }}
+                </div>
                             <div class="form-group">
                                 {{ form_label(form.resultatexamen, 'Descriptions Medecins', {'label_attr': {'for': 'exampleInputresultatexamen'}}) }}
                                 {{ form_widget(form.resultatexamen, {'attr': {'class': 'form-control', 'placeholder': 'Description Medecins', 'id': 'exampleInputDatePrescription'}}) }}

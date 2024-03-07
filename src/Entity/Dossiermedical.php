@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use PHPUnit\Util\Json;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -41,6 +42,21 @@ class Dossiermedical
     #[ORM\OneToOne(inversedBy: 'dossiermedical', cascade: ['persist', 'remove'])]
     private ?Patient $patient = null;
 
+    #[ORM\Column(type:"string", nullable:true)]
+    //#[assert\NotNull(message:"image is required")]
+    private ?string $image;
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
 
    
     public function __construct()

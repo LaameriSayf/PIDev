@@ -217,6 +217,11 @@
                                 {{ form_widget(Form.resultatexamen, {'attr': {'class': 'form-control', 'placeholder': 'Résultats Examens', 'id': 'exampleInputResultatExamen'}}) }}
                                 {{ form_errors(Form.resultatexamen) }}
                             </div>
+                            <div class="mb-3">
+                    {{ form_label(Form.image, "New Image") }}
+                    {{ form_widget(Form.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(Form.image) }}
+                </div>
                             <div class="form-group">
                               {{ form_label(Form.antecedentspersonnelles, 'Antecedants Personnelles', {'label_attr': {'for': 'exampleInputAntecedenstPersonnelles'}}) }}
                                 {% for key, value in Form.antecedentspersonnelles %}

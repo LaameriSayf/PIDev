@@ -10,7 +10,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Ordonnance;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DossierType extends AbstractType
 {
@@ -31,6 +33,11 @@ class DossierType extends AbstractType
         ->add('DateCreation')
         ->add('resultatexamen')
         ->add('numdossier')
+        ->add('image', FileType::class, [
+            'label' => 'Dossiermedical Image',
+            'required' => false,
+            'mapped' => false, // Do not map this field to the entity property
+        ])
       //// ->add('patient', EntityType::class, [
          //////'class' => Patient::class,
          ///'choice_label' => 'id',

@@ -357,8 +357,8 @@ document.getElementById('searchInput').addEventListener('input', function() {
                                 <tr>
                                         <td>{{ ordonnance.id }}</td>
                                         <td>{{ ordonnance.medecamentprescrit()}}</td>
-                                        <td>{{ordonnance.dateprescription() | date('Y-m-d') }}</td>
-                                        <td>{{ordonnance.renouvellement() | date('Y-m-d') }}</td>
+                                        <td>{{ordonnance.dateprescription() | date('Y-m-d H:i:s') }}</td>
+                                        <td>{{ordonnance.renouvellement() | date('Y-m-d H:i:s') }}</td>
                                         <td>{{ordonnance.adresse() }}</td>
              
 
