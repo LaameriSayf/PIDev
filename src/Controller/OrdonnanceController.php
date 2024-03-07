@@ -120,7 +120,7 @@ public function showdetail(ManagerRegistry $doctrine,OrdonnanceRepository $repo,
         // Fetch prescriptions filtered by date and dossier
         $ordonnance = $repo->findBy(['dateprescription' => $dateObj, 'dossiermedical' => $dossier], ['dateprescription' => 'DESC']);
     } else {
-        // If no date provided, fetch all prescriptions sorted by date for the given dossier
+        // If no date provided, fetch all prescriptions sorted by date/dossier medical for the given dossier
         $ordonnance = $repo->findBy(['dossiermedical' => $dossier], ['dateprescription' => 'DESC']);
     }
 
@@ -128,26 +128,44 @@ public function showdetail(ManagerRegistry $doctrine,OrdonnanceRepository $repo,
     return $this->render('ordonnance/show.html.twig', ['listOrdonnances' => $ordonnance]);
 }
 
+#[Route('/ordonnance/edit/{id}', name: 'ordonnance_edit')]
+public function edit($id, Request $request, OrdonnanceRepository $repository, ManagerRegistry $doctrine, DossiermedicalRepository $repo)
+{
+    // Trouver le dossier médical par son ID
+    $dossier = $repo->find($id);
 
-    #[Route('/ordonnance/edit/{id}', name: 'ordonnance_edit')]
-    public function edit(OrdonnanceRepository $repository, $id, Request $request,ManagerRegistry $doctrine)
-    {
-   
-    $ordonnance= $repository->find($id);
+    // Trouver l'ordonnance associée au dossier médical par son ID
+    $ordonnance = $repository->findOneBy(['dossiermedical' => $dossier]);
+
+    // Si l'ordonnance n'est pas trouvée, vous pouvez en créer une nouvelle
+    if (!$ordonnance) {
+        // Créer une nouvelle instance d'Ordonnance et l'associer au dossier médical
+        $ordonnance = new Ordonnance();
+        $ordonnance->setDossiermedical($dossier);
+    }
+
+    // Créer le formulaire avec l'ordonnance
     $form = $this->createForm(OrdonnanceType::class, $ordonnance);
     $form->handleRequest($request);
+
     if ($form->isSubmitted() && $form->isValid()) {
-        $em =$doctrine->getManager(); 
+        $em = $doctrine->getManager();
+
+        // Vous n'avez pas besoin de persister l'ordonnance explicitement car elle est déjà gérée par l'EntityManager.
         $em->flush();
+
         return $this->redirectToRoute("ordonnance_show");
     }
 
     return $this->render('ordonnance/edit.html.twig', [
         'form' => $form->createView(),
-          
     ]);
-    
 }
+
+
+
+   
+
 
     #[Route('/ordonnance/{id}', name: 'ordonnance_delete')]
         public function delete($id, OrdonnanceRepository $repository,ManagerRegistry $doctrine)

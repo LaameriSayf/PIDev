@@ -319,7 +319,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"><a class="nav-link" href="{{path('add_dossier')}}">Ajouter dossiers</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ path('show_dossier')}}">Consulter liste desdossiers</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('show_dossier')}}">Consulter liste des Dossiers</a></li>
               </ul>
             </div>
           </li>
@@ -340,10 +340,8 @@ document.getElementById('searchInput').addEventListener('input', function() {
     <thead>
         <tr>
             <th>id</th>
-            <th>Image</th>
-            <th>Numéro Dossier</th>
-            <th>Description Médecins</th>
-            <th>Antécédents personnels</th>
+            <th>Nom</th>
+            <th>Prénom</th>
             <th>Détails Ordonnances</th>
             <th>Date de Création</th>
             <th>Action</th>
@@ -355,20 +353,22 @@ document.getElementById('searchInput').addEventListener('input', function() {
         {% for dossier in listDossiers %}
         <tr>
             <td>{{ dossier.id }}</td>
-            <td>
+            <td>{{ dossier.nom }}</td>
+            <td>{{ dossier.prenom }}</td>
+           {# <td>
               {% if dossier.image %}
                   <img src="{{ asset('uploads/images/' ~ dossier.image) }}" alt="{{ dossier.id }}" class="rectangle-image">
               {% endif %}
-            </td>
-            <td>{{ dossier.numdossier }}</td>
-            <td>{{ dossier.resultatexamen }}</td>
-            <td>
+            </td>#}
+           {# <td>{{ dossier.numdossier }}</td>#}
+           {# <td>{{ dossier.resultatexamen }}</td>#}
+            {#<td>
                 <ul>
                     {% for antecedent in dossier.antecedentspersonnelles %}
                         <li>{{ antecedent }}</li>
                     {% endfor %}
                 </ul>
-            </td>
+            </td>#}
              <td>
                <a href="{{ path('ordonnancedetail_show', {'id': dossier.id}) }}">Voir ordonnance</a>
               </td>
@@ -380,9 +380,17 @@ document.getElementById('searchInput').addEventListener('input', function() {
             <td>{{dossier.datecreation() | date('Y-m-d H:i:s') }}</td>
             <td>
                 <a href="{{ path('edit_Dossier', {'id': dossier.id}) }}">
-                    <button type="button" class="btn btn-outline-primary">Modifier</button>
+                  <button type="button" class="btn btn-outline-primary">Modifier</button>
+                </a>
+                  <a href="{{ path('details_dossier', {'id': dossier.id}) }}">
+                  <button type="button" class="btn btn-outline-primary">Consulter</button>
                 </a>
             </td>
+            {#<td>
+                <a href="{{ path('details_dossier', {'id': dossier.id}) }}">
+                    <button type="button" class="btn btn-outline-primary">Consulter</button>
+                </a>
+            </td>#}
             
         </tr>
         {% endfor %}

@@ -19,6 +19,8 @@ class OrdonnanceType extends AbstractType
     {
         $builder
             
+            ->add('nom')
+            ->add('prenom')
             ->add('medecamentprescrit')
             ->add('adresse')
             ->add('renouvellement')

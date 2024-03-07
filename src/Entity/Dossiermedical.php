@@ -24,9 +24,6 @@ class Dossiermedical
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $resultatexamen = null;
-
-
-    
     #[ORM\Column(nullable: true)]
      private ?array $antecedentspersonnelles = [];
 
@@ -36,15 +33,30 @@ class Dossiermedical
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $DateCreation = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $numdossier = null;
-
     #[ORM\OneToOne(inversedBy: 'dossiermedical', cascade: ['persist', 'remove'])]
     private ?Patient $patient = null;
 
     #[ORM\Column(type:"string", nullable:true)]
     //#[assert\NotNull(message:"image is required")]
     private ?string $image;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
+    #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z]*$/',
+        message: 'Le nom doit contenir uniquement des lettres.'
+          )]
+    private ?string $nom = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Ce champ est obligatoire !')]
+    #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z]*$/',
+        message: 'Le nom doit contenir uniquement des lettres.'
+          )]
+    private ?string $prenom = null;
 
     public function getImage(): ?string
     {
@@ -137,17 +149,6 @@ class Dossiermedical
         return $this;
     }
 
-    public function getNumdossier(): ?int
-    {
-        return $this->numdossier;
-    }
-
-    public function setNumdossier(?int $numdossier): static
-    {
-        $this->numdossier = $numdossier;
-
-        return $this;
-    }
 
     public function getPatient(): ?Patient
     {
@@ -157,6 +158,30 @@ class Dossiermedical
     public function setPatient(?Patient $patient): static
     {
         $this->patient = $patient;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
 
         return $this;
     }

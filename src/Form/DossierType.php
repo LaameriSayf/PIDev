@@ -29,10 +29,11 @@ class DossierType extends AbstractType
             // //Autres options de configuration selon vos besoins
       // ])
 
-       
+        ->add('nom')
+        ->add('prenom')
         ->add('DateCreation')
         ->add('resultatexamen')
-        ->add('numdossier')
+        //->add('numdossier')
         ->add('image', FileType::class, [
             'label' => 'Dossiermedical Image',
             'required' => false,

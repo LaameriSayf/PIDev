@@ -209,6 +209,18 @@
                   <h4 class="card-title">Ajouter ordonnance</h4>
                   
                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                          
+                            <div class="form-group">
+                                {{ form_label(form.nom, 'Nom Patient', {'label_attr': {'for': 'exampleInputNom'}}) }}
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom Patient', 'id': 'exampleInputNom'}}) }}
+                                {{ form_errors(form.nom) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.prenom, 'Prénom Patient', {'label_attr': {'for': 'exampleInputPrenom'}}) }}
+                                {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Médicament prescrit', 'id': 'exampleInputPrenom'}}) }}
+                                {{ form_errors(form.prenom) }}
+                            </div>
+        
         
                              <div class="form-group">
                                 {{ form_label(form.medecamentprescrit, 'Médicament prescrit', {'label_attr': {'for': 'exampleInputMedecamentPrescrit'}}) }}

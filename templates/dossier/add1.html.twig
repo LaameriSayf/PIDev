@@ -213,9 +213,14 @@
                             
 
                             <div class="form-group">
-                                {{ form_label(form.numdossier, 'Numéro dossier ', {'label_attr': {'for': 'exampleInputNumdossier'}}) }}
-                                {{ form_widget(form.numdossier, {'attr': {'class': 'form-control', 'placeholder': 'Numéro dossier', 'id': 'exampleInputNumDossier'}}) }}
-                                {{ form_errors(form.numdossier) }}
+                                {{ form_label(form.nom, 'Nom Patient ', {'label_attr': {'for': 'exampleInputNom'}}) }}
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom Patient', 'id': 'exampleInputNom'}}) }}
+                                {{ form_errors(form.nom) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.prenom, 'Prénom Patient ', {'label_attr': {'for': 'exampleInputNom'}}) }}
+                                {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Prénom Patient', 'id': 'exampleInputNumDossier'}}) }}
+                                {{ form_errors(form.prenom) }}
                             </div>
                             <div class="mb-3">
                     {{ form_label(form.image, "New Image") }}

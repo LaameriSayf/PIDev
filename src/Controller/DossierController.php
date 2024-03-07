@@ -123,6 +123,35 @@ class DossierController extends AbstractController
         'Form' => $Form->createView(),
     ]);
 }
+
+    #[Route('/detailsD/{id}', name: 'details_dossier')]
+    public function detailsDossier(ManagerRegistry $doctrine, Request $request, DossiermedicalRepository $repo, $id): Response
+    {
+        // Récupérer le dossier médical par son identifiant
+        $dossier = $repo->find($id);
+
+        // Récupérer la date depuis la requête
+        $date = $request->query->get('date');   
+
+        // Vérifier si une date a été fournie dans la requête
+        if ($date) {
+            // Convertir la date en objet DateTime si nécessaire
+            $dateObj = new DateTime($date);
+
+            // Récupérer les dossiers médicaux filtrés par date et identifiant de dossier médical
+            $dossiers = $repo->findByDate($dateObj);
+        } else {
+            // Si aucune date n'est fournie, récupérer tous les dossiers médicaux pour le dossier spécifié, triés par DateCreation
+            $dossiers = $repo->findBy(['id' => $id], ['DateCreation' => 'DESC']);
+        }
+
+        // Rendre la vue avec les dossiers médicaux récupérés
+        return $this->render('dossier/details.html.twig', ['listDossiers' => $dossiers]);
+    }
+}
+
+   
+    
    //#[Route('/searchDossier', name: 'search_dossier')]
    // public function searchDossier(Request $request, DossiermedicalRepository $dossierRepository): Response
     //{
@@ -149,7 +178,7 @@ class DossierController extends AbstractController
        // Redirect to a route where you can display the dossier or confirm creation.
       // return $this->redirectToRoute('show_dossier', ['id' => $dossier->getId()]);
   // }
-}
+
 
 
 
