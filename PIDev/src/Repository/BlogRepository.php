@@ -21,6 +21,15 @@ class BlogRepository extends ServiceEntityRepository
         parent::__construct($registry, Blog::class);
     }
 
+    public function findUsersWhoRatedBlog(Blog $blog): array
+    {
+        return $this->createQueryBuilder('u')
+            ->join('u.rate', 'r')
+            ->andWhere('r.blog = :blog')
+            ->setParameter('blog', $blog)
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Blog[] Returns an array of Blog objects
 //     */
