@@ -27,7 +27,7 @@ class RendezvousController extends AbstractController
             'controller_name' => 'RendezvousController',
         ]);
     }
-    
+    //RENDEZ - VOUS PATIENT
 #[Route('/addRendezvous', name: 'app_addRendezvous')]
 public function addRendezvous(Request $request, ManagerRegistry $doctrine, SluggerInterface $slugger): Response
 {   $rendezvous = new Rendezvous();
@@ -125,7 +125,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
         return $this->render('rendezvous/consulterRdv/afficherRdvMedecin.html.twig', ['list'=>$rendezvous]);
     }
     
-
+        //ACCEPTER RENDEZ VOUS
    
     #[Route('/acceptRendezvous/{id}', name: 'app_acceptRendezvous')]
     public function acceptRendezvous($id, RendezvousRepository $repository, EntityManagerInterface $entityManager,ManagerRegistry $doctrine): Response
@@ -148,7 +148,7 @@ public function addRendezvous(Request $request, ManagerRegistry $doctrine, Slugg
         $rendezvous=$repository->findAll();
         return $this->render('rendezvous/consulterRdv/acceptedRendezvous.html.twig', ['list'=>$rendezvous]);
     }   
-
+    //ANNULER RENDEZ-VOUS 
     #[Route('/afficherRendezVousAnnuler', name: 'app_afficherN')]
     public function afficherRendezVousMedcinAnuler(ManagerRegistry $doctrine):Response
     {
