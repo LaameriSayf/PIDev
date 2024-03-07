@@ -1,16 +1,43 @@
-{% extends 'baseB.html.twig' %}
+{% extends 'baseF.html.twig' %}
 {% block body %}
           <!-- Include Font Awesome in your HTML file -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<nav class="sidebar sidebar-offcanvas" id="sidebar" style="background-color: DodgerBlue; color: white; ">
+        <ul class="nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Gérer Emploi</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+              <ul class="nav flex-column sub-menu" >
+                <li class="nav-item"><a class="nav-link" href="{{path('app_addEmploi')}}">Ajouter Emploi</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_calendar')}}">Consulter liste des emplois</a></li>
+              </ul>
+            </div>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Gérer Rendez vous</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+              <!-- aaa remplir -->
+                <li class="nav-item"> <a class="nav-link" href="{{ path('app_addRendezvous')}}"> Ajouter Rendez-vous </a></li>
+                
+              </ul>
+            </div>
+          </li>
+         
+        </ul>
+      </nav>
 
- <div class="main-panel">        
-    <div class="content-wrapper">
-       
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 style="text-align: center;background-color: DodgerBlue; color: white;" class="card-title">Liste des Rendez-vous</h1>
-                         <div class="row">
 <!-- Search Bar -->
 <div class="col-md-12 mb-4">
     <form action="{{ path('app_searchRendezvousByDate') }}" method="get" class="input-group">
