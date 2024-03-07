@@ -17,17 +17,17 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire !')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $nom_cat = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\NotBlank(message: 'Le type est obligatoire !')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $type_cat = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\NotBlank(message: ' Description est obligatoire !')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
     private ?string $description_cat = null;
 

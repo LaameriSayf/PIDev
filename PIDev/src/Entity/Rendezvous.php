@@ -30,7 +30,7 @@ class Rendezvous
     private ?Emploi $emploi = null;
 
     #[ORM\ManyToOne(inversedBy: 'rendezvouses')]
-    private ?Patient $idpatient = null;
+    private ?patient $idpatient = null;
 
     public function getId(): ?int
     {

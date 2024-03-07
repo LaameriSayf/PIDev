@@ -3,12 +3,13 @@
 {% block title %}Hello MedicamentController!{% endblock %}
 
 {% block body %}
+
 <div class="container-scroller">
     <!-- partial:../../partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        &nbsp; &nbsp;<a class="navbar-brand brand-logo mr-5" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/medimedi.jpg')}}" class="mr-2" alt="logo"/></a>
-        <a class="navbar-brand brand-logo-mini" href="{{asset('back/index.html')}}"><img src="{{asset('back/images/logo-mini.svg')}}" alt="logo"/></a>
+        &nbsp; &nbsp;<a class="navbar-brand brand-logo mr-5" href="{{ path('app_home')}}"><img src="{{asset('back/images/medimedi.jpg')}}" class="mr-2" alt="logo"/></a>
+        <a class="navbar-brand brand-logo-mini" href="{{ path('app_home')}}"><img src="{{asset('back/images/lili.jpg')}}" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
         <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -22,15 +23,18 @@
                   <i class="icon-search"></i>
                 </span>
               </div>
-              <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search">
+               {{ form_start(form) }}
+               {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+               {{ form_end(form) }}
             </div>
           </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+            <a class="nav-link count-indicator dropdown-toggle" id="notificationLink" href="#" data-toggle="dropdown">
               <i class="icon-bell mx-0"></i>
               <span class="count"></span>
+              
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
               <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
@@ -41,35 +45,9 @@
                   </div>
                 </div>
                 <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Application Error</h6>
+                  <h6 class="preview-subject font-weight-normal" id="notificationText">Application Error</h6>
                   <p class="font-weight-light small-text mb-0 text-muted">
                     Just now
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-warning">
-                    <i class="ti-settings mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">Settings</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    Private message
-                  </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-info">
-                    <i class="ti-user mx-0"></i>
-                  </div>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                  <p class="font-weight-light small-text mb-0 text-muted">
-                    2 days ago
                   </p>
                 </div>
               </a>
@@ -275,7 +253,7 @@
       </div>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           
           
@@ -287,8 +265,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Categorie</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des catégories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('addCategorie')}}">Ajouter Categorie</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherCategorie')}}">Consulter liste des catégories</a></li>
               </ul>
             </div>
           </li>
@@ -301,9 +279,9 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/login.html"> Ajouter médicament </a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html">Consulter liste des medicaments</a></li>
-                <li class="nav-item"> <a class="nav-link" href="../../pages/samples/register.html"> Statistique </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_addMedicament')}}"> Ajouter médicament</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherMedicament')}}"> Consulter liste des medicaments</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_stat')}}">  Statistique</a></li>
               </ul>
             </div>
           </li>
@@ -329,9 +307,10 @@
                                         <th>Qte</th>
                                         <th>description</th>
                                         <th>etat</th>
+                                        <th>image</th>
                                         <th>categorie</th>
-                                        <th>Option</th>
-                                          <th>Option</th>
+                                        <th class="text-center">Option</th>
+                                          
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -343,11 +322,15 @@
                                         <td>{{ med.getDateAmm() | date('Y-m-d') }}</td>
                                         <td>{{ med.getDateExpiration() | date('Y-m-d') }}</td>
                                         <td>{{ med.getQte() }}</td>
-                                        <td>{{ med.getDescription() }}</td>
+                                      <td>   <span class="short-description">{{ med.getDescription()[:3] ~ '...' }}</span>
+    <span class="full-description" style="display: none;">{{ med.getDescription() }}</span>
+    <button type="button" class="btn btn-link show-description">plus</button>
+</td>
                                         <td>{{ med.getEtat() }}</td>
-                                        <td>{{ med.getCategorie().getNomCat() }}</td>
-                                         <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}">edit</a> </td>
-                                      <td><a href="{{ path('app_deleteMedicament', {'id': med.id}) }}">delete</a></td>
+                                        <td><img src="{{asset('uploads/'~med.getImage()) }}"></td>
+                                        <td>{{ med.getCategorie() is not null ? med.getCategorie().getNomCat() : 'Not available' }}</td>
+                                         <td><a href="{{ path('app_editMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-outline-primary">Modifier</button></a> 
+                                      <a href="{{ path('app_deleteMedicament', {'id': med.id}) }}"><button type="button" class="btn btn-danger">Supprimer</button></a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -364,4 +347,132 @@
     <!-- partial -->
 </div>
 </div>
+<div class="row">
+            <div class="col">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% for page in 1..totalPages %}
+                            <li class="page-item {% if page == currentPage %}active{% endif %}">
+                                <a class="page-link" href="{{ path('app_afficherMedicament', {'page': page}) }}">{{ page }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+<script>
+// Attend que le DOM soit entièrement chargé avant d'exécuter le code
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Sélectionne tous les éléments avec la classe CSS "show-description" et les stocke dans showButtons
+    var showButtons = document.querySelectorAll('.show-description');
+
+    // Itère sur chaque bouton trouvé précédemment
+    showButtons.forEach(function (button) {
+
+        // Ajoute un écouteur d'événements de clic à chaque bouton
+        button.addEventListener('click', function () {
+
+            // Obtient le parent (élément <td>) du bouton actuellement cliqué
+            var parentTd = button.parentNode;
+
+            // Sélectionne l'élément ayant la classe CSS "short-description" à l'intérieur du parent <td>
+            var shortDescription = parentTd.querySelector('.short-description');
+
+            // Sélectionne l'élément ayant la classe CSS "full-description" à l'intérieur du parent <td>
+            var fullDescription = parentTd.querySelector('.full-description');
+
+            // Vérifie si la description courte est actuellement visible
+            if (shortDescription.style.display !== 'none') {
+                // Cache la description courte et affiche la description complète
+                shortDescription.style.display = 'none';
+                fullDescription.style.display = 'inline';
+                // Modifie le texte du bouton en conséquence
+                button.innerText = 'Masquer la description';
+            } else {
+                // Si la description est masquée, affiche la description courte et cache la description complète
+                shortDescription.style.display = 'inline';
+                fullDescription.style.display = 'none';
+                // Modifie le texte du bouton en conséquence
+                button.innerText = 'plus';
+            }
+        });
+    });
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var notificationLink = document.getElementById('notificationLink');
+    var notificationText = document.getElementById('notificationText');
+    
+    // Array to store all expired medications
+    var expiredMedications = [];
+
+    // Itérer sur chaque ligne de médicament
+    var lignesMedicament = document.querySelectorAll('tbody tr');
+
+    lignesMedicament.forEach(function (ligne) {
+        // Obtenir la date d'expiration de la ligne
+        var dateExpiration = ligne.querySelector('td:nth-child(5)').innerText;
+
+        // Analyser la date d'expiration en utilisant moment.js
+        var dateExpirationAnalysee = moment(dateExpiration, 'YYYY-MM-DD');
+
+        // Comparer la date d'expiration analysée avec la date actuelle
+        if (dateExpirationAnalysee.isValid() && dateExpirationAnalysee.isBefore(moment())) {
+            // Ajouter le médicament expiré à la liste
+            expiredMedications.push({
+                id: ligne.querySelector('td:first-child').innerText,
+                name: ligne.querySelector('td:nth-child(3)').innerText
+            });
+        }
+    });
+
+    // Vérifier s'il y a des médicaments expirés
+    if (expiredMedications.length > 0) {
+        // Afficher une notification pour tous les médicaments expirés
+        var message = "Les médicaments suivants ont expiré:\n";
+        expiredMedications.forEach(function (medication) {
+            message += "ID: " + medication.id + ", Nom: " + medication.name + "\n";
+        });
+
+        // Afficher la notification
+        afficherNotification('Médicaments expirés', message);
+    }
+
+    function afficherNotification(titre, message) {
+        // Mettez à jour le contenu de la notification
+        notificationText.innerText = message;
+
+        // Affichez la notification en changeant la classe de fond du lien pour indiquer une notification
+        notificationLink.classList.add('has-notification');
+
+        // Remplacez ceci par votre implémentation de notification préférée
+        // Ici, j'utilise une simple boîte d'alerte
+        
+    }
+});
+</script>
+<script>
+{% for flashMessage in app.session.flashbag.get('success') %}
+    Swal.fire({
+        icon: 'success',
+        title: '{{ flashMessage }}',
+        showConfirmButton: true,
+        timer: 2000, 
+        timerProgressBar: true, 
+        allowOutsideClick: false,
+        allowEscapeKey: false 
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '{{ path('app_afficherMedicament') }}';
+        }
+    });
+{% endfor %}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
 {% endblock %}

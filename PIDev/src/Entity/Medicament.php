@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Entity;
-
 use App\Repository\MedicamentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: MedicamentRepository::class)]
 class Medicament
@@ -18,6 +18,7 @@ class Medicament
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Length(min: 3, minMessage: 'La longueur minimale est de 3 caractères.')]
     private ?string $ref_med = null;
 
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
@@ -26,6 +27,7 @@ class Medicament
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
     #[Assert\Length(max: 255, maxMessage: 'La longueur maximale est de 255 caractères.')]
+    #[Assert\Length(min: 3, minMessage: 'La longueur minimale est de 3 caractères.')]
     private ?string $nom_med = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -38,6 +40,7 @@ class Medicament
 
     #[ORM\Column]
     #[Assert\NotBlank(message: 'Ce champ est obligatoire !!')]
+    #[Assert\GreaterThan( value: 0,)]
     private ?int $Qte = null;
 
     #[ORM\Column(length: 255)]
@@ -53,7 +56,11 @@ class Medicament
     #[ORM\ManyToOne(inversedBy: 'medicaments')]
     private ?Pharmacien $idpharmacien = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     // Getters and setters
+   
 
     public function getId(): ?int
     {
@@ -164,6 +171,18 @@ class Medicament
     public function setIdpharmacien(?Pharmacien $idpharmacien): static
     {
         $this->idpharmacien = $idpharmacien;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

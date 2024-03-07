@@ -21,32 +21,6 @@ class CommentaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Commentaire::class);
     }
 
-    public function save(Commentaire $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(Commentaire $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-    public function getCommentairesParBlog()
-    {
-        return $this->createQueryBuilder('c')
-            ->select('b.titre AS titre, COUNT(c.id) AS nombreCommentaires')
-            ->join('c.idblog', 'b')
-            ->groupBy('b.id')
-            ->getQuery()
-            ->getResult();
-    }
 //    /**
 //     * @return Commentaire[] Returns an array of Commentaire objects
 //     */

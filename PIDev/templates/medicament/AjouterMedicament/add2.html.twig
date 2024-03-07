@@ -225,7 +225,7 @@
             <h4 class="card-title">Ajouter medicament</h4>
            
           
-                {{ form_start(myForm,{'attr':{'novalidate':'novalidate'}}) }}
+                {{ form_start(myForm,{'attr':{'novalidate':'novalidate', 'enctype': 'multipart/form-data'}}) }}
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group row">
@@ -296,12 +296,22 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Ajoutez ici d'autres champs si nécessaire -->
+                  
                 </div>
-             
-         
-                        {{ form_row(myForm.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
-                    
+
+
+                 <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">{{ form_label(myForm.image, "Choisir une image") }}</label>
+                <div class="col-sm-9">
+                    {{ form_widget(myForm.image, {'attr': {'class': 'form-control'}}) }}
+                    {{ form_errors(myForm.image) }}
+                </div>
+            </div>
+        </div>
+    </div>
+                {{ form_row(myForm.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
                 {{ form_end(myForm) }}
           
         </div>

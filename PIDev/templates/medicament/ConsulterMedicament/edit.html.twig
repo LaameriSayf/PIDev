@@ -175,7 +175,7 @@
       </div>
       <!-- partial -->
       <!-- partial:../../partials/_sidebar.html -->
-      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           
           
@@ -187,8 +187,8 @@
             </a>
             <div class="collapse" id="form-elements">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Ajouter Categorie</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{asset('back/pages/forms/basic_elements.html')}}">Consulter liste des catégories</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('addCategorie')}}">Ajouter Categorie</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('app_afficherCategorie')}}">Consulter liste des catégories</a></li>
               </ul>
             </div>
           </li>
@@ -201,9 +201,9 @@
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{asset('back/pages/samples/login.html')}}"> Ajouter médicament </a></li>
-                <li class="nav-item"> <a class="nav-link" href=".{{asset('back/pages/samples/register.html')}}"> Consulter liste des medicaments </a></li>
-                <li class="nav-item"> <a class="nav-link" href="{{asset('back/pages/samples/register.html')}}">  Statistique </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_addMedicament')}}"> Ajouter médicament</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_afficherMedicament')}}"> Consulter liste des medicaments</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{{path('app_stat')}}">  Statistique</a></li>
               </ul>
             </div>
           </li>
@@ -224,7 +224,7 @@
                   
                       {{ form_start(myForm, {'attr': {'novalidate': 'novalidate'}}) }}
                       <div class="form-group">
-    {{ form_label(myForm.categorie, 'Catégorie', {'label_attr': {'for': 'exampleInputCategory'}}) }}
+    {{ form_label(myForm.categorie, 'Catégorie') }}
     {{ form_widget(myForm.categorie, {'attr': {'class': 'form-control', 'id': 'exampleInputCategory'}}) }}
     {{ form_errors(myForm.categorie) }}
 </div>
@@ -239,31 +239,48 @@
         {{ form_widget(myForm.nom_med, {'attr': {'class': 'form-control', 'placeholder': 'Nom médicament', 'id': 'exampleInputEmail3'}}) }}
         {{ form_errors(myForm.nom_med) }}
     </div>
+ 
+<div class="form-group">
+   <label for="date_amm" >Autorisation de mise sur le marché</label>
+    {{ form_widget(myForm.date_amm, {'attr': { 'class': 'form-control', 'placeholder': 'Date AMM'}}) }}
+    {{ form_errors(myForm.date_amm) }}
+</div>
+
+<div class="form-group ">
+
+                 <label for="date_expiration" >Date expiration</label>
+                {{ form_widget(myForm.date_expiration, {'attr': {'class': 'form-control', 'id': 'daterendezvous'}}) }}
+                {{ form_errors(myForm.date_expiration) }}
+              </div>
+            </div>
+
     <div class="form-group">
-        {{ form_label(myForm.date_amm, 'Date AMM', {'label_attr': {'for': 'exampleInputPassword4'}}) }}
-        {{ form_widget(myForm.date_amm, {'attr': {'placeholder': 'Date AMM', 'id': 'exampleInputPassword4'}}) }}
-        {{ form_errors(myForm.date_amm) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(myForm.date_expiration, 'Date expiration', {'label_attr': {'for': 'exampleSelectGender'}}) }}
-        {{ form_widget(myForm.date_expiration, {'attr': { 'placeholder': 'Date expiration', 'id': 'exampleSelectGender'}}) }}
-        {{ form_errors(myForm.date_expiration) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(myForm.Qte, 'Quantité', {'label_attr': {'for': 'exampleInputCity1'}}) }}
-        {{ form_widget(myForm.Qte, {'attr': {'class': 'form-control', 'placeholder': 'Quantité', 'id': 'exampleInputCity1'}}) }}
+        {{ form_label(myForm.Qte, 'Quantité') }}
+        {{ form_widget(myForm.Qte, {'attr': {'class': 'form-control', 'placeholder': 'Quantité'}}) }}
         {{ form_errors(myForm.Qte) }}
     </div>
     <div class="form-group">
         {{ form_label(myForm.description, 'Description', {'label_attr': {'for': 'exampleTextarea1'}}) }}
-        {{ form_widget(myForm.description, {'attr': {'class': 'form-control', 'placeholder': 'Description', 'id': 'exampleTextarea1', 'rows': '4'}}) }}
+        {{ form_widget(myForm.description, {'attr': {'class': 'form-control', 'placeholder': 'Description'}}) }}
         {{ form_errors(myForm.description) }}
     </div>
-    <div class="form-group">
-        {{ form_label(myForm.etat, 'État', {'label_attr': {'for': 'exampleTextarea1'}}) }}
-        {{ form_widget(myForm.etat, {'attr': {'class': 'form-control', 'placeholder': 'État', 'id': 'exampleTextarea1'}}) }}
-        {{ form_errors(myForm.etat) }}
-    </div>
+   <div class="form-group">
+    {{ form_label(myForm.etat, 'État') }}
+    {{ form_widget(myForm.etat, {'attr': {'class': 'form-control', 'placeholder': 'État'}}) }}
+    {{ form_errors(myForm.etat) }}
+</div>
+        <div class="form-group">
+            {{ form_label(myForm.image, 'Image') }}
+            {% if currentImage is defined %}
+                <img src="{{ asset('uploads/' ~ currentImage) }}" alt="Current Image" width="100" height="100">
+            {% else %}
+                {{ form_widget(myForm.image, {'attr': {'class': 'form-control', 'placeholder': 'Image'}}) }}
+                {{ form_errors(myForm.image) }}
+            {% endif %}
+        </div>
+</div>
+</div>
+
 {{ form_row(myForm.Ajouter, {'attr': {'class': 'btn btn-primary mr-2'}}) }}
  
     {{ form_end(myForm) }}
