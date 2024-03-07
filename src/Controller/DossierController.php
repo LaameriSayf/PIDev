@@ -62,16 +62,27 @@ class DossierController extends AbstractController
     
      
     #[Route('/showDossier', name: 'show_dossier')]
-    public function show(ManagerRegistry $doctrine): Response
+    public function show(ManagerRegistry $doctrine,Request $req,DossiermedicalRepository $repo): Response
     {
-    //$repo=$doctrine->getRepository(Dossiermedical::class);
-    //$dossiers=$repo->findAll();
-    $repo = $doctrine->getRepository(Dossiermedical::class);
-    $dossiers = $repo->findAll();
-    return $this->render('dossier/show1.html.twig', ['listDossiers'=>$dossiers]);
-    }
+    // Récupérer la date depuis la requête
+    $date = $req->query->get('date');   
+     // Vérifier si une date a été fournie dans la requête
+     if ($date) {
+        // Convertir la date en objet DateTime si nécessaire
+        $dateObj = new DateTime($date);
+
+        // Récupérer les dossiers médicaux filtrés par date
+        $dossiers = $repo->findByDate($dateObj);}
+        else {
+     $dossiers = $repo->findBy([], ['DateCreation' => 'DESC']);
     
-     
+   /// $repo = $doctrine->getRepository(Dossiermedical::class);
+   // $dossiers = $repo->findAll();
+    return $this->render('dossier/show1.html.twig', ['listDossiers'=>$dossiers]);
+
+     }
+    
+}  
      #[Route('/editDossier/{id}', name: 'edit_Dossier')]
      public function edit($id, RepositoryDossiermedicalRepository $repository,ManagerRegistry $doctrine, Request $request)
     {

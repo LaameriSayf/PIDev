@@ -21,9 +21,18 @@ class OrdonnanceRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordonnance::class);
     }
 
-//     /**
-//      * @return Ordonnance[] Returns an array of Ordonnance objects
-//     */
+   /**
+     * @return Ordonnance[] Returns an array of Ordonnance objects
+    */
+
+    public function findByDate($date): array
+    {
+        return $this->createQueryBuilder('d')
+            ->andWhere('d.dateprescription  = :date')
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
 //    public function patient($id): array
 //    {
 //        return $this->createQueryBuilder('o')

@@ -47,14 +47,26 @@ class OrdonnanceController extends AbstractController
     }
     
     #[Route('/showOrdonnance', name: 'ordonnance_show')]
-    public function show(ManagerRegistry $doctrine): Response
+    public function show(ManagerRegistry $doctrine,OrdonnanceRepository $repo,Request $req): Response
     {
+    // Récupérer la date depuis la requête
+    $date = $req->query->get('date');
+    // Vérifier si une date a été fournie dans la requête
+    if ($date) {
+        // Convertir la date en objet DateTime si nécessaire
+        $dateObj = new DateTime($date);
+
+        // Récupérer les dossiers médicaux filtrés par date
+        $dossiers = $repo->findByDate($dateObj);}
+        else {
+            $ordonnance= $repo->findBy([], ['dateprescription' => 'DESC']);
   
-    $repo=$doctrine->getRepository(Ordonnance::class);
-    $ordonnance=$repo->findAll();
+    //$repo=$doctrine->getRepository(Ordonnance::class);
+   // $ordonnance=$repo->findAll();
 
     return $this->render('ordonnance/show.html.twig', ['listOrdonnances'=>$ordonnance]);
     }
+}
 
 
     #[Route('/ordonnance/edit/{id}', name: 'ordonnance_edit')]

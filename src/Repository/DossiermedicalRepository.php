@@ -60,6 +60,16 @@ class DossiermedicalRepository extends ServiceEntityRepository
                 
                        return $dossiers;
                    }
+                   public function findByDate($date): array
+                   {
+                       return $this->createQueryBuilder('d')
+                           ->andWhere('d.DateCreation = :date')
+                           ->setParameter('date', $date)
+                           ->getQuery()
+                           ->getResult();
+                   }
+                   
+
                 }
         
  
