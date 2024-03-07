@@ -15,6 +15,9 @@ use Symfony\Component\Form\AbstractType;
 use App\Form\PharmacienTypeType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Repository\GlobalUserRepository;
+
 
 
 
@@ -142,6 +145,16 @@ return $this->render('Pharmacien/consulterpharmacien.html.twig', [ 'listPharmaci
             return $this->redirectToRoute('app_afficherPharmacien');
         }
         return $this->render('pharmacien/detailspharmacien.html.twig',['pharmacien' =>$pharmacien]);
+    }
+    #[Route('/ShowPharmaciens', name: 'app_showPharmaciens')]
+    public function showPharmaciens(PharmacienRepository $repository,SessionInterface $s,GlobalUserRepository $repo)
+    {   $id = $s->get('id');
+        $pharmacien = $repo->find($id);
+
+        if (!$pharmacien) {
+            return $this->redirectToRoute('app_afficherPharmacien');
+        }
+        return $this->render('pharmacien/editprofilepharmacien.html.twig',['pharmacien' =>$pharmacien]);
     }
 
       

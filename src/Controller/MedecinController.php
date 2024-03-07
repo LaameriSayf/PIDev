@@ -14,6 +14,8 @@ use Symfony\Component\Form\AbstractType;
 use App\Form\MedecinType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Repository\GlobalUserRepository;
 
 class MedecinController extends AbstractController
 {
@@ -138,5 +140,15 @@ return $this->render('medecin/consultermedecin.html.twig', [ 'listMedecin' => $l
             return $this->redirectToRoute('app_afficherMedecin');
         }
         return $this->render('medecin/detailsmedecin.html.twig',['medecin' =>$medecin]);
+    }
+    #[Route('/ShowMedecins', name: 'app_showMedecins')]
+    public function showAdmins(MedecinRepository $repository,SessionInterface $s,GlobalUserRepository $repo)
+    {   $id = $s->get('id');
+        $medecin = $repo->find($id);
+
+        if (!$medecin) {
+            return $this->redirectToRoute('app_afficherMedecin');
+        }
+        return $this->render('medecin/editprofilemedecin.html.twig',['medecin' =>$medecin]);
     }
 }

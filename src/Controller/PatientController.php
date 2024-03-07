@@ -17,6 +17,9 @@ use App\Form\PatientType;
 use App\Form\RegistrationType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Repository\GlobalUserRepository;
+
 
 
 
@@ -193,6 +196,16 @@ return $this->render('patient/consulterpatient.html.twig', [ 'listPatient' => $l
             return $this->redirectToRoute('app_afficherPatient');
         }
         return $this->render('patient/detailspatient.html.twig',['patient' =>$patient]);
+    }
+    #[Route('/ShowPatients', name: 'app_showPatients')]
+    public function showPatients(PatientRepository $repository,SessionInterface $s,GlobalUserRepository $repo)
+    {   $id = $s->get('id');
+        $patient = $repo->find($id);
+
+        if (!$patient) {
+            return $this->redirectToRoute('app_afficherPatient');
+        }
+        return $this->render('patient/editprofilepatient.html.twig',['patient' =>$patient]);
     }
       
 }
