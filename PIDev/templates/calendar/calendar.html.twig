@@ -10,8 +10,8 @@
     <div id="calendrier"></div>
 
 {% block javascripts %}
-<script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             let calendarElt = document.querySelector("#calendrier");
             let calendar = new FullCalendar.Calendar(calendarElt, {
@@ -24,66 +24,76 @@
                     left: 'prev,next today',    
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
-
                 },
                 events: {{ data|raw }},
-                 eventContent: function(info) {
-                return {
-                    html: `<div class="fc-content">
-                    <div class="fc-content">${info.event.extendedProps.titre}</div>
-                           <div class="fc-content">${info.event.extendedProps.description}</div>
-                           <div class="fc-content">
-                            <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">Delete</button>
-                       </div>
-                       </div>`
+                eventContent: function(info) {
+                    return {
+                        html: `<div class="fc-content">
+                                    <div class="fc-content">${info.event.extendedProps.titre}</div>
+                                    <div class="fc-content">${info.event.extendedProps.description}</div>
+                                    <div class="fc-content">
+                                        <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">Delete</button>
+                                    </div>
+                                </div>`
                     };
-                        },
-                        editable:true,
-                        eventResizableFromStart: true,
+                },
+                editable: true,
+                eventResizableFromStart: true
+            });
 
-                
-            })
-            ///editEmploi/{id}/edit
-            calendar.on('eventChange',(e) => {
-
+            calendar.on('eventChange', (e) => {
                 let url = `/editEmploi/${e.event.id}/edit`;
-                 let donnees = {
+                let donnees = {
+                    "titre": e.event.extendedProps.titre,
+                    "start": e.event.start,
+                    "end": e.event.end,
+                    "description": e.event.extendedProps.description,
+                };
+                console.log(donnees);
+                let xhr = new XMLHttpRequest();
+                xhr.open("PUT", url);
+                xhr.send(JSON.stringify(donnees));
+            });
+            //Delete
+            calendarElt.addEventListener('click', function (event) {
+                if (event.target.classList.contains('delete-event')) {
+                    let eventId = event.target.getAttribute('data-event-id');
+                    // Swal fire alert
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Are you sure?',
+                        text: 'You won\'t be able to revert this!',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            calendar.getEventById(eventId).remove();
 
-                "titre": e.event.extendedProps.titre,
-                "start": e.event.start,
-                "end": e.event.end,
-                "description": e.event.extendedProps.description,
-                 }
-                 console.log(donnees)
-            let xhr = new XMLHttpRequest
-
-            xhr.open("PUT", url)
-            xhr.send(JSON.stringify(donnees))
-
-                
-            })
-            //delete 
-             calendarElt.addEventListener('click', function (event) {
-        if (event.target.classList.contains('delete-event')) {
-            let eventId = event.target.getAttribute('data-event-id');
-            //Swal fire alert
-            if (confirm("Are you sure you want to delete this event?")) {
-                calendar.getEventById(eventId).remove();
-
-                fetch(`/deleteEmploi/${eventId}`, {
-                    method: 'DELETE',
-                }).then(response => {
-                    if (response.ok) {
-                        // Event deleted successfully
-                        console.log('Event deleted successfully');
-                    } else {
-                        // Handle error
-                        console.error('Failed to delete event');
-                    }
-                });
-            }
-        }
-    });
+                            fetch(`/deleteEmploi/${eventId}`, {
+                                method: 'DELETE',
+                            }).then(response => {
+                                if (response.ok) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Your event has been deleted.',
+                                        'success'
+                                    );
+                                } else {
+                                    // Handle error
+                                    console.error('Failed to delete event');
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to delete event.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        }
+                    });
+                }
+            });
 
             calendar.render();
         });
@@ -113,11 +123,11 @@
     #calendrier .fc-content {
         font-size: 1em;
         font-weight: bold;
-        background-color: #007bff; /* Set the background color for the event */
-        color: #fff; /* Set the text color for the event */
+        background-color: #007bff; 
+        color: #fff; 
         padding: 5px;
         border-radius: 5px;
-        text-align: center; /* Center the content within the event */
+        text-align: center; 
     }
 
     #calendrier .fc-description {
@@ -130,8 +140,9 @@
         border-color: red;
     }
 </style>
-{% endblock %}{% block javascript %}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+{% endblock %}
+
+{% block javascript %}
     {% for flashMessage in app.flashes('success') %}
         <script>
             Swal.fire({
@@ -159,7 +170,5 @@
             });
         </script>
     {% endfor %}
-    {% endblock %}
-
-    
+{% endblock %}
 {% endblock %}
