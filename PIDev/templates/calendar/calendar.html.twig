@@ -11,42 +11,84 @@
 
 {% block javascripts %}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let calendarElt = document.querySelector("#calendrier");
-        let calendar = new FullCalendar.Calendar(calendarElt, {
-            allDaySlot: false,
-            initialView: 'dayGridMonth',
-            locale: 'fr',
-            timeZone: 'Africa/Tunis',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: {{ data|raw }},
-            eventContent: function (info) {
-                let deleteButton = `<button class="btn btn-danger btn-sm custom-delete-button" data-event-id="${info.event.id}">
-                                        <i class="bi bi-trash"></i> Delete
-                                    </button>`;
 
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarElt = document.querySelector("#calendrier");
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                
+                allDaySlot: false,
+                initialView: 'dayGridMonth',
+                locale: 'fr',  
+                timeZone: 'Africa/Tunis',
+                headerToolbar: {
+                    left: 'prev,next today',    
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+
+                },
+                events: {{ data|raw }},
+                 eventContent: function(info) {
                 return {
                     html: `<div class="fc-content">
-                            <div>${info.event.extendedProps.titre}</div>
-                            <div>${info.event.extendedProps.description}</div>
-                            <div>${deleteButton}</div>
-                          </div>`,
-                };
-            },
-            editable: true,
-            eventResizableFromStart: true
-        });
+                    <div class="fc-content">${info.event.extendedProps.titre}</div>
+                           <div class="fc-content">${info.event.extendedProps.description}</div>
+                           <div class="fc-content">
+                            <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">Delete</button>
+                       </div>
+                       </div>`
+                    };
+                        },
+                        editable:true,
+                        eventResizableFromStart: true,
 
-        // Your existing code for edit and delete events
+                
+            })
+            ///editEmploi/{id}/edit
+            calendar.on('eventChange',(e) => {
 
-        calendar.render();
+                let url = `/editEmploi/${e.event.id}/edit`;
+                 let donnees = {
+
+                "titre": e.event.extendedProps.titre,
+                "start": e.event.start,
+                "end": e.event.end,
+                "description": e.event.extendedProps.description,
+                 }
+                 console.log(donnees)
+            let xhr = new XMLHttpRequest
+
+            xhr.open("PUT", url)
+            xhr.send(JSON.stringify(donnees))
+
+                
+            })
+            //delete 
+             calendarElt.addEventListener('click', function (event) {
+        if (event.target.classList.contains('delete-event')) {
+            let eventId = event.target.getAttribute('data-event-id');
+            //Swal fire alert
+            if (confirm("Are you sure you want to delete this event?")) {
+                calendar.getEventById(eventId).remove();
+
+                fetch(`/deleteEmploi/${eventId}`, {
+                    method: 'DELETE',
+                }).then(response => {
+                    if (response.ok) {
+                        // Event deleted successfully
+                        console.log('Event deleted successfully');
+                    } else {
+                        // Handle error
+                        console.error('Failed to delete event');
+                    }
+                });
+            }
+        }
     });
-</script>
-<!-- Your existing script and style links... -->
+
+            calendar.render();
+        });
+    </script>
+    <!-- Your existing script and style links... -->
 {% endblock %}
 
 {% block stylesheets %}
@@ -88,8 +130,36 @@
         border-color: red;
     }
 </style>
-{% endblock %}
-{% block javascript %}
-<!-- Your existing SweetAlert2 code -->
-{% endblock %}
+{% endblock %}{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Ajouter!',
+                text: '{{ flashMessage }} 👍',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! 😊',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+
+    {% for flashMessage in app.flashes('error') %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ flashMessage }} 😞',
+                showConfirmButton: true,
+                confirmButtonText: 'OK! 👌',
+            });
+        </script>
+    {% endfor %}
+    {% endblock %}
+
+    
 {% endblock %}
