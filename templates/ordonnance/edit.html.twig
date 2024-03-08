@@ -210,12 +210,24 @@
                   <h4 class="card-title">Modifier ordonnance</h4>
                   
                       {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                          
+                             <div class="form-group">
+                                {{ form_label(form.nom, 'Nom Patient', {'label_attr': {'for': 'exampleInputNom'}}) }}
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom Patient', 'id': 'exampleInputNom'}}) }}
+                                {{ form_errors(form.nom) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form_label(form.prenom, 'Prénom Patient', {'label_attr': {'for': 'exampleInputPrenom'}}) }}
+                                {{ form_widget(form.prenom, {'attr': {'class': 'form-control', 'placeholder': 'Médicament prescrit', 'id': 'exampleInputPrenom'}}) }}
+                                {{ form_errors(form.prenom) }}
+                            </div>
 
                             <div class="form-group">
                                 {{ form_label(form.dateprescription, 'Date de prescription', {'label_attr': {'for': 'exampleInputDatePrescription'}}) }}
                                 {{ form_widget(form.dateprescription, {'attr': {'class': 'form-control', 'placeholder': 'Date de prescription', 'id': 'exampleInputDatePrescription'}}) }}
                                 {{ form_errors(form.dateprescription) }}
                             </div>
+
 
                             <div class="form-group">
                                 {{ form_label(form.medecamentprescrit, 'Médicament prescrit', {'label_attr': {'for': 'exampleInputMedecamentPrescrit'}}) }}
@@ -234,6 +246,11 @@
                                 {{ form_widget(form.renouvellement, {'attr': {'class': 'form-control', 'placeholder': 'Renouvellement', 'id': 'exampleInputRenouvellement'}}) }}
                                 {{ form_errors(form.renouvellement) }}
                             </div>
+                             <div class="form-group">
+                                {{ form_label(form.Dossiermedical, 'Dossier Médical', {'label_attr': {'for': 'exampleInputDossierMedical'}}) }}
+                                {{ form_widget(form.Dossiermedical, {'attr': {'class': 'form-control', 'placeholder': 'Dosier M', 'id': 'exampleInputMedecamentPrescrit'}}) }}
+                                {{ form_errors(form.Dossiermedical) }}
+                            </div
     
    
          
